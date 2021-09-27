@@ -107,3 +107,12 @@ typedoc/
 !typedoc/_redirects
 # Local Netlify folder
 .netlify
+
+# Recommendation from https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored (not using Zero-installs)
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
