@@ -3583,6 +3583,10 @@ __metadata:
 "@udecode/zustood@workspace:packages/zustood":
   version: 0.0.0-use.local
   resolution: "@udecode/zustood@workspace:packages/zustood"
+  dependencies:
+    immer: 9.0.6
+  peerDependencies:
+    zustand: 3.5.10
   languageName: unknown
   linkType: soft
 
@@ -7826,6 +7830,13 @@ __metadata:
   version: 5.1.8
   resolution: "ignore@npm:5.1.8"
   checksum: 967abadb61e2cb0e5c5e8c4e1686ab926f91bc1a4680d994b91947d3c65d04c3ae126dcdf67f08e0feeb8ff8407d453e641aeeddcc47a3a3cca359f283cf6121
+  languageName: node
+  linkType: hard
+
+"immer@npm:9.0.6":
+  version: 9.0.6
+  resolution: "immer@npm:9.0.6"
+  checksum: 75da22f3b32f3f14604eb389b4f50e84a14f2e42f306f0cbe4d2969aed54ec7fda9a7e9ca42ebae2ba73ec9bb6ec1001fafbac535accaf03860054ab0f7e8388
   languageName: node
   linkType: hard
 
@@ -12450,6 +12461,7 @@ __metadata:
     ts-jest: ^26.5.2
     typedoc: ^0.21.0-beta.2
     typescript: ^4.4.3
+    zustand: ^3.5.10
   languageName: unknown
   linkType: soft
 
@@ -14726,5 +14738,17 @@ typescript@^4.4.3:
   version: 0.1.0
   resolution: "yocto-queue@npm:0.1.0"
   checksum: f77b3d8d00310def622123df93d4ee654fc6a0096182af8bd60679ddcdfb3474c56c6c7190817c84a2785648cdee9d721c0154eb45698c62176c322fb46fc700
+  languageName: node
+  linkType: hard
+
+"zustand@npm:^3.5.10":
+  version: 3.5.10
+  resolution: "zustand@npm:3.5.10"
+  peerDependencies:
+    react: ">=16.8"
+  peerDependenciesMeta:
+    react:
+      optional: true
+  checksum: a9bb68c137bda6facd9e01cf9f027c80a394b1ca788dab4271942e23deaeacda7909a22039621d3157d3c13e8c497413a2a518619ec452e2a7d16efa7cc96130
   languageName: node
   linkType: hard
