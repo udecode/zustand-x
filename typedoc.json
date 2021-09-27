@@ -1,0 +1,15 @@
+{
+  "disableOutputCheck": true,
+  "exclude": [
+    "**/*test*/**",
+    "**/*fixture*/**",
+    "**/*template*/**",
+    "**/*stories*/**",
+    "**/*.development.*"
+  ],
+  "includeVersion": true,
+  "name": "@udecode/zustood",
+  "entryPoints": ["packages/zustood/src/index.ts"],
+  "out": "./typedoc",
+  "readme": "./README.md"
+}

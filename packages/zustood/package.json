@@ -1,0 +1,35 @@
+{
+  "name": "@udecode/zustood",
+  "version": "0.0.1",
+  "description": "Auto generate selectors and actions for zustand",
+  "keywords": [
+    "zustand"
+  ],
+  "homepage": "https://github.com/udecode/zustood",
+  "bugs": {
+    "url": "https://github.com/udecode/zustood/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/udecode/zustood.git",
+    "directory": "packages/zustood"
+  },
+  "license": "MIT",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "prebuild": "rimraf dist",
+    "build": "tsc && yarn rollup",
+    "build:w": "yarn rollup -w",
+    "cti": "sh ../../cti.sh",
+    "rollup": "rollup -c=../../rollup.config.js",
+    "test": "jest"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
