@@ -102,7 +102,6 @@ connect.lock
 storybook-static/
 
 # Local
-packages/plate/docs/
 typedoc/
 !typedoc/_redirects
 # Local Netlify folder
