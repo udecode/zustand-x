@@ -75,6 +75,7 @@ module.exports = {
     'no-await-in-loop': 'off',
     'no-empty': 'off',
     'no-empty-function': 'off',
+    'no-redeclare': 'off',
     'no-console': [
       'warn',
       {
