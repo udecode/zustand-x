@@ -1,6 +1,6 @@
 {
   "name": "@udecode/zustood",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Auto generate selectors and actions for zustand",
   "keywords": [
     "zustand"
