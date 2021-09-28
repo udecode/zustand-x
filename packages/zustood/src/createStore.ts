@@ -27,23 +27,25 @@ export const createStore =
   ): StoreApi<TName, T, StateActions<T>> => {
     const {
       middlewares: _middlewares = [],
-      persist,
+      devtools: devtoolsOptions,
+      persist: persistOptions,
       enableAutoFreeze = false,
-      enableDevtools,
     } = options;
 
     // NOTE
     setAutoFreeze(enableAutoFreeze);
     const middlewares: any[] = [immerMiddleware, ..._middlewares];
 
-    if (persist) {
+    if (persistOptions) {
       middlewares.push((config: any) =>
-        persistMiddleware(config, { ...persist, name } as any)
+        persistMiddleware(config, { ...persistOptions, name } as any)
       );
     }
 
-    if (enableDevtools) {
-      middlewares.push((config: any) => devtools(config, name));
+    if (devtoolsOptions) {
+      middlewares.push((config: any) =>
+        devtools(config, { ...devtoolsOptions, name })
+      );
     }
 
     middlewares.push(createVanillaStore);

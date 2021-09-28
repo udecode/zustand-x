@@ -16,7 +16,6 @@ pullrequest is merged. Or a code sample showing the usage of a new API. -->
 - [x] The tests pass with `yarn test`.
 - [x] The linter passes with `yarn lint`. (Fix errors with `yarn lint
       --fix`.)
-- [x] The relevant examples still work: (Run examples with `yarn docs`.)
 
 <!--
 

@@ -86,11 +86,44 @@ export type ActionBuilder<
   api: StoreApi<TName, T, TActions, TSelectors>
 ) => any;
 
+export interface DevToolsOptions {
+  serialize?: {
+    options:
+      | boolean
+      | {
+          date?: boolean;
+          regex?: boolean;
+          undefined?: boolean;
+          nan?: boolean;
+          infinity?: boolean;
+          error?: boolean;
+          symbol?: boolean;
+          map?: boolean;
+          set?: boolean;
+        };
+  };
+}
+
 export interface CreateStoreOptions<T extends State> {
+  /**
+   * Zustand middlewares
+   */
   middlewares?: any[];
+
+  /**
+   * Devtools middleware options
+   */
+  devtools?: DevToolsOptions;
+
+  /**
+   * Persist middleware options
+   */
   persist?: Omit<PersistOptions<T>, 'name'>;
+
+  /**
+   * Enable immer autofreeze
+   */
   enableAutoFreeze?: boolean;
-  enableDevtools?: boolean;
 }
 
 export type SetImmerState<T> = (fn: (draft: Draft<T>) => void) => void;
