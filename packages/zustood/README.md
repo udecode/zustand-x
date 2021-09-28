@@ -22,12 +22,12 @@ yarn add zustand @udecode/zustood
 
 ### Why zustood over zustand?
 
-- Simpler & modular
 - Much less boilerplate
-- Derived selectors
-- Derived actions
-- Full typescript support
+- Modular state management:
+  - Derived selectors
+  - Derived actions
 - `immer`, `devtools` and `persist` middlewares
+- Full typescript support
 
 ## Create a store
 
