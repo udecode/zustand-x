@@ -16,7 +16,7 @@ const INPUT_FILE = fs.existsSync(INPUT_FILE_PATH)
   ? INPUT_FILE_PATH
   : path.join(PACKAGE_ROOT_PATH, 'src/index.tsx');
 const PKG_JSON = require(path.join(PACKAGE_ROOT_PATH, 'package.json'));
-// const babelConfig = require("./babel.config");
+const babelConfig = require('./babel.config');
 
 const isUmd = false;
 
@@ -59,7 +59,7 @@ const plugins = [
   // Use Babel to transpile the result, limiting it to the source code.
   babel({
     presets: [
-      // ...babelConfig.presets,
+      ...babelConfig.presets,
       [
         '@babel/preset-env',
         {
@@ -71,7 +71,7 @@ const plugins = [
       ],
     ],
     plugins: [
-      // ...babelConfig.plugins,
+      ...babelConfig.plugins,
       '@babel/plugin-proposal-optional-chaining',
       '@babel/plugin-proposal-nullish-coalescing-operator',
       'babel-plugin-dynamic-import-node',
