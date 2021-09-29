@@ -1,7 +1,7 @@
 {
   "name": "@udecode/zustood",
   "version": "0.2.0",
-  "description": "Auto generate selectors and actions for zustand",
+  "description": "A modular store factory using zustand",
   "keywords": [
     "zustand"
   ],
