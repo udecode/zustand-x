@@ -1,5 +1,11 @@
 # @udecode/zustood
 
+## 0.3.0
+
+### Minor Changes
+
+- [#11](https://github.com/udecode/zustood/pull/11) [`25e04f8`](https://github.com/udecode/zustood/commit/25e04f8750636ef413414e702e965b20094c9539) Thanks [@zbeyens](https://github.com/zbeyens)! - fix exports
+
 ## 0.2.0
 
 ### Minor Changes
