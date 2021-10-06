@@ -3,5 +3,8 @@
 ---
 
 changes:
-- added `persist.enabled` and `devtools.enabled` options
-- renamed `DevToolsOptions` to `DevtoolsOptions`
+- `createStore` options:
+  - from `persist` to `persist.enabled`
+  - from `devtools` to `devtools.enabled`
+  - from `enableAutoFreeze` to `immer.enabledAutoFreeze`
+- types
