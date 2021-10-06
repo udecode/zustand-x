@@ -5,3 +5,4 @@
 export * from './CreateStoreOptions';
 export * from './DevtoolsOptions';
 export * from './PersistOptions';
+export { ImmerOptions } from './ImmerOptions';

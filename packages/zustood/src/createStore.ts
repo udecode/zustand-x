@@ -32,10 +32,11 @@ export const createStore =
       middlewares: _middlewares = [],
       devtools,
       persist,
-      enableAutoFreeze = false,
+      immer,
     } = options;
 
-    setAutoFreeze(enableAutoFreeze);
+    setAutoFreeze(immer?.enabledAutoFreeze ?? false);
+
     const middlewares: any[] = [immerMiddleware, ..._middlewares];
 
     if (persist?.enabled) {

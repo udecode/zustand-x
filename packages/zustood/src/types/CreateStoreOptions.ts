@@ -1,25 +1,26 @@
 import { State } from 'zustand';
 import { PersistOptions } from './PersistOptions';
 import { DevtoolsOptions } from './DevtoolsOptions';
+import { ImmerOptions } from './ImmerOptions';
 
 export interface CreateStoreOptions<T extends State> {
   /**
-   * Zustand middlewares
+   * Zustand middlewares.
    */
   middlewares?: any[];
 
   /**
-   * Devtools middleware options
+   * Devtools middleware options.
    */
   devtools?: DevtoolsOptions;
 
   /**
-   * Persist middleware options
+   * Immer middleware options.
    */
-  persist?: PersistOptions<T>;
+  immer?: ImmerOptions;
 
   /**
-   * Enable immer autofreeze
+   * Persist middleware options.
    */
-  enableAutoFreeze?: boolean;
+  persist?: PersistOptions<T>;
 }
