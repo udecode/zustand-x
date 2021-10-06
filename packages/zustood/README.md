@@ -20,6 +20,9 @@ which solves these challenges, so you can focus on your app.
 yarn add zustand @udecode/zustood
 ```
 
+Visit [zustood.udecode.io](https://zustood.udecode.io) for the
+API.
+
 ### Why zustood over zustand?
 
 - Much less boilerplate
@@ -230,7 +233,7 @@ export interface CreateStoreOptions<T extends State> {
 Zustood is using these middlewares:
 - `immer`: required. Autofreeze can be enabled using `enableAutoFreeze`
   option.
-- `devtools`: enabled if `enableDevtools` option is true
+- `devtools`: enabled if `devtools` option is defined.
 - `persist`: enabled if `persist` option is defined. `persist`
   implements `PersistOptions` interface from [zustand](https://github.com/pmndrs/zustand#persist-middleware)
 - custom middlewares can be added using `middlewares` option

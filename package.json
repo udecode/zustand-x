@@ -27,7 +27,7 @@
     "test:covwa": "yarn test:cov --watchAll",
     "test:w": "yarn test --watch",
     "test:wa": "yarn test --watchAll",
-    "typedoc": "npx typedoc --tsconfig packages/zustood/tsconfig.json",
+    "typedoc": "npx typedoc --options scripts/typedoc.json",
     "unlink-all": "lerna exec --parallel --bail=false yarn unlink"
   },
   "devDependencies": {
@@ -93,7 +93,7 @@
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-typescript2": "^0.30.0",
     "ts-jest": "^26.5.2",
-    "typedoc": "^0.21.0-beta.2",
+    "typedoc": "^0.22.5",
     "typescript": "^4.4.3",
     "zustand": "^3.5.10"
   }
