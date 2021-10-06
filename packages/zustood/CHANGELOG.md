@@ -1,5 +1,16 @@
 # @udecode/zustood
 
+## 0.4.0
+
+### Minor Changes
+
+- [#17](https://github.com/udecode/zustood/pull/17) [`a2b1b5c`](https://github.com/udecode/zustood/commit/a2b1b5c0c57abe4b583896256cba815137e2fef3) Thanks [@zbeyens](https://github.com/zbeyens)! - changes:
+  - `createStore` options:
+    - from `persist` to `persist.enabled`
+    - from `devtools` to `devtools.enabled`
+    - from `enableAutoFreeze` to `immer.enabledAutoFreeze`
+  - types
+
 ## 0.3.0
 
 ### Minor Changes
