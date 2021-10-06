@@ -1,9 +1,11 @@
 import { setAutoFreeze } from 'immer';
 import create, { State, StateCreator } from 'zustand';
-import { devtools, persist as persistMiddleware } from 'zustand/middleware';
+import {
+  devtools as devtoolsMiddleware,
+  persist as persistMiddleware,
+} from 'zustand/middleware';
 import createVanillaStore from 'zustand/vanilla';
 import {
-  CreateStoreOptions,
   ImmerStoreApi,
   MergeState,
   SetImmerState,
@@ -18,6 +20,7 @@ import { generateStateGetSelectors } from './utils/generateStateGetSelectors';
 import { generateStateHookSelectors } from './utils/generateStateHookSelectors';
 import { immerMiddleware } from './middlewares/immer.middleware';
 import { pipe } from './utils/pipe';
+import { CreateStoreOptions } from './types/CreateStoreOptions';
 
 export const createStore =
   <TName extends string>(name: TName) =>
@@ -27,24 +30,24 @@ export const createStore =
   ): StoreApi<TName, T, StateActions<T>> => {
     const {
       middlewares: _middlewares = [],
-      devtools: devtoolsOptions,
-      persist: persistOptions,
-      enableAutoFreeze = false,
+      devtools,
+      persist,
+      immer,
     } = options;
 
-    // NOTE
-    setAutoFreeze(enableAutoFreeze);
+    setAutoFreeze(immer?.enabledAutoFreeze ?? false);
+
     const middlewares: any[] = [immerMiddleware, ..._middlewares];
 
-    if (persistOptions) {
+    if (persist?.enabled) {
       middlewares.push((config: any) =>
-        persistMiddleware(config, { ...persistOptions, name } as any)
+        persistMiddleware(config, { ...persist, name } as any)
       );
     }
 
-    if (devtoolsOptions) {
+    if (devtools?.enabled) {
       middlewares.push((config: any) =>
-        devtools(config, { ...devtoolsOptions, name })
+        devtoolsMiddleware(config, { ...devtools, name })
       );
     }
 

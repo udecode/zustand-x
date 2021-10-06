@@ -1,7 +1,6 @@
 import { Draft } from 'immer';
 import { State, StoreApi as RawStoreApi, UseStore } from 'zustand';
 import { EqualityChecker, GetState, StateSelector } from 'zustand/vanilla';
-import { PersistOptions } from './middlewares/persist.middleware';
 
 export type StoreApiGet<
   T extends State = {},
@@ -85,46 +84,6 @@ export type ActionBuilder<
   get: StoreApiGet<T, TSelectors>,
   api: StoreApi<TName, T, TActions, TSelectors>
 ) => any;
-
-export interface DevToolsOptions {
-  serialize?: {
-    options:
-      | boolean
-      | {
-          date?: boolean;
-          regex?: boolean;
-          undefined?: boolean;
-          nan?: boolean;
-          infinity?: boolean;
-          error?: boolean;
-          symbol?: boolean;
-          map?: boolean;
-          set?: boolean;
-        };
-  };
-}
-
-export interface CreateStoreOptions<T extends State> {
-  /**
-   * Zustand middlewares
-   */
-  middlewares?: any[];
-
-  /**
-   * Devtools middleware options
-   */
-  devtools?: DevToolsOptions;
-
-  /**
-   * Persist middleware options
-   */
-  persist?: Omit<PersistOptions<T>, 'name'>;
-
-  /**
-   * Enable immer autofreeze
-   */
-  enableAutoFreeze?: boolean;
-}
 
 export type SetImmerState<T> = (fn: (draft: Draft<T>) => void) => void;
 

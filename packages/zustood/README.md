@@ -222,20 +222,21 @@ The second parameter of `createStore` is for options:
 ```ts
 export interface CreateStoreOptions<T extends State> {
   middlewares?: any[];
-  devtools?: DevToolsOptions;
-  persist?: Omit<PersistOptions<T>, 'name'>;
-  enableAutoFreeze?: boolean;
+  devtools?: DevtoolsOptions;
+  immer?: ImmerOptions;
+  persist?: PersistOptions;
 }
 ```
 
 ### Middlewares
 
 Zustood is using these middlewares:
-- `immer`: required. Autofreeze can be enabled using `enableAutoFreeze`
-  option.
-- `devtools`: enabled if `devtools` option is defined.
-- `persist`: enabled if `persist` option is defined. `persist`
-  implements `PersistOptions` interface from [zustand](https://github.com/pmndrs/zustand#persist-middleware)
+- `immer`: required. Autofreeze can be enabled using
+  `immer.enabledAutoFreeze` option.
+- `devtools`: enabled if `devtools.enabled` option is `true`.
+- `persist`: enabled if `persist.enabled` option is `true`. `persist`
+  implements `PersistOptions` interface from
+  [zustand](https://github.com/pmndrs/zustand#persist-middleware)
 - custom middlewares can be added using `middlewares` option
 
 ## Contributing and project organization

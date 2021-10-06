@@ -11,18 +11,3 @@ export const immerMiddleware =
 
     return config(api.setState, get, api);
   };
-
-// export const immerMutable =
-//   <T extends State>(
-//     config: StateCreator<T, SetImmerState<T>>
-//   ): StateCreator<T> =>
-//   (set, get, api) =>
-//     config(
-//       (fn) => {
-//         setAutoFreeze(false);
-//         set(produce<T>(fn));
-//         setAutoFreeze(true);
-//       },
-//       get,
-//       api
-//     );

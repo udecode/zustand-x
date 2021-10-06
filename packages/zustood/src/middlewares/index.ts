@@ -3,4 +3,3 @@
  */
 
 export * from './immer.middleware';
-export * from './persist.middleware';

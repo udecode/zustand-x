@@ -5,8 +5,8 @@ export type StateStorage = {
 export type StorageValue<S> = { state: S; version: number };
 
 export type PersistOptions<S> = {
-  /** Name of the storage (must be unique) */
-  name: string;
+  enabled?: boolean;
+
   /**
    * A function returning a storage.
    * The storage must fit `window.localStorage`'s api (or an async version of it).
