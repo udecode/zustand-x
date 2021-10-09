@@ -257,6 +257,12 @@ your feedback** here. Read our
 [contributing guide](https://github.com/udecode/zustood/blob/main/CONTRIBUTING.md)
 to get started.
 
+<p>
+<a href="https://www.netlify.com">
+  <img src="https://www.netlify.com/img/global/badges/netlify-color-accent.svg" alt="Deploys by Netlify" />
+</a>
+</p>
+
 ## License
 
 [MIT](https://github.com/udecode/zustood/blob/main/LICENSE)
