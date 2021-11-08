@@ -1,5 +1,11 @@
 # @udecode/zustood
 
+## 0.4.1
+
+### Patch Changes
+
+- [#20](https://github.com/udecode/zustood/pull/20) [`e7ce19a`](https://github.com/udecode/zustood/commit/e7ce19a98567eb71bc60ed0c968324c11c07dbc3) Thanks [@zbeyens](https://github.com/zbeyens)! - support zustand 3.6 `PersistOptions`
+
 ## 0.4.0
 
 ### Minor Changes
