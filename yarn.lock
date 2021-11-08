@@ -3586,7 +3586,7 @@ __metadata:
   dependencies:
     immer: 9.0.6
   peerDependencies:
-    zustand: 3.5.10
+    zustand: ">=3.5.10"
   languageName: unknown
   linkType: soft
 
@@ -12461,7 +12461,7 @@ __metadata:
     ts-jest: ^26.5.2
     typedoc: ^0.22.5
     typescript: ^4.4.3
-    zustand: ^3.5.10
+    zustand: ^3.6.4
   languageName: unknown
   linkType: soft
 
@@ -14731,14 +14731,14 @@ typescript@^4.4.3:
   languageName: node
   linkType: hard
 
-"zustand@npm:^3.5.10":
-  version: 3.5.10
-  resolution: "zustand@npm:3.5.10"
+"zustand@npm:^3.6.4":
+  version: 3.6.4
+  resolution: "zustand@npm:3.6.4"
   peerDependencies:
     react: ">=16.8"
   peerDependenciesMeta:
     react:
       optional: true
-  checksum: a9bb68c137bda6facd9e01cf9f027c80a394b1ca788dab4271942e23deaeacda7909a22039621d3157d3c13e8c497413a2a518619ec452e2a7d16efa7cc96130
+  checksum: 16e0fae5779f68bb03e60e164afa58febe6a7452ead0485c9a7de3ee8c7c46cf252300109c7d24a6eb07e85aaac824186cdd89d158ff9faa3aa4d07430e9fcee
   languageName: node
   linkType: hard

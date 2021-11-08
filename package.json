@@ -95,6 +95,6 @@
     "ts-jest": "^26.5.2",
     "typedoc": "^0.22.5",
     "typescript": "^4.4.3",
-    "zustand": "^3.5.10"
+    "zustand": "^3.6.4"
   }
 }
