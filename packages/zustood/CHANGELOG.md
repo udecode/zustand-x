@@ -1,5 +1,11 @@
 # @udecode/zustood
 
+## 0.4.2
+
+### Patch Changes
+
+- [#22](https://github.com/udecode/zustood/pull/22) [`196501f`](https://github.com/udecode/zustood/commit/196501fc4ce52fa85b6433b5e9b0782ca302cb1e) Thanks [@xuanduc987](https://github.com/xuanduc987)! - Allow deleting properties from state
+
 ## 0.4.1
 
 ### Patch Changes
