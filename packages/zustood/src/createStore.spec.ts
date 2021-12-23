@@ -76,5 +76,22 @@ describe('zustood', () => {
         stars: 1,
       });
     });
+
+    describe('deletes a property', () => {
+      it('should delete that property', () => {
+        const store = createStore('repo')<{ name?: string; stars: number }>({
+          name: 'zustood',
+          stars: 0,
+        });
+
+        store.set.state((draft) => {
+          delete draft.name;
+        });
+
+        expect(store.get.state()).toEqual({
+          stars: 0,
+        });
+      });
+    });
   });
 });

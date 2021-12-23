@@ -1,13 +1,14 @@
 import produce from 'immer';
-import { State, StateCreator } from 'zustand';
+import { GetState, State, StateCreator } from 'zustand';
 import { SetImmerState } from '../types';
 
 export const immerMiddleware =
   <T extends State>(
-    config: StateCreator<T>
-  ): StateCreator<T, SetImmerState<T>> =>
+    config: StateCreator<T, SetImmerState<T>, GetState<T>>
+  ): StateCreator<T> =>
   (set, get, api) => {
-    api.setState = (fn) => set(produce<T>(fn as any) as any);
+    const setState: SetImmerState<T> = (fn) => set(produce<T>(fn), true);
+    api.setState = setState as any;
 
-    return config(api.setState, get, api);
+    return config(setState, get, api);
   };
