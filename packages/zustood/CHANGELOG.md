@@ -1,5 +1,11 @@
 # @udecode/zustood
 
+## 0.4.3
+
+### Patch Changes
+
+- [#24](https://github.com/udecode/zustood/pull/24) [`29d8bb3`](https://github.com/udecode/zustood/commit/29d8bb3ce2d7ab26125df37415bcf1c6602816a5) Thanks [@zbeyens](https://github.com/zbeyens)! - fix: extended actions `get` parameter was missing the extended selectors.
+
 ## 0.4.2
 
 ### Patch Changes
