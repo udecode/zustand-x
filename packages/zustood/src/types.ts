@@ -32,7 +32,9 @@ export type StoreApi<
     TSelectors & ReturnType<SB>
   >;
 
-  extendActions<AB extends ActionBuilder<TName, T, StateActions<T> & TActions>>(
+  extendActions<
+    AB extends ActionBuilder<TName, T, StateActions<T> & TActions, TSelectors>
+  >(
     builder: AB
   ): StoreApi<
     TName,
