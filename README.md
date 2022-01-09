@@ -20,7 +20,7 @@ which solves these challenges, so you can focus on your app.
 yarn add zustand @udecode/zustood
 ```
 
-Visit [zustood.udecode.io](https://zustood.udecode.io) for the
+Visit [zustood.netlify.app](https://zustood.netlify.app) for the
 API.
 
 ### Why zustood over zustand?
