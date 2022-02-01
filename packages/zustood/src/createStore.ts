@@ -36,7 +36,7 @@ export const createStore =
     } = options;
 
     setAutoFreeze(immer?.enabledAutoFreeze ?? false);
-    if(immer?.enableMapSet) {
+    if (immer?.enableMapSet) {
       enableMapSet();
     }
 
