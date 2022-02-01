@@ -1,5 +1,11 @@
 # @udecode/zustood
 
+## 0.4.4
+
+### Patch Changes
+
+- [#28](https://github.com/udecode/zustood/pull/28) [`db9a744`](https://github.com/udecode/zustood/commit/db9a744a333da999b762f1a6ab7fb5d42d90df68) Thanks [@solimer](https://github.com/solimer)! - Add enable map set to immer's options
+
 ## 0.4.3
 
 ### Patch Changes
