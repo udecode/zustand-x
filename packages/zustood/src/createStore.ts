@@ -1,4 +1,4 @@
-import { setAutoFreeze } from 'immer';
+import { setAutoFreeze, enableMapSet } from 'immer';
 import create, { State, StateCreator } from 'zustand';
 import {
   devtools as devtoolsMiddleware,
@@ -36,6 +36,9 @@ export const createStore =
     } = options;
 
     setAutoFreeze(immer?.enabledAutoFreeze ?? false);
+    if (immer?.enableMapSet) {
+      enableMapSet();
+    }
 
     const middlewares: any[] = [immerMiddleware, ..._middlewares];
 
