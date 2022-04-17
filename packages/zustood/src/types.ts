@@ -1,6 +1,7 @@
 import { Draft } from 'immer';
 import { State, StoreApi as RawStoreApi, UseStore } from 'zustand';
 import { EqualityChecker, GetState, StateSelector } from 'zustand/vanilla';
+import { NamedSet } from 'zustand/middleware'
 
 export type StoreApiGet<
   T extends State = {},
@@ -87,7 +88,9 @@ export type ActionBuilder<
   api: StoreApi<TName, T, TActions, TSelectors>
 ) => any;
 
-export type SetImmerState<T> = (fn: (draft: Draft<T>) => void) => void;
+export type SetImmerState<T> = (fn: (draft: Draft<T>) => void, name?: string) => void;
+
+export type StateCreatorWithDevtools<T extends State, CustomSetState = NamedSet<T>, CustomGetState = GetState<T>, CustomStoreApi extends RawStoreApi<T> = RawStoreApi<T>> = (set: CustomSetState, get: CustomGetState, api: CustomStoreApi) => T;
 
 export interface ImmerStoreApi<T extends State>
   extends Omit<RawStoreApi<T>, 'setState'> {
