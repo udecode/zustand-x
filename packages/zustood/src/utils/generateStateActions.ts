@@ -2,7 +2,8 @@ import { State } from 'zustand';
 import { SetRecord, UseImmerStore } from '../types';
 
 export const generateStateActions = <T extends State>(
-  store: UseImmerStore<T>
+  store: UseImmerStore<T>,
+  storeName: string
 ) => {
   const actions: SetRecord<T> = {} as any;
 
@@ -11,9 +12,10 @@ export const generateStateActions = <T extends State>(
       const prevValue = store.getState()[key];
       if (prevValue === value) return;
 
-      store.setState((draft) => {
+      const actionKey = key.replace(/^\S/, s => s.toUpperCase());
+      store.setState(((draft) => {
         draft[key] = value;
-      });
+      }), `${storeName}/${actionKey}`);
     };
   });
 

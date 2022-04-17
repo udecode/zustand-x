@@ -62,7 +62,7 @@ export const createStore =
     const store = createStore(() => initialState);
     const useStore = create(store as any) as UseImmerStore<T>;
 
-    const stateActions = generateStateActions(useStore);
+    const stateActions = generateStateActions(useStore, name);
 
     const mergeState: MergeState<T> = (state) => {
       store.setState((draft) => {
