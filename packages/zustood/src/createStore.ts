@@ -64,10 +64,14 @@ export const createStore =
 
     const stateActions = generateStateActions(useStore, name);
 
-    const mergeState: MergeState<T> = (state) => {
+    const mergeState: MergeState<T> = (state, actionName) => {
       store.setState((draft) => {
         Object.assign(draft, state);
-      });
+      }, actionName || `@@${name}/mergeState`);
+    };
+
+    const setState: SetImmerState<T> = (fn, actionName) => {
+      store.setState(fn, actionName || `@@${name}/setState`);
     };
 
     const hookSelectors = generateStateHookSelectors(useStore);
@@ -80,7 +84,7 @@ export const createStore =
       } as StateGetters<T>,
       name,
       set: {
-        state: store.setState,
+        state: setState,
         mergeState,
         ...stateActions,
       } as StateActions<T>,

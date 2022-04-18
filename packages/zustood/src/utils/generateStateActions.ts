@@ -12,10 +12,10 @@ export const generateStateActions = <T extends State>(
       const prevValue = store.getState()[key];
       if (prevValue === value) return;
 
-      const actionKey = key.replace(/^\S/, s => s.toUpperCase());
-      store.setState(((draft) => {
+      const actionKey = key.replace(/^\S/, (s) => s.toUpperCase());
+      store.setState((draft) => {
         draft[key] = value;
-      }), `${storeName}/${actionKey}`);
+      }, `@@${storeName}/set${actionKey}`);
     };
   });
 

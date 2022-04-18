@@ -7,7 +7,8 @@ export const immerMiddleware =
     config: StateCreatorWithDevtools<T, SetImmerState<T>, GetState<T>>
   ): StateCreatorWithDevtools<T> =>
   (set, get, api) => {
-    const setState: SetImmerState<T> = (fn, name) => set(produce<T>(fn), true, name);
+    const setState: SetImmerState<T> = (fn, actionName) =>
+      set(produce<T>(fn), true, actionName);
     api.setState = setState as any;
 
     return config(setState, get, api);

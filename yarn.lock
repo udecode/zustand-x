@@ -3584,7 +3584,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@udecode/zustood@workspace:packages/zustood"
   dependencies:
-    immer: 9.0.6
+    immer: ^9.0.6
   peerDependencies:
     zustand: ">=3.5.10"
   languageName: unknown
@@ -7833,10 +7833,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"immer@npm:9.0.6":
-  version: 9.0.6
-  resolution: "immer@npm:9.0.6"
-  checksum: 75da22f3b32f3f14604eb389b4f50e84a14f2e42f306f0cbe4d2969aed54ec7fda9a7e9ca42ebae2ba73ec9bb6ec1001fafbac535accaf03860054ab0f7e8388
+"immer@npm:^9.0.6":
+  version: 9.0.12
+  resolution: "immer@npm:9.0.12"
+  checksum: bcbec6d76dac65e49068eb67ece4d407116e62b8cde3126aa89c801e408f5047763ba0aeb62f1938c1aa704bb6612f1d8302bb2a86fa1fc60fcc12d8b25dc895
   languageName: node
   linkType: hard
 
