@@ -1,5 +1,11 @@
 # @udecode/zustood
 
+## 0.5.0
+
+### Minor Changes
+
+- [#32](https://github.com/udecode/zustood/pull/32) [`d3aa69c`](https://github.com/udecode/zustood/commit/d3aa69c93aac9cd359b51f804fab971740ddd3cb) Thanks [@ShinyLeee](https://github.com/ShinyLeee)! - Support logging action name when devtools enabled
+
 ## 0.4.4
 
 ### Patch Changes
