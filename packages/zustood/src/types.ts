@@ -112,13 +112,13 @@ export interface UseImmerStore<T extends State>
   extends Omit<UseStore<T>, 'setState'> {
   (): T;
 
-  <U>(selector: StateSelector<T, U>, equalityFn?: EqualityChecker<U>): U;
+  <U>(selector: StateSelector<T, U>, equalityFn?: EqualityChecker<T>): U;
 
   setState: SetImmerState<T>;
 }
 
 export type GetRecord<O> = {
-  [K in keyof O]: () => O[K];
+  [K in keyof O]: (equalityFn?: EqualityChecker<O>) => O[K];
 };
 export type SetRecord<O> = {
   [K in keyof O]: (value: O[K]) => void;
