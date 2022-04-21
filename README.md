@@ -101,6 +101,7 @@ full typescript support:
 const repoStore = createStore('repo')({
   name: 'zustood ',
   stars: 0,
+  middlewares: ['immer', 'devtools', 'persist']
 })
   .extendSelectors((set, get, api) => ({
     validName: () => get.name().trim(),
@@ -191,8 +192,14 @@ export const actions = mapValuesKey('set', rootStore);
 ### Global hook selectors
 
 ```ts
+import shallow from 'zustand/shallow'
+
 useStore().repo.name()
 useStore().modal.isOpen()
+
+// prevent unnecessary re-renders
+// more see: https://docs.pmnd.rs/zustand/recipes#selecting-multiple-state-slices
+useStore().repo.middlewares(shallow)
 ```
 
 By using `useStore()`, ESLint will correctly lint hook errors.
