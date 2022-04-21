@@ -1,5 +1,11 @@
 # @udecode/zustood
 
+## 1.0.0
+
+### Major Changes
+
+- [#34](https://github.com/udecode/zustood/pull/34) [`22f07f6`](https://github.com/udecode/zustood/commit/22f07f69e05ee4ebde7a6f293367fcdd4e167fed) Thanks [@ShinyLeee](https://github.com/ShinyLeee)! - selector hooks support passing equality function
+
 ## 0.5.0
 
 ### Minor Changes
