@@ -5,6 +5,7 @@ import {
   StoreApi,
   StoreApiGet,
   StoreApiUse,
+  StoreApiUseTracked,
 } from '../types';
 
 export const extendSelectors = <
@@ -26,6 +27,10 @@ export const extendSelectors = <
     ...api.use,
   } as StoreApiUse<T, TSelectors & ReturnType<CB>>;
 
+  const useTracked = {
+    ...api.useTracked,
+  } as StoreApiUseTracked<T, TSelectors & ReturnType<CB>>;
+
   const get = {
     ...api.get,
   } as StoreApiGet<T, TSelectors & ReturnType<CB>>;
@@ -33,6 +38,9 @@ export const extendSelectors = <
   Object.keys(builder(api.store.getState(), api.get, api)).forEach((key) => {
     // @ts-ignore
     use[key] = (...args: any[]) =>
+      api.useStore((state) => builder(state, api.get, api)[key])(...args);
+    // @ts-ignore
+    useTracked[key] = (...args: any[]) =>
       api.useStore((state) => builder(state, api.get, api)[key])(...args);
     // @ts-ignore
     get[key] = (...args: any[]) =>

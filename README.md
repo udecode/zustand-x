@@ -31,6 +31,7 @@ API.
   - Derived actions
 - `immer`, `devtools` and `persist` middlewares
 - Full typescript support
+- `react-tracked` support
 
 ## Create a store
 
@@ -40,6 +41,10 @@ import { createStore } from '@udecode/zustood'
 const repoStore = createStore('repo')({
   name: 'zustood',
   stars: 0,
+  owner: {
+    name: 'someone',
+    email: 'someone@xxx.com',
+  },
 })
 ```
 
@@ -70,6 +75,17 @@ state and the component will re-render on changes. Use the `use` method:
 ```ts
 repoStore.use.name()
 repoStore.use.stars()
+```
+
+### Tracked Hooks
+
+> Big thanks for [react-tracked](https://github.com/dai-shi/react-tracked)
+
+Use the tracked hooks in React components, no providers needed. Select your
+state and the component will only triggers re-renders if the **accessed property** is changed. Use the `useTracked` method:
+
+```ts
+repoStore.useTracked.owner()
 ```
 
 We recommend using the global hooks (see below) to support ESLint hook
@@ -182,6 +198,9 @@ export const rootStore = {
 // Global hook selectors
 export const useStore = () => mapValuesKey('use', rootStore);
 
+// Global tracked hook selectors
+export const useTrackedStore = () => mapValuesKey('useTracked', rootStore);
+
 // Global getter selectors
 export const store = mapValuesKey('get', rootStore);
 
@@ -202,7 +221,32 @@ useStore().modal.isOpen()
 useStore().repo.middlewares(shallow)
 ```
 
-By using `useStore()`, ESLint will correctly lint hook errors.
+### Global tracked hook selectors
+
+```tsx
+// with useTrackStore UserEmail Component will only re-render when accessed property owner.email changed
+const UserEmail = () => {
+  const owner = useTrackedStore().repo.owner()
+  return (
+    <div>
+      <span>User Email: {owner.email}</span>
+    </div>
+  );
+};
+
+// with useStore UserEmail Component re-render when owner changed, but you can pass equalityFn to avoid it.
+const UserEmail = () => {
+  const owner = useStore().repo.owner()
+  // const owner = useStore().repo.owner((prev, next) => prev.owner.email === next.owner.email)
+  return (
+    <div>
+      <span>User Email: {owner.email}</span>
+    </div>
+  );
+};
+```
+
+By using `useStore() or useTrackStore()`, ESLint will correctly lint hook errors.
 
 ### Global getter selectors
 

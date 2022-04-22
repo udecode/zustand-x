@@ -1,4 +1,5 @@
 import { setAutoFreeze, enableMapSet } from 'immer';
+import { createTrackedSelector } from 'react-tracked';
 import create, { State, StateCreator } from 'zustand';
 import {
   devtools as devtoolsMiddleware,
@@ -18,6 +19,7 @@ import { generateStateActions } from './utils/generateStateActions';
 import { storeFactory } from './utils/storeFactory';
 import { generateStateGetSelectors } from './utils/generateStateGetSelectors';
 import { generateStateHookSelectors } from './utils/generateStateHookSelectors';
+import { generateStateTrackedHooksSelectors } from './utils/generateStateTrackedHooksSelectors';
 import { immerMiddleware } from './middlewares/immer.middleware';
 import { pipe } from './utils/pipe';
 import { CreateStoreOptions } from './types/CreateStoreOptions';
@@ -77,6 +79,12 @@ export const createStore =
     const hookSelectors = generateStateHookSelectors(useStore);
     const getterSelectors = generateStateGetSelectors(useStore);
 
+    const useTrackedStore = createTrackedSelector(useStore);
+    const trackedHooksSelectors = generateStateTrackedHooksSelectors(
+      useStore,
+      useTrackedStore
+    );
+
     const api = {
       get: {
         state: store.getState,
@@ -90,7 +98,9 @@ export const createStore =
       } as StateActions<T>,
       store,
       use: hookSelectors,
+      useTracked: trackedHooksSelectors,
       useStore,
+      useTrackedStore,
       extendSelectors: () => api as any,
       extendActions: () => api as any,
     };

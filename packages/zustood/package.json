@@ -30,7 +30,8 @@
     "test": "jest"
   },
   "dependencies": {
-    "immer": "^9.0.6"
+    "immer": "^9.0.6",
+    "react-tracked": "^1.7.9"
   },
   "peerDependencies": {
     "zustand": ">=3.5.10"
