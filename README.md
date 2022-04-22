@@ -77,19 +77,19 @@ repoStore.use.name()
 repoStore.use.stars()
 ```
 
+We recommend using the global hooks (see below) to support ESLint hook
+linting.
+
 ### Tracked Hooks
 
 > Big thanks for [react-tracked](https://github.com/dai-shi/react-tracked)
 
 Use the tracked hooks in React components, no providers needed. Select your
-state and the component will only triggers re-renders if the **accessed property** is changed. Use the `useTracked` method:
+state and the component will trigger re-renders only if the **accessed property** is changed. Use the `useTracked` method:
 
 ```ts
 repoStore.useTracked.owner()
 ```
-
-We recommend using the global hooks (see below) to support ESLint hook
-linting.
 
 ### Getters
 
