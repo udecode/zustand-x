@@ -9,6 +9,10 @@ export type StoreApiGet<
 > = StateGetters<T> & TSelectors;
 export type StoreApiUse<T extends State = {}, TSelectors = {}> = GetRecord<T> &
   TSelectors;
+export type StoreApiUseTracked<
+  T extends State = {},
+  TSelectors = {}
+> = GetRecord<T> & TSelectors;
 export type StoreApiSet<TActions = {}> = TActions;
 
 export type StoreApi<
@@ -22,7 +26,9 @@ export type StoreApi<
   set: StoreApiSet<TActions>;
   store: ImmerStoreApi<T>;
   use: StoreApiUse<T, TSelectors>;
+  useTracked: StoreApiUseTracked<T, TSelectors>;
   useStore: UseImmerStore<T>;
+  useTrackedStore: () => T;
 
   extendSelectors<SB extends SelectorBuilder<TName, T, TActions, TSelectors>>(
     builder: SB
