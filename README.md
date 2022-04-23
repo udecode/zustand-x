@@ -119,11 +119,11 @@ const repoStore = createStore('repo')({
   stars: 0,
   middlewares: ['immer', 'devtools', 'persist']
 })
-  .extendSelectors((set, get, api) => ({
+  .extendSelectors((state, get, api) => ({
     validName: () => get.name().trim(),
     // other selectors
   }))
-  .extendSelectors((set, get, api) => ({
+  .extendSelectors((state, get, api) => ({
     // get.validName is accessible
     title: (prefix: string) =>
       `${prefix + get.validName()} with ${get.stars()} stars`,
