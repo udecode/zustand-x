@@ -1,5 +1,13 @@
 # @udecode/zustood
 
+## 1.1.1
+
+### Patch Changes
+
+- [#38](https://github.com/udecode/zustood/pull/38) [`8671fcd`](https://github.com/udecode/zustood/commit/8671fcd4a5de1ec17d26d6dd49aafd5ef2142c07) Thanks [@ShinyLeee](https://github.com/ShinyLeee)! - fix: selectors always cause re-render because of always return a new function
+  fix: correct equalityFn typing
+  docs: fix extendSelectors argument typo
+
 ## 1.1.0
 
 ### Minor Changes
