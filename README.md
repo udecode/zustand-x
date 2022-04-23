@@ -119,11 +119,11 @@ const repoStore = createStore('repo')({
   stars: 0,
   middlewares: ['immer', 'devtools', 'persist']
 })
-  .extendSelectors((set, get, api) => ({
+  .extendSelectors((state, get, api) => ({
     validName: () => get.name().trim(),
     // other selectors
   }))
-  .extendSelectors((set, get, api) => ({
+  .extendSelectors((state, get, api) => ({
     // get.validName is accessible
     title: (prefix: string) =>
       `${prefix + get.validName()} with ${get.stars()} stars`,
@@ -237,7 +237,7 @@ const UserEmail = () => {
 // with useStore UserEmail Component re-render when owner changed, but you can pass equalityFn to avoid it.
 const UserEmail = () => {
   const owner = useStore().repo.owner()
-  // const owner = useStore().repo.owner((prev, next) => prev.owner.email === next.owner.email)
+  // const owner = useStore().repo.owner((prev, next) => prev.email === next.email)
   return (
     <div>
       <span>User Email: {owner.email}</span>

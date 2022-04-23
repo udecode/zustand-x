@@ -8,7 +8,7 @@ export const generateStateHookSelectors = <T extends State>(
 
   Object.keys(store.getState()).forEach((key) => {
     // selectors[`use${capitalize(key)}`] = () =>
-    selectors[key] = (equalityFn?: EqualityChecker<T>) => {
+    selectors[key] = (equalityFn?: EqualityChecker<T[keyof T]>) => {
       return store((state: T) => state[key as keyof T], equalityFn);
     };
   });
