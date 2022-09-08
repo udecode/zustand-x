@@ -45,8 +45,13 @@ export const createStore =
     const middlewares: any[] = [immerMiddleware, ..._middlewares];
 
     if (persist?.enabled) {
+      const options = {
+        ...persist,
+        name: persist.name ?? name,
+      };
+
       middlewares.push((config: any) =>
-        persistMiddleware(config, { ...persist, name } as any)
+        persistMiddleware(config, options as any)
       );
     }
 
