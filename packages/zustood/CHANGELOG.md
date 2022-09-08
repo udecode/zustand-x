@@ -1,5 +1,11 @@
 # @udecode/zustood
 
+## 1.1.3
+
+### Patch Changes
+
+- [#49](https://github.com/udecode/zustood/pull/49) [`0a0ee89`](https://github.com/udecode/zustood/commit/0a0ee8930d25bf4afb1ea4fd8ca7076cafab6cf3) Thanks [@GoodbyeNJN](https://github.com/GoodbyeNJN)! - fix: update `PersistOptions` typing
+
 ## 1.1.2
 
 ### Patch Changes
