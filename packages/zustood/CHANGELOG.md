@@ -1,5 +1,11 @@
 # @udecode/zustood
 
+## 1.1.2
+
+### Patch Changes
+
+- [#47](https://github.com/udecode/zustood/pull/47) [`ac2379c`](https://github.com/udecode/zustood/commit/ac2379c28ea59c780e068eb609ac5037b745ce77) Thanks [@GoodbyeNJN](https://github.com/GoodbyeNJN)! - feat: support persist name is different from store name
+
 ## 1.1.1
 
 ### Patch Changes
