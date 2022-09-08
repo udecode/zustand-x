@@ -6,6 +6,9 @@ export type StateStorage = {
 };
 export type StorageValue<S> = { state: S; version: number };
 
-export type PersistOptions<S> = _PersistOptions<S> & {
+type PersistOptionsWithoutName<S> = Omit<_PersistOptions<S>, 'name'>;
+
+export type PersistOptions<S> = PersistOptionsWithoutName<S> & {
   enabled?: boolean;
+  name?: string;
 };
