@@ -3,6 +3,5 @@
  */
 
 export * from './CreateStoreOptions';
-export * from './DevtoolsOptions';
 export * from './ImmerOptions';
 export * from './PersistOptions';

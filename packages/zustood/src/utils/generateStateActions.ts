@@ -1,5 +1,4 @@
-import { State } from 'zustand';
-import { SetRecord, UseImmerStore } from '../types';
+import { SetRecord, State, UseImmerStore } from '../types';
 
 export const generateStateActions = <T extends State>(
   store: UseImmerStore<T>,
@@ -7,7 +6,7 @@ export const generateStateActions = <T extends State>(
 ) => {
   const actions: SetRecord<T> = {} as any;
 
-  Object.keys(store.getState()).forEach((key) => {
+  Object.keys((store as any).getState()).forEach((key) => {
     actions[key] = (value: keyof T) => {
       const prevValue = store.getState()[key];
       if (prevValue === value) return;

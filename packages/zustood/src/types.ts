@@ -1,6 +1,6 @@
 import { Draft } from 'immer';
-import { State, StoreApi as RawStoreApi, UseStore } from 'zustand';
-import { EqualityChecker, GetState, StateSelector } from 'zustand/vanilla';
+import { StoreApi as RawStoreApi, UseBoundStore } from 'zustand';
+import { GetState, StateSelector } from 'zustand/vanilla';
 import { NamedSet } from 'zustand/middleware';
 
 export type StoreApiGet<
@@ -60,6 +60,9 @@ export type StoreApi<
   //   >;
 };
 
+export type State = unknown;
+export type EqualityChecker<T> = (state: T, newState: T) => boolean;
+
 export type MergeState<T extends State> = (
   state: Partial<T>,
   actionName?: string
@@ -115,7 +118,7 @@ export interface ImmerStoreApi<T extends State>
 }
 
 export interface UseImmerStore<T extends State>
-  extends Omit<UseStore<T>, 'setState'> {
+  extends Omit<UseBoundStore<RawStoreApi<T>>, 'setState'> {
   (): T;
 
   <U>(selector: StateSelector<T, U>, equalityFn?: EqualityChecker<U>): U;

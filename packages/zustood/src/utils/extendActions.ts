@@ -1,5 +1,4 @@
-import { State } from 'zustand';
-import { ActionBuilder, StateActions, StoreApi } from '../types';
+import { ActionBuilder, State, StateActions, StoreApi } from '../types';
 
 export const extendActions = <
   AB extends ActionBuilder<TName, T, StateActions<T> & TActions, TSelectors>,

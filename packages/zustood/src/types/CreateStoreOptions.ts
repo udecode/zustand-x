@@ -1,7 +1,7 @@
-import { State } from 'zustand';
 import { PersistOptions } from './PersistOptions';
-import { DevtoolsOptions } from './DevtoolsOptions';
 import { ImmerOptions } from './ImmerOptions';
+import { State } from '../types';
+import { DevtoolsOptions } from 'zustand/middleware';
 
 export interface CreateStoreOptions<T extends State> {
   /**

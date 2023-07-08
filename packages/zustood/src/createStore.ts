@@ -1,11 +1,12 @@
 import { setAutoFreeze, enableMapSet } from 'immer';
 import { createTrackedSelector } from 'react-tracked';
-import create, { State, StateCreator } from 'zustand';
+import { create } from 'zustand';
+import type { StateCreator } from 'zustand';
 import {
   devtools as devtoolsMiddleware,
   persist as persistMiddleware,
 } from 'zustand/middleware';
-import createVanillaStore from 'zustand/vanilla';
+import { createStore as createVanillaStore } from 'zustand/vanilla';
 import {
   ImmerStoreApi,
   MergeState,
@@ -14,6 +15,7 @@ import {
   StateGetters,
   StoreApi,
   UseImmerStore,
+  State,
 } from './types';
 import { generateStateActions } from './utils/generateStateActions';
 import { storeFactory } from './utils/storeFactory';
@@ -63,6 +65,7 @@ export const createStore =
 
     middlewares.push(createVanillaStore);
 
+    // @ts-ignore
     const createStore = (createState: StateCreator<T, SetImmerState<T>>) =>
       pipe(createState as any, ...middlewares) as ImmerStoreApi<T>;
 
