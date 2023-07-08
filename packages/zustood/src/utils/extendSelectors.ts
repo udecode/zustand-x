@@ -1,6 +1,6 @@
-import { State } from 'zustand';
 import {
   SelectorBuilder,
+  State,
   StateActions,
   StoreApi,
   StoreApiGet,

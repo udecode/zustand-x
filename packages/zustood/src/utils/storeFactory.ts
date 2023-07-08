@@ -1,9 +1,9 @@
-import { State } from 'zustand';
 import {
   ActionBuilder,
   SelectorBuilder,
   StateActions,
   StoreApi,
+  State,
 } from '../types';
 import { extendActions } from './extendActions';
 import { extendSelectors } from './extendSelectors';

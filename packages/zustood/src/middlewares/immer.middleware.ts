@@ -1,10 +1,14 @@
-import produce from 'immer';
-import { GetState, State } from 'zustand';
-import { SetImmerState, StateCreatorWithDevtools } from '../types';
+import { produce } from 'immer';
+import { StoreApi } from 'zustand';
+import { SetImmerState, StateCreatorWithDevtools, State } from '../types';
 
 export const immerMiddleware =
   <T extends State>(
-    config: StateCreatorWithDevtools<T, SetImmerState<T>, GetState<T>>
+    config: StateCreatorWithDevtools<
+      T,
+      SetImmerState<T>,
+      StoreApi<T>['getState']
+    >
   ): StateCreatorWithDevtools<T> =>
   (set, get, api) => {
     const setState: SetImmerState<T> = (fn, actionName) =>
