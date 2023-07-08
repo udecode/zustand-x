@@ -1,5 +1,15 @@
 # @udecode/zustood
 
+## 2.0.0
+
+### Major Changes
+
+- [#57](https://github.com/udecode/zustood/pull/57) [`2b1dbeb`](https://github.com/udecode/zustood/commit/2b1dbeb96ba86fbd31e3c731d2bd42cc22a003f0) Thanks [@enchorb](https://github.com/enchorb)! - Upgraded ﻿`zustand` to version 4, bringing in several new features and improvements.
+  - Deprecated types in `zustand` v4+ were addressed by including them in the package itself.
+  - Upgraded ﻿`immer` to the latest version.
+  - The upgrade to `zustand` v4 and `immer` introduces enhancements, bug fixes, and performance optimizations to your application.
+  - Please make sure to review the official documentation of ﻿`zustand` v4 and `immer` for any additional changes and updates.
+
 ## 1.1.3
 
 ### Patch Changes
