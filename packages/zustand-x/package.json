@@ -1,33 +1,42 @@
 {
   "name": "zustand-x",
   "version": "2.0.0",
-  "description": "A modular store factory using zustand",
-  "keywords": [
-    "zustand"
-  ],
-  "homepage": "https://github.com/udecode/zustand-x",
-  "bugs": {
-    "url": "https://github.com/udecode/zustand-x/issues"
-  },
+  "description": "Zustand store factory for a best-in-class developer experience.",
+  "license": "MIT",
+  "homepage": "https://platejs.org",
   "repository": {
     "type": "git",
-    "url": "https://github.com/udecode/zustand-x.git",
-    "directory": "packages/zustand-x"
+    "url": "https://github.com/udecode/plate.git",
+    "directory": "packages/cli"
   },
-  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/udecode/plate/issues"
+  },
+  "sideEffects": false,
   "main": "dist/index.js",
-  "module": "dist/index.es.js",
+  "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "files": [
-    "dist"
+    "dist/**/*"
   ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "module": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
   "scripts": {
-    "prebuild": "rimraf dist",
-    "build": "tsc && yarn rollup",
-    "build:w": "yarn rollup -w",
-    "cti": "sh ../../scripts/cti.sh",
-    "rollup": "rollup -c=../../rollup.config.js",
-    "test": "jest"
+    "build": "yarn p:build",
+    "build:watch": "yarn p:build:watch",
+    "brl": "yarn p:brl",
+    "clean": "yarn p:clean",
+    "lint": "yarn p:lint",
+    "lint:fix": "yarn p:lint:fix",
+    "test": "yarn p:test",
+    "test:watch": "yarn p:test:watch",
+    "typecheck": "yarn p:typecheck"
   },
   "dependencies": {
     "immer": "^10.0.2",
@@ -36,6 +45,9 @@
   "peerDependencies": {
     "zustand": ">=4.3.9"
   },
+  "keywords": [
+    "zustand"
+  ],
   "publishConfig": {
     "access": "public"
   }
