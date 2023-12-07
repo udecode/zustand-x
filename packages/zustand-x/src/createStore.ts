@@ -1,30 +1,32 @@
-import { setAutoFreeze, enableMapSet } from 'immer';
+import { enableMapSet, setAutoFreeze } from 'immer';
 import { createTrackedSelector } from 'react-tracked';
 import { create } from 'zustand';
-import type { StateCreator } from 'zustand';
 import {
   devtools as devtoolsMiddleware,
   persist as persistMiddleware,
 } from 'zustand/middleware';
 import { createStore as createVanillaStore } from 'zustand/vanilla';
+
+import { immerMiddleware } from './middlewares/immer.middleware';
 import {
   ImmerStoreApi,
   MergeState,
   SetImmerState,
+  State,
   StateActions,
   StateGetters,
   StoreApi,
   UseImmerStore,
-  State,
 } from './types';
+import { CreateStoreOptions } from './types/CreateStoreOptions';
 import { generateStateActions } from './utils/generateStateActions';
-import { storeFactory } from './utils/storeFactory';
 import { generateStateGetSelectors } from './utils/generateStateGetSelectors';
 import { generateStateHookSelectors } from './utils/generateStateHookSelectors';
 import { generateStateTrackedHooksSelectors } from './utils/generateStateTrackedHooksSelectors';
-import { immerMiddleware } from './middlewares/immer.middleware';
 import { pipe } from './utils/pipe';
-import { CreateStoreOptions } from './types/CreateStoreOptions';
+import { storeFactory } from './utils/storeFactory';
+
+import type { StateCreator } from 'zustand';
 
 export const createStore =
   <TName extends string>(name: TName) =>
@@ -47,14 +49,12 @@ export const createStore =
     const middlewares: any[] = [immerMiddleware, ..._middlewares];
 
     if (persist?.enabled) {
-      const options = {
+      const opts = {
         ...persist,
         name: persist.name ?? name,
       };
 
-      middlewares.push((config: any) =>
-        persistMiddleware(config, options as any)
-      );
+      middlewares.push((config: any) => persistMiddleware(config, opts));
     }
 
     if (devtools?.enabled) {
@@ -66,18 +66,21 @@ export const createStore =
     middlewares.push(createVanillaStore);
 
     // @ts-ignore
-    const createStore = (createState: StateCreator<T, SetImmerState<T>>) =>
+    const pipeMiddlewares = (createState: StateCreator<T, SetImmerState<T>>) =>
       pipe(createState as any, ...middlewares) as ImmerStoreApi<T>;
 
-    const store = createStore(() => initialState);
+    const store = pipeMiddlewares(() => initialState);
     const useStore = create(store as any) as UseImmerStore<T>;
 
     const stateActions = generateStateActions(useStore, name);
 
     const mergeState: MergeState<T> = (state, actionName) => {
-      store.setState((draft) => {
-        Object.assign(draft, state);
-      }, actionName || `@@${name}/mergeState`);
+      store.setState(
+        (draft) => {
+          Object.assign(draft as any, state);
+        },
+        actionName || `@@${name}/mergeState`
+      );
     };
 
     const setState: SetImmerState<T> = (fn, actionName) => {

@@ -1,4 +1,4 @@
-import { GetRecord, UseImmerStore, EqualityChecker, State } from '../types';
+import { EqualityChecker, GetRecord, State, UseImmerStore } from '../types';
 
 export const generateStateHookSelectors = <T extends State>(
   store: UseImmerStore<T>

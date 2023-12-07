@@ -1,4 +1,4 @@
-import { GetRecord, UseImmerStore, State } from '../types';
+import { GetRecord, State, UseImmerStore } from '../types';
 
 export const generateStateTrackedHooksSelectors = <T extends State>(
   store: UseImmerStore<T>,

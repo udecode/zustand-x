@@ -1,6 +1,7 @@
 import { produce } from 'immer';
 import { StoreApi } from 'zustand';
-import { SetImmerState, StateCreatorWithDevtools, State } from '../types';
+
+import { SetImmerState, State, StateCreatorWithDevtools } from '../types';
 
 export const immerMiddleware =
   <T extends State>(

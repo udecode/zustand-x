@@ -3,7 +3,7 @@ import { mapValues } from 'lodash';
 export const mapValuesKey = <
   VK extends string,
   T extends Record<VK, any>,
-  R extends Record<keyof R, T>
+  R extends Record<keyof R, T>,
 >(
   key: VK,
   obj: R
