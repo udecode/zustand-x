@@ -119,5 +119,5 @@ export const createZustandFactory =
     return storeFactory(api) as StoreApi<TName, T, StateActions<T>>;
   };
 
-// @deprecated use createZustandFactory instead
+// Alias {@link createZustandFactory}
 export const createStore = createZustandFactory;
