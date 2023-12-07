@@ -28,7 +28,7 @@ import { storeFactory } from './utils/storeFactory';
 
 import type { StateCreator } from 'zustand';
 
-export const createStore =
+export const createZustandFactory =
   <TName extends string>(name: TName) =>
   <T extends State>(
     initialState: T,
@@ -118,3 +118,6 @@ export const createStore =
 
     return storeFactory(api) as StoreApi<TName, T, StateActions<T>>;
   };
+
+// @deprecated use createZustandFactory instead
+export const createStore = createZustandFactory;

@@ -20,10 +20,10 @@ which solves these challenges, so you can focus on your app.
 yarn add zustand zustand-x
 ```
 
-Visit [zustand-x.netlify.app](https://zustand-x.netlify.app) for the
+Visit [zustand-x.udecode.io](https://zustand-x.udecode.io) for the
 API.
 
-### Why zustand-x in addition to zustand?
+### Why `zustand-x` in addition to `zustand`?
 
 - Much less boilerplate
 - Modular state management:

@@ -79,12 +79,13 @@ describe('zustandX', () => {
 
     describe('deletes a property', () => {
       it('should delete that property', () => {
-        const repoStore = createStore('repo')<{ name?: string; stars: number }>(
-          {
-            name: 'zustandX',
-            stars: 0,
-          }
-        );
+        const repoStore = createStore('repo')<{
+          name?: string;
+          stars: number;
+        }>({
+          name: 'zustandX',
+          stars: 0,
+        });
 
         repoStore.set.state((draft) => {
           delete draft.name;

@@ -7,7 +7,7 @@ export const generateStateTrackedHooksSelectors = <T extends State>(
   const selectors: GetRecord<T> = {} as any;
 
   Object.keys((store as any).getState()).forEach((key) => {
-    selectors[key] = () => {
+    selectors[key as keyof T] = () => {
       return trackedStore()[key as keyof T];
     };
   });
