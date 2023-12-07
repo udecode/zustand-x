@@ -1,5 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": ["**/.env.*local", "**/tsconfig*.json"],
   "globalEnv": ["CI", "GITHUB_OAUTH_TOKEN"],
   "pipeline": {
     "build": {

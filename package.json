@@ -10,8 +10,9 @@
     "build:watch": "ROARR_LOG=true turbowatch ./config/turbowatch.config.ts | roarr",
     "brl": "yarn g:brl",
     "check:install": "yarn dlx @yarnpkg/doctor@4.0.0-rc.10 --configFileName config/.ncurc.yml packages",
-    "deps:check": "yarn dlx npm-check-updates@latest --configFileName config/.ncurc.yml --deep --mergeConfig",
-    "deps:update": "deps:check -u",
+    "clean:turbo": "rimraf --glob '**/.turbo' '**/turbo-*.log' && turbo daemon clean",
+    "deps:check": "npx npm-check-updates@latest --configFileName config/ncurc.yml --workspaces --root --mergeConfig",
+    "deps:update": "npx npm-check-updates@latest --configFileName ncurc.yml -u --workspaces --root --mergeConfig",
     "lint": "yarn g:lint",
     "lint:fix": "yarn g:lint:fix",
     "prerelease": "yarn g:prerelease",
@@ -21,7 +22,7 @@
     "g:build": "turbo --filter \"./packages/**\" build --no-daemon",
     "g:build:watch": "yarn build:watch",
     "g:changeset": "changeset",
-    "g:clean": "turbo --filter \"./packages/**\" clean --no-daemon",
+    "g:clean": "yarn clean:turbo && turbo --filter \"./packages/**\" clean --no-daemon",
     "g:lint": "turbo --filter \"./packages/**\" lint --no-daemon",
     "g:lint:fix": "turbo lint:fix --no-daemon",
     "g:prerelease": "yarn build",
@@ -33,7 +34,7 @@
     "g:test:covwa": "yarn g:test:cov --watchAll",
     "g:test:wa": "yarn g:test --watchAll",
     "g:typecheck": "turbo typecheck --no-daemon",
-    "nuke:node_modules": "rimraf '**/node_modules'",
+    "nuke:node_modules": "rimraf --glob '**/node_modules'",
     "p:brl": "cd $INIT_CWD && barrelsby -d $INIT_CWD/src -D -l all -q -e '.*(fixture|template|spec|__tests__).*'",
     "p:brl:below": "cd $INIT_CWD && barrelsby -d $INIT_CWD/src -D -l below -q -e '.*(fixture|template|spec|__tests__).*'",
     "p:build": "cd $INIT_CWD && yarn p:tsup",
@@ -105,8 +106,8 @@
     "zustand": "^4.4.7"
   },
   "engines": {
-    "node": "^14.13.1 || >=16.0.0",
-    "npm": "please-use-yarn",
-    "yarn": ">=1.22.0"
+    "node": ">=18.12.0",
+    "yarn": ">=1.22.0",
+    "npm": "please-use-yarn"
   }
 }
