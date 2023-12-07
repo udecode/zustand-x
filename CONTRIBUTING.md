@@ -48,7 +48,7 @@ We use eslint as a linter for all code (including typescript code).
 All you have to run is:
 
 ```sh
-yarn lint --fix
+yarn lint:fix
 ```
 
 #### Run unit tests
