@@ -1,6 +1,6 @@
 ---
 name: '🚨 Bug'
-about: A bug that occurs in zustood logic
+about: A bug that occurs in zustand-x logic
 title: ''
 labels: bug
 assignees: ''

@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for your interest in improving `zustood`! We are a
+Thanks for your interest in improving `zustand-x`! We are a
 community-driven project and welcome contributions of all kinds: from
 discussion to documentation to bugfixes to feature improvements.
 
@@ -12,7 +12,7 @@ everyone's precious time.
 No software is bug-free. So, if you got an issue, follow these steps:
 
 - Search the
-  [issue list](https://github.com/udecode/zustood/issues?utf8=%E2%9C%93&q=)
+  [issue list](https://github.com/udecode/zustand-x/issues?utf8=%E2%9C%93&q=)
   for current and old issues.
   - If you find an existing issue, please UPVOTE the issue by adding a
     "thumbs-up reaction". We use this to help prioritize issues!
@@ -33,8 +33,8 @@ package manager. See
 [installation guide](https://yarnpkg.com/en/docs/install).
 
 1. `cd ~` (optional)
-2. `git clone https://github.com/udecode/zustood.git` _bonus_: use your own fork for this step
-3. `cd zustood`
+2. `git clone https://github.com/udecode/zustand-x.git` _bonus_: use your own fork for this step
+3. `cd zustand-x`
 4. `yarn install`
 5. `yarn build`
 
@@ -111,7 +111,7 @@ a PR if tests are failing.
 include a short description of what you contributed and, if it is a code
 change, instructions for how to manually test out the change. This is
 informally enforced by our
-[PR template](https://github.com/udecode/zustood/blob/main/.github/PULL_REQUEST_TEMPLATE.md).
+[PR template](https://github.com/udecode/zustand-x/blob/main/.github/PULL_REQUEST_TEMPLATE.md).
 If your PR is reviewed as only needing trivial changes (e.g. small typos
 etc), and you have commit access then you can merge the PR after making
 those changes.
@@ -132,7 +132,7 @@ great place to start. Here's how you can help:
 
 ### Responding to questions
 
-[Q&A](https://github.com/udecode/zustood/discussions/categories/q-a) is a
+[Q&A](https://github.com/udecode/zustand-x/discussions/categories/q-a) is a
 great place to help. If you can answer a question, it will help the
 asker as well as anyone who has a similar question. Also in the future
 if anyone has that same question they can easily find it by searching.
@@ -160,7 +160,7 @@ labels to filter issues down so we can see all of the issues for a
 particular area, and keep the total number of open issues under control.
 
 For example, here is the list of
-[open, untyped issues](https://github.com/udecode/zustood/issues?utf8=%E2%9C%93&q=is%3Aissue%20is%3Aopen%20-label%3A%22bug%22%20-label%3A%22discussion%22%20-label%3A%22feature%22%20-label%3A%22maintenance%22%20-label%3A%22question%20%2F%20support%22%20-label%3A%22documentation%22%20-label%3A%22greenkeeper%22).
+[open, untyped issues](https://github.com/udecode/zustand-x/issues?utf8=%E2%9C%93&q=is%3Aissue%20is%3Aopen%20-label%3A%22bug%22%20-label%3A%22discussion%22%20-label%3A%22feature%22%20-label%3A%22maintenance%22%20-label%3A%22question%20%2F%20support%22%20-label%3A%22documentation%22%20-label%3A%22greenkeeper%22).
 For more info see
 [searching issues](https://help.github.com/articles/searching-issues/)
 in the Github docs.

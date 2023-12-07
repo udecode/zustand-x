@@ -1,18 +1,18 @@
 {
-  "name": "@udecode/zustood",
+  "name": "zustand-x",
   "version": "2.0.0",
   "description": "A modular store factory using zustand",
   "keywords": [
     "zustand"
   ],
-  "homepage": "https://github.com/udecode/zustood",
+  "homepage": "https://github.com/udecode/zustand-x",
   "bugs": {
-    "url": "https://github.com/udecode/zustood/issues"
+    "url": "https://github.com/udecode/zustand-x/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/udecode/zustood.git",
-    "directory": "packages/zustood"
+    "url": "https://github.com/udecode/zustand-x.git",
+    "directory": "packages/zustand-x"
   },
   "license": "MIT",
   "main": "dist/index.js",

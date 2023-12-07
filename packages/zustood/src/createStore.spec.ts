@@ -1,20 +1,20 @@
 import { createStore } from './createStore';
 
-describe('zustood', () => {
+describe('zustandX', () => {
   describe('when get', () => {
     const store = createStore('repo')({
-      name: 'zustood',
+      name: 'zustandX',
       stars: 0,
     });
 
     it('should be', () => {
-      expect(store.get.name()).toEqual('zustood');
+      expect(store.get.name()).toEqual('zustandX');
     });
   });
 
   describe('when extending actions', () => {
     const store = createStore('repo')({
-      name: 'zustood',
+      name: 'zustandX',
       stars: 0,
     })
       .extendActions((set, get, api) => ({
@@ -41,7 +41,7 @@ describe('zustood', () => {
 
   describe('when extending selectors', () => {
     const store = createStore('repo')({
-      name: 'zustood ',
+      name: 'zustandX ',
       stars: 0,
     })
       .extendSelectors((set, get, api) => ({
@@ -54,14 +54,14 @@ describe('zustood', () => {
 
     it('should be', () => {
       expect(store.get.title('Repository: ')).toBe(
-        'Repository: zustood with 0 stars'
+        'Repository: zustandX with 0 stars'
       );
     });
   });
 
   describe('when set.state', () => {
     const store = createStore('repo')({
-      name: 'zustood',
+      name: 'zustandX',
       stars: 0,
     });
 
@@ -80,7 +80,7 @@ describe('zustood', () => {
     describe('deletes a property', () => {
       it('should delete that property', () => {
         const store = createStore('repo')<{ name?: string; stars: number }>({
-          name: 'zustood',
+          name: 'zustandX',
           stars: 0,
         });
 

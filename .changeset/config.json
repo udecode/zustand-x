@@ -1,8 +1,8 @@
 {
   "$schema": "https://unpkg.com/@changesets/config@1.6.0/schema.json",
-  "changelog": ["@changesets/changelog-github", { "repo": "udecode/zustood" }],
+  "changelog": ["@changesets/changelog-github", { "repo": "udecode/zustand-x" }],
   "commit": false,
-  "linked": [["@udecode/zustood*"]],
+  "linked": [["zustand-x"]],
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",

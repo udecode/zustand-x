@@ -7,9 +7,9 @@
     "**/*.development.*"
   ],
   "includeVersion": true,
-  "name": "@udecode/zustood",
-  "entryPoints": ["../packages/zustood/src/index.ts"],
+  "name": "zustand-x",
+  "entryPoints": ["../packages/zustand-x/src/index.ts"],
   "out": "../typedoc",
-  "tsconfig": "../packages/zustood/tsconfig.json",
+  "tsconfig": "../packages/zustand-x/tsconfig.json",
   "readme": "./README.md"
 }
