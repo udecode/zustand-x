@@ -39,7 +39,7 @@
     "typecheck": "yarn p:typecheck"
   },
   "dependencies": {
-    "immer": "^10.0.2",
+    "immer": "^10.0.3",
     "react-tracked": "^1.7.11"
   },
   "peerDependencies": {
