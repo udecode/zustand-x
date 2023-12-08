@@ -1,5 +1,13 @@
 # @udecode/zustood
 
+## 3.0.0
+
+### Major Changes
+
+- [#66](https://github.com/udecode/zustand-x/pull/66) by [@zbeyens](https://github.com/zbeyens) –
+  - Rename `@udecode/zustood` package to `zustand-x`
+  - `createZustandStore`: new alias for `createStore`
+
 ## 2.0.0
 
 ### Major Changes
