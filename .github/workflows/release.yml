@@ -34,7 +34,7 @@ jobs:
           # publish: yarn g:release
           cwd: ${{ github.workspace }}
           title: '[Release] Version packages'
-          publish: yarn prerelease && yarn changeset publish
+          publish: yarn release
           # Optional, might be used in conjunction with GITHUB_TOKEN to
           # allow running the workflows on a Version package action.
           # Be aware of security implications.
