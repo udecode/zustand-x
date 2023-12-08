@@ -1,0 +1,81 @@
+name: CI-packages
+
+on:
+  push:
+    branches: [main, next]
+    paths:
+      - 'packages/**'
+      - 'package.json'
+      - '*.lock'
+      - '.yarnrc.yml'
+      - 'tsconfig.json'
+      - '.prettier*'
+      - '.github/**'
+      - 'config/**'
+      - 'scripts/**'
+      - 'jest.config.cjs'
+      - 'prettier.config.cjs'
+      - 'turbo.json'
+
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'packages/**'
+      - 'package.json'
+      - '*.lock'
+      - '.yarnrc.yml'
+      - 'tsconfig.base.json'
+      - '.prettier*'
+      - '.github/**'
+      - 'config/**'
+      - 'scripts/**'
+      - 'jest.config.cjs'
+      - 'prettier.config.cjs'
+      - 'turbo.json'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20.x]
+    #    env:
+    #      TURBO_API: 'http://127.0.0.1:9080'
+    #      TURBO_TEAM: 'nextjs-monorepo-example'
+    #      TURBO_TOKEN: 'local_server_turbo_relaxed_token'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      #      - name: ⏩ TurboRepo local server
+      #        uses: felixmosh/turborepo-gh-artifacts@v2
+      #        with:
+      #          repo-token: ${{ secrets.GITHUB_TOKEN }}
+      #          server-token: ${{ env.TURBO_TOKEN }}
+
+      - name: 📥 Monorepo install
+        uses: ./.github/actions/yarn-nm-install
+
+      - name: ♻️ Restore packages cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ${{ github.workspace }}/.cache
+            ${{ github.workspace }}/**/tsconfig.tsbuildinfo
+          key: packages-cache-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+
+      - name: 🕵️ Typecheck
+        run: yarn typecheck
+
+      - name: 🔬 Linter
+        run: yarn lint
+
+      - name: 🧪 Unit tests
+        run: yarn test
+
+      - name: 🏗 Run build
+        run: yarn build

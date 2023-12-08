@@ -1,9 +1,9 @@
 import {
   ActionBuilder,
   SelectorBuilder,
+  State,
   StateActions,
   StoreApi,
-  State,
 } from '../types';
 import { extendActions } from './extendActions';
 import { extendSelectors } from './extendSelectors';
@@ -12,7 +12,7 @@ export const storeFactory = <
   TName extends string,
   T extends State,
   TActions = {},
-  TSelectors = {}
+  TSelectors = {},
 >(
   api: StoreApi<TName, T, StateActions<T> & TActions, TSelectors>
 ) => {

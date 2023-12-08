@@ -5,7 +5,7 @@ export const extendActions = <
   TName extends string,
   T extends State = {},
   TActions = {},
-  TSelectors = {}
+  TSelectors = {},
 >(
   builder: AB,
   api: StoreApi<TName, T, StateActions<T> & TActions, TSelectors>

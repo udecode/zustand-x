@@ -1,6 +1,6 @@
 {
   "$schema": "https://unpkg.com/@changesets/config@1.6.0/schema.json",
-  "changelog": ["@changesets/changelog-github", { "repo": "udecode/zustand-x" }],
+  "changelog": ["./changelog-github", { "repo": "udecode/zustand-x" }],
   "commit": false,
   "linked": [["zustand-x"]],
   "access": "public",

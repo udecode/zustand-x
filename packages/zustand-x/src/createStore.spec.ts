@@ -79,16 +79,19 @@ describe('zustandX', () => {
 
     describe('deletes a property', () => {
       it('should delete that property', () => {
-        const store = createStore('repo')<{ name?: string; stars: number }>({
+        const repoStore = createStore('repo')<{
+          name?: string;
+          stars: number;
+        }>({
           name: 'zustandX',
           stars: 0,
         });
 
-        store.set.state((draft) => {
+        repoStore.set.state((draft) => {
           delete draft.name;
         });
 
-        expect(store.get.state()).toEqual({
+        expect(repoStore.get.state()).toEqual({
           stars: 0,
         });
       });

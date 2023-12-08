@@ -1,17 +1,17 @@
 import { Draft } from 'immer';
 import { StoreApi as RawStoreApi, UseBoundStore } from 'zustand';
-import { GetState, StateSelector } from 'zustand/vanilla';
 import { NamedSet } from 'zustand/middleware';
+import { GetState, StateSelector } from 'zustand/vanilla';
 
 export type StoreApiGet<
   T extends State = {},
-  TSelectors = {}
+  TSelectors = {},
 > = StateGetters<T> & TSelectors;
 export type StoreApiUse<T extends State = {}, TSelectors = {}> = GetRecord<T> &
   TSelectors;
 export type StoreApiUseTracked<
   T extends State = {},
-  TSelectors = {}
+  TSelectors = {},
 > = GetRecord<T> & TSelectors;
 export type StoreApiSet<TActions = {}> = TActions;
 
@@ -19,7 +19,7 @@ export type StoreApi<
   TName extends string,
   T extends State = {},
   TActions = {},
-  TSelectors = {}
+  TSelectors = {},
 > = {
   get: StoreApiGet<T, TSelectors>;
   name: TName;
@@ -40,7 +40,7 @@ export type StoreApi<
   >;
 
   extendActions<
-    AB extends ActionBuilder<TName, T, StateActions<T> & TActions, TSelectors>
+    AB extends ActionBuilder<TName, T, StateActions<T> & TActions, TSelectors>,
   >(
     builder: AB
   ): StoreApi<
@@ -82,7 +82,7 @@ export type SelectorBuilder<
   TName extends string,
   T extends State,
   TActions = {},
-  TSelectors = {}
+  TSelectors = {},
 > = (
   state: T,
   get: StoreApiGet<T, TSelectors>,
@@ -93,7 +93,7 @@ export type ActionBuilder<
   TName extends string,
   T extends State,
   TActions = {},
-  TSelectors = {}
+  TSelectors = {},
 > = (
   set: StoreApiSet<TActions>,
   get: StoreApiGet<T, TSelectors>,
@@ -109,7 +109,7 @@ export type StateCreatorWithDevtools<
   T extends State,
   CustomSetState = NamedSet<T>,
   CustomGetState = GetState<T>,
-  CustomStoreApi extends RawStoreApi<T> = RawStoreApi<T>
+  CustomStoreApi extends RawStoreApi<T> = RawStoreApi<T>,
 > = (set: CustomSetState, get: CustomGetState, api: CustomStoreApi) => T;
 
 export interface ImmerStoreApi<T extends State>

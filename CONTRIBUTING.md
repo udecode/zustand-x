@@ -35,8 +35,9 @@ package manager. See
 1. `cd ~` (optional)
 2. `git clone https://github.com/udecode/zustand-x.git` _bonus_: use your own fork for this step
 3. `cd zustand-x`
-4. `yarn install`
-5. `yarn build`
+4. `corepack enable`
+5. `yarn install`
+6. `yarn build`
 
 ### Editing
 
@@ -47,7 +48,7 @@ We use eslint as a linter for all code (including typescript code).
 All you have to run is:
 
 ```sh
-yarn lint --fix
+yarn lint:fix
 ```
 
 #### Run unit tests

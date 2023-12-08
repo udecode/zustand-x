@@ -1,6 +1,16 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 
+packages/cli/components
+**/tsconfig.tsbuildinfo
 
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+
+# Generated files
 .history
 node_modules/
 report.*
@@ -8,15 +18,13 @@ report.*
 # Dependency directories
 jspm_packages/
 /packages/*/node_modules
-/packages/*/LICENSE
-**/lib
 **/dist
 
 # compiled output
 /dist
 /tmp
 /out-tsc
-/build
+**/build
 
 # Runtime data
 pids
@@ -102,16 +110,11 @@ connect.lock
 storybook-static/
 
 # Local
-typedoc/
-!typedoc/_redirects
+packages/plate/docs/
 # Local Netlify folder
 .netlify
-
-# Recommendation from https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored (not using Zero-installs)
-.yarn/*
-!.yarn/patches
-!.yarn/releases
-!.yarn/plugins
-!.yarn/sdks
-!.yarn/versions
-.pnp.*
+/test-results/
+/playwright-report/
+/playwright/.cache/
+.turbo
+.vercel

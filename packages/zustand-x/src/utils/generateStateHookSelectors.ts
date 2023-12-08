@@ -1,4 +1,4 @@
-import { GetRecord, UseImmerStore, EqualityChecker, State } from '../types';
+import { EqualityChecker, GetRecord, State, UseImmerStore } from '../types';
 
 export const generateStateHookSelectors = <T extends State>(
   store: UseImmerStore<T>
@@ -7,7 +7,7 @@ export const generateStateHookSelectors = <T extends State>(
 
   Object.keys((store as any).getState()).forEach((key) => {
     // selectors[`use${capitalize(key)}`] = () =>
-    selectors[key] = (equalityFn?: EqualityChecker<T[keyof T]>) => {
+    selectors[key as keyof T] = (equalityFn?: EqualityChecker<T[keyof T]>) => {
       return store((state: T) => state[key as keyof T], equalityFn);
     };
   });

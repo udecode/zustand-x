@@ -7,7 +7,7 @@ export const generateStateGetSelectors = <T extends State>(
 
   Object.keys((store as any).getState()).forEach((key) => {
     // selectors[`get${capitalize(key)}`] = () => store.getState()[key as keyof T];
-    selectors[key] = () => store.getState()[key as keyof T];
+    selectors[key as keyof T] = () => store.getState()[key as keyof T];
   });
 
   return selectors;
