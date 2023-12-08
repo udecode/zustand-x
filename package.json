@@ -16,6 +16,7 @@
     "lint:fix": "yarn g:lint:fix",
     "test": "yarn g:test",
     "typecheck": "yarn g:typecheck",
+    "typedoc": "npx typedoc --options scripts/typedoc.json",
     "release": "yarn build && yarn changeset publish",
     "g:brl": "turbo --filter \"./packages/**\" brl --no-daemon",
     "g:build": "turbo --filter \"./packages/**\" build --no-daemon",
@@ -100,6 +101,7 @@
     "tsup": "8.0.1",
     "turbo": "^1.11.0",
     "turbowatch": "2.29.4",
+    "typedoc": "^0.25.4",
     "typescript": "5.3.3",
     "zustand": "^4.4.7"
   },

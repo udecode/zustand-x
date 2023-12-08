@@ -11,5 +11,5 @@
   "entryPoints": ["../packages/zustand-x/src/index.ts"],
   "out": "../typedoc",
   "tsconfig": "../packages/zustand-x/tsconfig.json",
-  "readme": "./README.md"
+  "readme": "../README.md"
 }

@@ -10,6 +10,8 @@ packages/cli/components
 !.yarn/sdks
 !.yarn/versions
 
+typedoc
+
 **/.netrc
 
 # Generated files
