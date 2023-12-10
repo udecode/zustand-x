@@ -1,5 +1,13 @@
 # @udecode/zustood
 
+## 3.0.1
+
+### Patch Changes
+
+- [#69](https://github.com/udecode/zustand-x/pull/69) by [@zbeyens](https://github.com/zbeyens) –
+  - Fixes #60 – `[DEPRECATED] Passing a vanilla store will be unsupported in a future version`
+  - Support `equalityFn` towards v5. See https://github.com/pmndrs/zustand/discussions/1937.
+
 ## 3.0.0
 
 ### Major Changes
