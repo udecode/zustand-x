@@ -7,8 +7,6 @@ import {
 import { useStoreWithEqualityFn } from 'zustand/traditional';
 import { createStore as createVanillaStore } from 'zustand/vanilla';
 
-import 'zustand/vanilla';
-
 import { immerMiddleware } from './middlewares/immer.middleware';
 import {
   ImmerStoreApi,

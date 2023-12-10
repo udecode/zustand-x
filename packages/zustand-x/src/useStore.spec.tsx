@@ -51,26 +51,6 @@ describe('createAtomStore', () => {
       );
     };
 
-    const MUTABLE_PROVIDER_INITIAL_AGE = 19;
-    const MUTABLE_PROVIDER_NEW_AGE = 20;
-
-    // const MutableProvider = ({ children }: { children: ReactNode }) => {
-    //   const [age, setAge] = useState(MUTABLE_PROVIDER_INITIAL_AGE);
-    //
-    //   return (
-    //     <>
-    //       <MyTestStoreProvider age={age}>{children}</MyTestStoreProvider>
-    //
-    //       <button
-    //         type="button"
-    //         onClick={() => setAge(MUTABLE_PROVIDER_NEW_AGE)}
-    //       >
-    //         providerSetAge
-    //       </button>
-    //     </>
-    //   );
-    // };
-
     beforeEach(() => {
       renderHook(() => actions.name(INITIAL_NAME));
       renderHook(() => actions.age(INITIAL_AGE));
@@ -98,6 +78,58 @@ describe('createAtomStore', () => {
       expect(getByText(INITIAL_NAME)).toBeInTheDocument();
       expect(getByText(INITIAL_AGE + 1)).toBeInTheDocument();
       expect(store.store.getState().age).toBe(INITIAL_AGE + 1);
+    });
+  });
+
+  describe('multiple unrelated stores', () => {
+    type MyFirstTestStoreValue = { name: string };
+    type MySecondTestStoreValue = { age: number };
+
+    const initialFirstTestStoreValue: MyFirstTestStoreValue = {
+      name: 'My name',
+    };
+
+    const initialSecondTestStoreValue: MySecondTestStoreValue = {
+      age: 72,
+    };
+
+    const myFirstTestStoreStore = createZustandStore('myFirstTestStore')(
+      initialFirstTestStoreValue
+    );
+    const mySecondTestStoreStore = createZustandStore('mySecondTestStore')(
+      initialSecondTestStoreValue
+    );
+
+    const FirstReadOnlyConsumer = () => {
+      const name = myFirstTestStoreStore.use.name();
+
+      return (
+        <div>
+          <span>{name}</span>
+        </div>
+      );
+    };
+
+    const SecondReadOnlyConsumer = () => {
+      const age = mySecondTestStoreStore.use.age();
+
+      return (
+        <div>
+          <span>{age}</span>
+        </div>
+      );
+    };
+
+    it('returns the value for the correct store', () => {
+      const { getByText } = render(
+        <>
+          <FirstReadOnlyConsumer />
+          <SecondReadOnlyConsumer />
+        </>
+      );
+
+      expect(getByText('My name')).toBeInTheDocument();
+      expect(getByText(72)).toBeInTheDocument();
     });
   });
 });
