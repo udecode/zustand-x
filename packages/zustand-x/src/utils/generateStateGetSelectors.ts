@@ -1,7 +1,7 @@
-import { GetRecord, State, UseImmerStore } from '../types';
+import { GetRecord, ImmerStoreApi, State } from '../types';
 
 export const generateStateGetSelectors = <T extends State>(
-  store: UseImmerStore<T>
+  store: ImmerStoreApi<T>
 ) => {
   const selectors: GetRecord<T> = {} as any;
 

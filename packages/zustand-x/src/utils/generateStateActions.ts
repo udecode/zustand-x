@@ -1,7 +1,7 @@
-import { SetRecord, State, UseImmerStore } from '../types';
+import { ImmerStoreApi, SetRecord, State } from '../types';
 
 export const generateStateActions = <T extends State>(
-  store: UseImmerStore<T>,
+  store: ImmerStoreApi<T>,
   storeName: string
 ) => {
   const actions: SetRecord<T> = {} as any;

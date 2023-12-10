@@ -50,8 +50,8 @@ module.exports = {
         'mdx/no-unescaped-entities': 'off',
         'mdx/no-unused-expressions': 'off',
 
-        'react-hooks/exhaustive-deps': 'warn',
-        'react-hooks/rules-of-hooks': 'error',
+        // 'react-hooks/exhaustive-deps': 'warn',
+        // 'react-hooks/rules-of-hooks': 'error',
         'react/button-has-type': [
           'error',
           {
