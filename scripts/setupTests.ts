@@ -1,3 +1,5 @@
 import '@testing-library/jest-dom';
 
-jest.spyOn(global.console, 'warn').mockImplementation(() => jest.fn());
+jest.spyOn(global.console, 'warn').mockImplementation((message) => {
+  throw new Error(message);
+});

@@ -1,11 +1,13 @@
 import { enableMapSet, setAutoFreeze } from 'immer';
 import { createTrackedSelector } from 'react-tracked';
-import { create } from 'zustand';
 import {
   devtools as devtoolsMiddleware,
   persist as persistMiddleware,
 } from 'zustand/middleware';
+import { useStoreWithEqualityFn } from 'zustand/traditional';
 import { createStore as createVanillaStore } from 'zustand/vanilla';
+
+import 'zustand/vanilla';
 
 import { immerMiddleware } from './middlewares/immer.middleware';
 import {
@@ -70,9 +72,14 @@ export const createStore =
       pipe(createState as any, ...middlewares) as ImmerStoreApi<T>;
 
     const store = pipeMiddlewares(() => initialState);
-    const useStore = create(store as any) as UseImmerStore<T>;
+    const useStore = ((selector, equalityFn) =>
+      useStoreWithEqualityFn(
+        store as any,
+        selector as any,
+        equalityFn as any
+      )) as UseImmerStore<T>;
 
-    const stateActions = generateStateActions(useStore, name);
+    const stateActions = generateStateActions(store, name);
 
     const mergeState: MergeState<T> = (state, actionName) => {
       store.setState(
@@ -87,13 +94,13 @@ export const createStore =
       store.setState(fn, actionName || `@@${name}/setState`);
     };
 
-    const hookSelectors = generateStateHookSelectors(useStore);
-    const getterSelectors = generateStateGetSelectors(useStore);
+    const hookSelectors = generateStateHookSelectors(useStore, store);
+    const getterSelectors = generateStateGetSelectors(store);
 
     const useTrackedStore = createTrackedSelector(useStore);
     const trackedHooksSelectors = generateStateTrackedHooksSelectors(
-      useStore,
-      useTrackedStore
+      useTrackedStore,
+      store
     );
 
     const api = {
