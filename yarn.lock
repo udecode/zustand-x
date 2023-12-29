@@ -1993,7 +1993,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash@npm:^4.14.202":
+"@types/lodash.mapvalues@npm:^4.6.9":
+  version: 4.6.9
+  resolution: "@types/lodash.mapvalues@npm:4.6.9"
+  dependencies:
+    "@types/lodash": "npm:*"
+  checksum: 09216965c2c64854c8c765f38f436333e931b98638a0b9d996bda7b6d538593a4cfe53cad7415d50593be48d76798763b97dc2d7925ab200dce1fa5b630ed3b4
+  languageName: node
+  linkType: hard
+
+"@types/lodash@npm:*":
   version: 4.14.202
   resolution: "@types/lodash@npm:4.14.202"
   checksum: 6064d43c8f454170841bd67c8266cc9069d9e570a72ca63f06bceb484cb4a3ee60c9c1f305c1b9e3a87826049fd41124b8ef265c4dd08b00f6766609c7fe9973
@@ -7123,6 +7132,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lodash.mapvalues@npm:^4.6.0":
+  version: 4.6.0
+  resolution: "lodash.mapvalues@npm:4.6.0"
+  checksum: a976bfc3923d4d8d2034e049ec4700e3aaf141a6143c973d06be3b2c87697923cd0158ee770484ad1af52dfed93ae90d2b76268413db95a42a2f46d7e1754828
+  languageName: node
+  linkType: hard
+
 "lodash.memoize@npm:4.x":
   version: 4.1.2
   resolution: "lodash.memoize@npm:4.1.2"
@@ -9490,7 +9506,7 @@ __metadata:
     "@testing-library/user-event": "npm:^14.5.1"
     "@types/glob": "npm:8.1.0"
     "@types/jest": "npm:^29.5.11"
-    "@types/lodash": "npm:^4.14.202"
+    "@types/lodash.mapvalues": "npm:^4.6.9"
     "@types/node": "npm:^20.10.4"
     "@types/react": "npm:18.2.42"
     "@types/react-dom": "npm:18.2.17"
@@ -11684,6 +11700,7 @@ __metadata:
   resolution: "zustand-x@workspace:packages/zustand-x"
   dependencies:
     immer: "npm:^10.0.3"
+    lodash.mapvalues: "npm:^4.6.0"
     react-tracked: "npm:^1.7.11"
   peerDependencies:
     zustand: ">=4.3.9"

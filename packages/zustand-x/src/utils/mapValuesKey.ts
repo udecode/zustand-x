@@ -1,4 +1,4 @@
-import { mapValues } from 'lodash';
+import mapValues from 'lodash.mapvalues';
 
 export const mapValuesKey = <
   VK extends string,
