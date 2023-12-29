@@ -1,5 +1,11 @@
 # @udecode/zustood
 
+## 3.0.2
+
+### Patch Changes
+
+- [`78b2899`](https://github.com/udecode/zustand-x/commit/78b2899a7780c57d8d04a4e82d0ae60e252377c6) by [@zbeyens](https://github.com/zbeyens) – Replace lodash with lodash.mapvalues
+
 ## 3.0.1
 
 ### Patch Changes
