@@ -23,5 +23,5 @@ export interface CreateStoreOptions<T extends State> {
   /**
    * Persist middleware options.
    */
-  persist?: PersistOptions<T>;
+  persist?: PersistOptions<Partial<T>>;
 }
