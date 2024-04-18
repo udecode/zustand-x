@@ -1,5 +1,11 @@
 # @udecode/zustood
 
+## 3.0.3
+
+### Patch Changes
+
+- [#73](https://github.com/udecode/zustand-x/pull/73) by [@marbemac](https://github.com/marbemac) – Support partial state objects in the persist typings
+
 ## 3.0.2
 
 ### Patch Changes
