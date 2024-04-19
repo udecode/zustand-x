@@ -21,10 +21,13 @@ code.
 which solves these challenges, so you can focus on your app.
 
 ```bash
-yarn add zustand zustand-x
+yarn add zustand@4.4.7 zustand-x
 ```
 
-Visit [zustand-x.udecode.io](https://zustand-x.udecode.io) for the
+> [!IMPORTANT]
+> `zustand` 4.5.0+ is not yet supported. See https://github.com/udecode/zustand-x/issues/79.
+
+Visit [zustand-x.udecode.dev](https://zustand-x.udecode.dev) for the
 API.
 
 ### Why `zustand-x` in addition to `zustand`?
