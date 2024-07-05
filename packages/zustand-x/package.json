@@ -3,14 +3,13 @@
   "version": "3.0.3",
   "description": "Zustand store factory for a best-in-class developer experience.",
   "license": "MIT",
-  "homepage": "https://platejs.org",
+  "homepage": "https://zustand-x.udecode.dev",
   "repository": {
     "type": "git",
-    "url": "https://github.com/udecode/plate.git",
-    "directory": "packages/cli"
+    "url": "https://github.com/udecode/zustand-x.git"
   },
   "bugs": {
-    "url": "https://github.com/udecode/plate/issues"
+    "url": "https://github.com/udecode/zustand-x/issues"
   },
   "sideEffects": false,
   "main": "dist/index.js",

@@ -23,7 +23,7 @@ which solves these challenges, so you can focus on your app.
 yarn add zustand zustand-x
 ```
 
-Visit [zustand-x.udecode.io](https://zustand-x.udecode.io) for the
+Visit [zustand-x.udecode.dev](https://zustand-x.udecode.dev) for the
 API.
 
 ### Why zustand-x over zustand?

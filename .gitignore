@@ -114,8 +114,6 @@ connect.lock
 storybook-static/
 
 # Local
-packages/plate/docs/
-# Local Netlify folder
 .netlify
 /test-results/
 /playwright-report/

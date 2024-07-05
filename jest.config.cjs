@@ -35,7 +35,6 @@ module.exports = {
   moduleNameMapper: {
     '\\.(css|less|sass|scss)$': '<rootDir>/scripts/styleMock.cjs',
     ...getTsConfigBasePaths(),
-    // '^@udecode/plate-core$': '<rootDir>/packages/core/src',
     ...modules,
   },
   preset: 'ts-jest',
