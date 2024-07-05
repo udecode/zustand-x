@@ -1,5 +1,11 @@
 # @udecode/zustood
 
+## 3.0.4
+
+### Patch Changes
+
+- [`18e8f6e`](https://github.com/udecode/zustand-x/commit/18e8f6e9631e3ea0a31b944a54c1dfa80176564e) by [@zbeyens](https://github.com/zbeyens) – Fix doc links
+
 ## 3.0.3
 
 ### Patch Changes
