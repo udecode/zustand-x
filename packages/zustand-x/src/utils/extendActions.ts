@@ -16,14 +16,6 @@ export const extendActions = <
   TSelectors
 > => {
   const actions = builder(api.set, api.get, api);
-  // Object.keys(actions).forEach((key) => {
-  //   actions[key] = (...args: any[]) => {
-  //     // React batch
-  //     batch(() => {
-  //       actions[key](...args);
-  //     });
-  //   };
-  // });
 
   return {
     ...(api as any),

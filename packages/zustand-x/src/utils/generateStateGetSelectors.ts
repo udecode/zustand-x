@@ -1,12 +1,9 @@
-import { GetRecord, ImmerStoreApi, State } from '../types';
+import { TGetSelectorRecord, TReadonlyStoreApi } from './types.v2';
 
-export const generateStateGetSelectors = <T extends State>(
-  store: ImmerStoreApi<T>
-) => {
-  const selectors: GetRecord<T> = {} as any;
+export const generateStateGetSelectors = <T>(store: TReadonlyStoreApi<T>) => {
+  const selectors: TGetSelectorRecord<T> = {} as TGetSelectorRecord<T>;
 
-  Object.keys((store as any).getState()).forEach((key) => {
-    // selectors[`get${capitalize(key)}`] = () => store.getState()[key as keyof T];
+  Object.keys(store.getState() || {}).forEach((key) => {
     selectors[key as keyof T] = () => store.getState()[key as keyof T];
   });
 

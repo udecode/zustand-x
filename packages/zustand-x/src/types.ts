@@ -126,13 +126,6 @@ export interface UseImmerStore<T extends State>
   setState: SetImmerState<T>;
 }
 
-export type GetRecord<O> = {
-  [K in keyof O]: (equalityFn?: EqualityChecker<O[K]>) => O[K];
-};
-export type SetRecord<O> = {
-  [K in keyof O]: (value: O[K]) => void;
-};
-
 // export type UseRecord<O> = {
 //   [K in keyof O as `use${Capitalize<string & K>}`]: () => O[K];
 // };

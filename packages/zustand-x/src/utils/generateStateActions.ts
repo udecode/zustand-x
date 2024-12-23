@@ -1,21 +1,25 @@
-import { ImmerStoreApi, SetRecord, State } from '../types';
+import { TCreatedStoreType, TSetRecord } from './types.v2';
 
-export const generateStateActions = <T extends State>(
-  store: ImmerStoreApi<T>,
+export const generateStateActions = <T, U>(
+  store: TCreatedStoreType<T, U>,
   storeName: string
 ) => {
-  const actions: SetRecord<T> = {} as any;
+  const actions: TSetRecord<T> = {} as TSetRecord<T>;
 
-  Object.keys((store as any).getState()).forEach((key) => {
+  Object.keys(store.getState() || {}).forEach((key) => {
     actions[key as keyof T] = (value) => {
       const prevValue = store.getState()[key as keyof T];
       if (prevValue === value) return;
 
       const actionKey = key.replace(/^\S/, (s) => s.toUpperCase());
-      store.setState((draft) => {
-        // @ts-ignore
-        draft[key] = value;
-      }, `@@${storeName}/set${actionKey}`);
+      store.setState(
+        (state) => {
+          state[key as keyof T] = value;
+          return state;
+        },
+        undefined,
+        `@@${storeName}/set${actionKey}`
+      );
     };
   });
 

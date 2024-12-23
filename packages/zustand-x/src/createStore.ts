@@ -1,99 +1,84 @@
-import { enableMapSet, setAutoFreeze } from 'immer';
 import { createTrackedSelector } from 'react-tracked';
+import { createStore as createStoreZustand } from 'zustand';
 import {
-  devtools as devtoolsMiddleware,
+  devtools as devToolsMiddleware,
+  DevtoolsOptions,
   persist as persistMiddleware,
+  PersistOptions,
 } from 'zustand/middleware';
 import { useStoreWithEqualityFn } from 'zustand/traditional';
-import { createStore as createVanillaStore } from 'zustand/vanilla';
 
-import { immerMiddleware } from './middlewares/immer.middleware';
-import {
-  ImmerStoreApi,
-  MergeState,
-  SetImmerState,
-  State,
-  StateActions,
-  StateGetters,
-  StoreApi,
-  UseImmerStore,
-} from './types';
-import { CreateStoreOptions } from './types/CreateStoreOptions';
+import { extendSelectors } from './utils';
 import { generateStateActions } from './utils/generateStateActions';
 import { generateStateGetSelectors } from './utils/generateStateGetSelectors';
 import { generateStateHookSelectors } from './utils/generateStateHookSelectors';
 import { generateStateTrackedHooksSelectors } from './utils/generateStateTrackedHooksSelectors';
-import { pipe } from './utils/pipe';
-import { storeFactory } from './utils/storeFactory';
+import {
+  TEqualityChecker,
+  TStateActions,
+  TStateApi,
+  TStoreMiddlewareCreatorType,
+  TStoreSelectorType,
+} from './utils/types.v2';
 
-import type { StateCreator } from 'zustand';
+import type { StateCreator, StoreMutatorIdentifier } from 'zustand';
 
+type TCreateStoreOptions<T> = {
+  persist?: Partial<PersistOptions<T>> & {
+    enabled?: boolean;
+  };
+  devtools?: Partial<DevtoolsOptions> & {
+    enabled?: boolean;
+  };
+};
 export const createStore =
   <TName extends string>(name: TName) =>
-  <T extends State>(
-    initialState: T,
-    options: CreateStoreOptions<T> = {}
-  ): StoreApi<TName, T, StateActions<T>> => {
-    const {
-      middlewares: _middlewares = [],
-      devtools,
-      persist,
-      immer,
-    } = options;
+  <
+    StateType,
+    Mps extends [StoreMutatorIdentifier, unknown][] = [],
+    Mcs extends [StoreMutatorIdentifier, unknown][] = [],
+  >(
+    createState: StateCreator<StateType, Mps, Mcs>,
+    options: TCreateStoreOptions<StateType> = {}
+  ) => {
+    const { devtools, persist } = options;
 
-    setAutoFreeze(immer?.enabledAutoFreeze ?? false);
-    if (immer?.enableMapSet) {
-      enableMapSet();
-    }
-
-    const middlewares: any[] = [immerMiddleware, ..._middlewares];
-
-    if (persist?.enabled) {
-      const opts = {
-        ...persist,
-        name: persist.name ?? name,
-      };
-
-      middlewares.push((config: any) => persistMiddleware(config, opts));
-    }
+    const middlewares: ((
+      initializer: StateCreator<StateType, any, any>
+    ) => StateCreator<StateType, any, any>)[] = [];
 
     if (devtools?.enabled) {
-      middlewares.push((config: any) =>
-        devtoolsMiddleware(config, { ...devtools, name })
+      middlewares.push((config) =>
+        devToolsMiddleware(config, { ...devtools, name })
       );
     }
 
-    middlewares.push(createVanillaStore);
+    if (persist?.enabled) {
+      middlewares.push((config) =>
+        persistMiddleware(config, {
+          ...persist,
+          name: persist.name ?? name,
+        })
+      );
+    }
 
-    // @ts-ignore
-    const pipeMiddlewares = (createState: StateCreator<T, SetImmerState<T>>) =>
-      pipe(createState as any, ...middlewares) as ImmerStoreApi<T>;
+    const stateMutators = middlewares.reduce(
+      (y: any, fn) => fn(y),
+      createState
+    ) as TStoreMiddlewareCreatorType<StateType>;
 
-    const store = pipeMiddlewares(() => initialState);
-    const useStore = ((selector, equalityFn) =>
-      useStoreWithEqualityFn(
-        store as any,
-        selector as any,
-        equalityFn as any
-      )) as UseImmerStore<T>;
+    const store = createStoreZustand(stateMutators);
+
+    const getterSelectors = generateStateGetSelectors(store);
+
+    const useStore = <FilteredStateType>(
+      selector: TStoreSelectorType<StateType, FilteredStateType>,
+      equalityFn?: TEqualityChecker<FilteredStateType>
+    ): FilteredStateType => useStoreWithEqualityFn(store, selector, equalityFn);
 
     const stateActions = generateStateActions(store, name);
 
-    const mergeState: MergeState<T> = (state, actionName) => {
-      store.setState(
-        (draft) => {
-          Object.assign(draft as any, state);
-        },
-        actionName || `@@${name}/mergeState`
-      );
-    };
-
-    const setState: SetImmerState<T> = (fn, actionName) => {
-      store.setState(fn, actionName || `@@${name}/setState`);
-    };
-
     const hookSelectors = generateStateHookSelectors(useStore, store);
-    const getterSelectors = generateStateGetSelectors(store);
 
     const useTrackedStore = createTrackedSelector(useStore);
     const trackedHooksSelectors = generateStateTrackedHooksSelectors(
@@ -101,28 +86,40 @@ export const createStore =
       store
     );
 
-    const api = {
+    const apiInternal: TStateApi<TName, StateType, TStateActions<StateType>> = {
+      getInitialState: store.getInitialState,
       get: {
         state: store.getState,
         ...getterSelectors,
-      } as StateGetters<T>,
+      },
       name,
       set: {
-        state: setState,
-        mergeState,
+        state: store.setState,
         ...stateActions,
-      } as StateActions<T>,
+      },
       store,
+      useStore,
       use: hookSelectors,
       useTracked: trackedHooksSelectors,
-      useStore,
       useTrackedStore,
-      extendSelectors: () => api as any,
-      extendActions: () => api as any,
+      extendSelectors: () => apiInternal as any,
+      extendActions: () => apiInternal as any,
     };
 
-    return storeFactory(api) as StoreApi<TName, T, StateActions<T>>;
+    const storeFactory = (
+      api: TStateApi<TName, StateType, TStateActions<StateType>>
+    ) => {
+      return {
+        ...api,
+        extendSelectors: (builder) =>
+          storeFactory(extendSelectors(builder, api)),
+      } as TStateApi<TName, StateType, TStateActions<StateType>>;
+    };
+
+    return storeFactory(apiInternal);
   };
+
+// const a = createStore("a")(()=>({vv:""}))
 
 // Alias {@link createStore}
 export const createZustandStore = createStore;

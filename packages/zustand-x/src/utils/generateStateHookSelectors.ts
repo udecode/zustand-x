@@ -1,21 +1,22 @@
 import {
-  EqualityChecker,
-  GetRecord,
-  ImmerStoreApi,
-  State,
-  UseImmerStore,
-} from '../types';
+  TCreatedStoreType,
+  TEqualityChecker,
+  TGetRecord,
+  TStoreSelectorType,
+} from './types.v2';
 
-export const generateStateHookSelectors = <T extends State>(
-  useStore: UseImmerStore<T>,
-  store: ImmerStoreApi<T>
+export const generateStateHookSelectors = <T, U>(
+  useStore: <R>(
+    selector: TStoreSelectorType<T, R>,
+    equalityFn?: TEqualityChecker<R>
+  ) => R,
+  store: TCreatedStoreType<T, U>
 ) => {
-  const selectors: GetRecord<T> = {} as any;
+  const selectors: TGetRecord<T> = {} as TGetRecord<T>;
 
-  Object.keys((store as any).getState()).forEach((key) => {
-    // selectors[`use${capitalize(key)}`] = () =>
-    selectors[key as keyof T] = (equalityFn?: EqualityChecker<T[keyof T]>) => {
-      return useStore((state: T) => state[key as keyof T], equalityFn);
+  Object.keys(store.getState() || {}).forEach((key) => {
+    selectors[key as keyof T] = (equalityFn?: TEqualityChecker<T[keyof T]>) => {
+      return useStore((state) => state[key as keyof T], equalityFn);
     };
   });
 
