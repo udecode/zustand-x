@@ -1,27 +1,22 @@
-import { ActionBuilder, State, StateActions, StoreApi } from '../types';
+import { TActionBuilder, TStateApi } from '../types';
 
 export const extendActions = <
-  AB extends ActionBuilder<TName, T, StateActions<T> & TActions, TSelectors>,
-  TName extends string,
-  T extends State = {},
-  TActions = {},
-  TSelectors = {},
->(
-  builder: AB,
-  api: StoreApi<TName, T, StateActions<T> & TActions, TSelectors>
-): StoreApi<
   TName,
-  T,
-  StateActions<T> & TActions & ReturnType<AB>,
-  TSelectors
-> => {
+  StateType,
+  TActions,
+  TSelectors,
+  Builder extends TActionBuilder<TName, StateType, TActions, TSelectors>,
+>(
+  builder: Builder,
+  api: TStateApi<TName, StateType, TActions, TSelectors>
+) => {
   const actions = builder(api.set, api.get, api);
 
   return {
-    ...(api as any),
+    ...api,
     set: {
       ...api.set,
       ...actions,
     },
-  };
+  } as TStateApi<TName, StateType, TActions & ReturnType<Builder>, TSelectors>;
 };

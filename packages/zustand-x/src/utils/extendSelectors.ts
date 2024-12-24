@@ -1,28 +1,15 @@
-import { TSelectorBuilder, TStateApi } from './types.v2';
+import { TSelectorBuilder, TStateApi } from '../types';
 
 export const extendSelectors = <
-  Builder extends TSelectorBuilder<
-    TName,
-    StateType,
-    MutatedStateType,
-    TActions,
-    TSelectors
-  >,
-  TName extends string,
-  StateType,
-  MutatedStateType,
-  TActions,
-  TSelectors,
->(
-  builder: Builder,
-  api: TStateApi<TName, StateType, MutatedStateType, TActions, TSelectors>
-): TStateApi<
   TName,
   StateType,
-  MutatedStateType,
   TActions,
-  TSelectors & ReturnType<Builder>
-> => {
+  TSelectors,
+  Builder extends TSelectorBuilder<TName, StateType, TActions, TSelectors>,
+>(
+  builder: Builder,
+  api: TStateApi<TName, StateType, TActions, TSelectors>
+) => {
   const use = {
     ...api.use,
   };
@@ -63,5 +50,5 @@ export const extendSelectors = <
     get,
     use,
     useTracked,
-  };
+  } as TStateApi<TName, StateType, TActions, TSelectors & ReturnType<Builder>>;
 };

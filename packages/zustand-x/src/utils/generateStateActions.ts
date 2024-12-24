@@ -1,4 +1,4 @@
-import { TCreatedStoreType, TSetRecord } from './types.v2';
+import { TCreatedStoreType, TSetRecord } from '../types';
 
 export const generateStateActions = <T, U>(
   store: TCreatedStoreType<T, U>,

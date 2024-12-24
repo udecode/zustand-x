@@ -1,4 +1,4 @@
-import { TGetSelectorRecord, TReadonlyStoreApi } from './types.v2';
+import { TGetSelectorRecord, TReadonlyStoreApi } from '../types';
 
 export const generateStateTrackedHooksSelectors = <T>(
   useTrackedStore: () => T,

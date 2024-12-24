@@ -1,137 +1,118 @@
-import { Draft } from 'immer';
-import { StoreApi as RawStoreApi, UseBoundStore } from 'zustand';
-import { NamedSet } from 'zustand/middleware';
-import { GetState, StateSelector } from 'zustand/vanilla';
+import { Mutate, StateCreator, StoreApi } from 'zustand';
 
-export type StoreApiGet<
-  T extends State = {},
-  TSelectors = {},
-> = StateGetters<T> & TSelectors;
-export type StoreApiUse<T extends State = {}, TSelectors = {}> = GetRecord<T> &
-  TSelectors;
-export type StoreApiUseTracked<
-  T extends State = {},
-  TSelectors = {},
-> = GetRecord<T> & TSelectors;
-export type StoreApiSet<TActions = {}> = TActions;
+export type TEqualityChecker<StateType> = (
+  state: StateType,
+  newState: StateType
+) => boolean;
+export type TGetSelectorRecord<O> = {
+  [K in keyof O]: () => O[K];
+};
+export type TGetRecord<O> = {
+  [K in keyof O]: (equalityFn?: TEqualityChecker<O[K]>) => O[K];
+};
+export type TSetRecord<O> = {
+  [K in keyof O]: (value: O[K]) => void;
+};
+export type TStoreSelectorType<StateType, FilteredStateType = unknown> = (
+  state: StateType
+) => FilteredStateType;
 
-export type StoreApi<
-  TName extends string,
-  T extends State = {},
-  TActions = {},
+export type TEnabledMiddlewares<MutatedStateType> = [
+  ['zustand/devtools', never],
+  ['zustand/persist', MutatedStateType],
+];
+
+export type TStoreMiddlewareCreatorType<
+  StateType,
+  MutatedStateType = StateType,
+> = StateCreator<StateType, [], [...TEnabledMiddlewares<MutatedStateType>]>;
+export type TCreatedStoreType<StateType, MutatedStateType = StateType> = Mutate<
+  StoreApi<StateType>,
+  TEnabledMiddlewares<MutatedStateType>
+>;
+
+export type TReadonlyStoreApi<StateType> = Pick<
+  StoreApi<StateType>,
+  'getState' | 'getInitialState' | 'subscribe'
+>;
+
+export type TStoreApiSet<StateType, TActions = {}> = TSetRecord<StateType> &
+  TActions & {
+    state: TCreatedStoreType<StateType>['setState'];
+  };
+
+export type TStoreApiGet<
+  StateType,
   TSelectors = {},
-> = {
-  get: StoreApiGet<T, TSelectors>;
+> = TGetSelectorRecord<StateType> &
+  TSelectors & {
+    state: TCreatedStoreType<StateType>['getState'];
+  };
+
+export type TExtractState<S> = S extends {
+  getState: () => infer StateType;
+}
+  ? StateType
+  : never;
+
+export type TStateApi<TName, StateType, TActions = {}, TSelectors = {}> = {
   name: TName;
-  set: StoreApiSet<TActions>;
-  store: ImmerStoreApi<T>;
-  use: StoreApiUse<T, TSelectors>;
-  useTracked: StoreApiUseTracked<T, TSelectors>;
-  useStore: UseImmerStore<T>;
-  useTrackedStore: () => T;
-
-  extendSelectors<SB extends SelectorBuilder<TName, T, TActions, TSelectors>>(
-    builder: SB
-  ): StoreApi<
-    TName,
-    T,
-    StateActions<T> & TActions,
-    TSelectors & ReturnType<SB>
-  >;
-
-  extendActions<
-    AB extends ActionBuilder<TName, T, StateActions<T> & TActions, TSelectors>,
+  getInitialState: TCreatedStoreType<StateType>['getInitialState'];
+  get: TStoreApiGet<StateType, TSelectors>;
+  set: TStoreApiSet<StateType, TActions>;
+  store: TCreatedStoreType<StateType>;
+  useStore: <FilteredStateType>(
+    selector: TStoreSelectorType<StateType, FilteredStateType>,
+    equalityFn?: TEqualityChecker<FilteredStateType>
+  ) => FilteredStateType;
+  use: TGetRecord<StateType> & TSelectors;
+  useTracked: TGetSelectorRecord<StateType> & TSelectors;
+  useTrackedStore: () => StateType;
+  extendSelectors<
+    SelectorBuilder extends TSelectorBuilder<
+      TName,
+      StateType,
+      TActions,
+      TSelectors
+    >,
   >(
-    builder: AB
-  ): StoreApi<
+    builder: SelectorBuilder
+  ): TStateApi<
     TName,
-    T,
-    StateActions<T> & TActions & ReturnType<AB>,
-    TSelectors
+    StateType,
+    TStoreApiSet<StateType, TActions>,
+    TSelectors & ReturnType<SelectorBuilder>
   >;
-
-  // extendActionsMerge<AB extends ActionBuilder<TName, T, StateActions<T> & TActions>>(
-  //     builder: AB
-  //   ): StoreApi<
-  //     TName,
-  //     T,
-  //     StateActions<T> & TActions & ReturnType<AB>,
-  //     TSelectors
-  //   >;
+  extendActions<
+    ActionBuilder extends TActionBuilder<
+      TName,
+      StateType,
+      TActions,
+      TSelectors
+    >,
+  >(
+    builder: ActionBuilder
+  ): TStateApi<
+    TName,
+    StateType,
+    TActions & ReturnType<ActionBuilder>,
+    TStoreApiGet<StateType, TSelectors>
+  >;
 };
 
-export type State = unknown;
-export type EqualityChecker<T> = (state: T, newState: T) => boolean;
-
-export type MergeState<T extends State> = (
-  state: Partial<T>,
-  actionName?: string
-) => void;
-
-export type StateActions<T extends State> = SetRecord<T> & {
-  state: SetImmerState<T>;
-  mergeState: MergeState<T>;
-};
-export type StateGetters<T extends State> = GetRecord<T> & {
-  state: GetState<T>;
-};
-
-export type SelectorRecord<T> = Record<string, (state: T) => any>;
-
-export type SelectorBuilder<
-  TName extends string,
-  T extends State,
+export type TSelectorBuilder<
+  TName,
+  StateType,
   TActions = {},
   TSelectors = {},
 > = (
-  state: T,
-  get: StoreApiGet<T, TSelectors>,
-  api: StoreApi<TName, T, TActions, TSelectors>
-) => Record<string, (...args: any[]) => any>;
-
-export type ActionBuilder<
-  TName extends string,
-  T extends State,
-  TActions = {},
-  TSelectors = {},
-> = (
-  set: StoreApiSet<TActions>,
-  get: StoreApiGet<T, TSelectors>,
-  api: StoreApi<TName, T, TActions, TSelectors>
+  state: StateType,
+  get: TStoreApiGet<StateType, TSelectors>,
+  api: TStateApi<TName, StateType, TActions, TSelectors>
 ) => any;
 
-export type SetImmerState<T> = (
-  fn: (draft: Draft<T>) => void,
-  actionName?: string
-) => void;
-
-export type StateCreatorWithDevtools<
-  T extends State,
-  CustomSetState = NamedSet<T>,
-  CustomGetState = GetState<T>,
-  CustomStoreApi extends RawStoreApi<T> = RawStoreApi<T>,
-> = (set: CustomSetState, get: CustomGetState, api: CustomStoreApi) => T;
-
-export interface ImmerStoreApi<T extends State>
-  extends Omit<RawStoreApi<T>, 'setState'> {
-  setState: SetImmerState<T>;
-}
-
-export interface UseImmerStore<T extends State>
-  extends Omit<UseBoundStore<RawStoreApi<T>>, 'setState'> {
-  (): T;
-
-  <U>(selector: StateSelector<T, U>, equalityFn?: EqualityChecker<U>): U;
-
-  setState: SetImmerState<T>;
-}
-
-// export type UseRecord<O> = {
-//   [K in keyof O as `use${Capitalize<string & K>}`]: () => O[K];
-// };
-// export type GetRecord<O> = {
-//   [K in keyof O as `get${Capitalize<string & K>}`]: () => O[K];
-// };
-// export type SetRecord<O> = {
-//   [K in keyof O as `set${Capitalize<string & K>}`]: (value: O[K]) => void;
-// };
+export type TActionBuilder<TName, StateType, TActions = {}, TSelectors = {}> = (
+  set: TStoreApiSet<StateType, TActions>,
+  get: TStoreApiGet<StateType, TSelectors>,
+  api: TStateApi<TName, StateType, TActions, TSelectors>
+) => any;

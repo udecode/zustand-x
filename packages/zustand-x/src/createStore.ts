@@ -8,18 +8,19 @@ import {
 } from 'zustand/middleware';
 import { useStoreWithEqualityFn } from 'zustand/traditional';
 
-import { extendSelectors } from './utils';
+import {
+  TActionBuilder,
+  TEqualityChecker,
+  TSelectorBuilder,
+  TStateApi,
+  TStoreMiddlewareCreatorType,
+  TStoreSelectorType,
+} from './types';
+import { extendActions, extendSelectors } from './utils';
 import { generateStateActions } from './utils/generateStateActions';
 import { generateStateGetSelectors } from './utils/generateStateGetSelectors';
 import { generateStateHookSelectors } from './utils/generateStateHookSelectors';
 import { generateStateTrackedHooksSelectors } from './utils/generateStateTrackedHooksSelectors';
-import {
-  TEqualityChecker,
-  TStateActions,
-  TStateApi,
-  TStoreMiddlewareCreatorType,
-  TStoreSelectorType,
-} from './utils/types.v2';
 
 import type { StateCreator, StoreMutatorIdentifier } from 'zustand';
 
@@ -86,7 +87,7 @@ export const createStore =
       store
     );
 
-    const apiInternal: TStateApi<TName, StateType, TStateActions<StateType>> = {
+    const apiInternal: TStateApi<TName, StateType> = {
       getInitialState: store.getInitialState,
       get: {
         state: store.getState,
@@ -106,20 +107,30 @@ export const createStore =
       extendActions: () => apiInternal as any,
     };
 
-    const storeFactory = (
-      api: TStateApi<TName, StateType, TStateActions<StateType>>
-    ) => {
-      return {
-        ...api,
-        extendSelectors: (builder) =>
-          storeFactory(extendSelectors(builder, api)),
-      } as TStateApi<TName, StateType, TStateActions<StateType>>;
-    };
-
-    return storeFactory(apiInternal);
+    return storeFactory(apiInternal) as TStateApi<TName, StateType>;
   };
 
-// const a = createStore("a")(()=>({vv:""}))
+const storeFactory = <TName, StateType>(api: TStateApi<TName, StateType>) => {
+  return {
+    ...api,
+    extendSelectors: (builder: TSelectorBuilder<TName, StateType>) =>
+      storeFactory(extendSelectors(builder, api)),
+    extendActions: (builder: TActionBuilder<TName, StateType>) =>
+      storeFactory(extendActions(builder, api)),
+  };
+};
+
+// const test = createStore('hello')(() => ({ hey: 'aa' }))
+//   .extendSelectors(() => {
+//     return {
+//       selector: 'asas',
+//     };
+//   })
+//   .extendActions(() => {
+//     return {
+//       action: 'as',
+//     };
+//   });
 
 // Alias {@link createStore}
 export const createZustandStore = createStore;

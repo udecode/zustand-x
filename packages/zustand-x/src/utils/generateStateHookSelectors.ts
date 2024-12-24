@@ -3,7 +3,7 @@ import {
   TEqualityChecker,
   TGetRecord,
   TStoreSelectorType,
-} from './types.v2';
+} from '../types';
 
 export const generateStateHookSelectors = <T, U>(
   useStore: <R>(
