@@ -19,15 +19,9 @@ import { storeFactory } from './utils/storeFactory';
 
 import type { StoreMutatorIdentifier } from 'zustand';
 
-type TCreateStoreOptions<StateType> = {
-  persist?: PersistOptions<StateType>;
-  devtools?: DevtoolsOptions;
-  immer?: ImmerOptions;
-};
-
 type DefaultMutators<
   StateType,
-  Options extends TCreateStoreOptions<StateType>,
+  Options extends TBaseStoreOptions<StateType>,
 > = [
   ...(Options['immer'] extends { enabled: true }
     ? [['zustand/immer', never]]
@@ -42,28 +36,55 @@ type DefaultMutators<
 
 type ResolveMutators<
   StateType,
-  Options extends TCreateStoreOptions<StateType>,
   Mcs extends [StoreMutatorIdentifier, unknown][],
+  Options extends TBaseStoreOptions<StateType>,
 > = [...DefaultMutators<StateType, Options>, ...Mcs];
+
+type TBaseStoreOptions<StateType> = {
+  persist?: PersistOptions<StateType>;
+  devtools?: DevtoolsOptions;
+  immer?: ImmerOptions;
+};
+
+type TMiddleware<
+  StateType,
+  Mutators extends [StoreMutatorIdentifier, unknown][],
+> = (
+  config: TStoreInitiatorType<StateType, [], Mutators, StateType>
+) => TStoreInitiatorType<StateType, [], Mutators, StateType>;
+
+type TCreateStoreOptions<
+  StateType,
+  Mcs extends [StoreMutatorIdentifier, unknown][],
+> = TBaseStoreOptions<StateType> & {
+  middlewares?: TMiddleware<StateType, Mcs>[];
+};
 
 export const createStore =
   <TName extends string>(name: TName) =>
   <
-    StateType,
+    StateType extends object,
     Mps extends [StoreMutatorIdentifier, unknown][] = [],
     Mcs extends [StoreMutatorIdentifier, unknown][] = [],
-    Options extends
-      TCreateStoreOptions<StateType> = TCreateStoreOptions<StateType>,
-    Mutators extends [StoreMutatorIdentifier, unknown][] = ResolveMutators<
+    Options extends TCreateStoreOptions<StateType, Mcs> = TCreateStoreOptions<
       StateType,
-      Options,
       Mcs
     >,
+    Mutators extends [StoreMutatorIdentifier, unknown][] = ResolveMutators<
+      StateType,
+      Mcs,
+      Options
+    >,
   >(
-    createState: TStoreInitiatorType<StateType, Mps, Mutators>,
+    createState: StateType | TStoreInitiatorType<StateType, Mps, Mcs>,
     options: Options = {} as Options
   ) => {
-    const { devtools, persist, immer } = options;
+    const {
+      devtools,
+      persist,
+      immer,
+      middlewares: _middlewares = [],
+    } = options;
 
     const middlewares: ((
       initializer: TStoreInitiatorType<StateType, any, any, any>
@@ -95,9 +116,14 @@ export const createStore =
       );
     }
 
+    //apply other middlewares
+    if (_middlewares.length > 0) {
+      middlewares.push(..._middlewares);
+    }
+
     const stateMutators = middlewares.reduce(
       (y: any, fn) => fn(y),
-      createState
+      typeof createState === 'function' ? createState : () => createState
     ) as TStoreInitiatorType<StateType, [], Mutators>;
 
     const store = createStoreZustand(stateMutators);

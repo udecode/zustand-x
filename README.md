@@ -41,14 +41,14 @@ API.
 ```ts
 import { createStore } from 'zustand-x';
 
-const repoStore = createStore('repo')(() => ({
+const repoStore = createStore('repo')({
   name: 'zustandX',
   stars: 0,
   owner: {
     name: 'someone',
     email: 'someone@xxx.com',
   },
-}));
+});
 ```
 
 - the parameter of the first function is the name of the store, this is
@@ -284,7 +284,7 @@ ZustandX is using these middlewares:
 - `persist`: enabled if `persist.enabled` option is `true`. `persist`
   implements `PersistOptions` interface from
   [zustand](https://github.com/pmndrs/zustand#persist-middleware)
-- custom middlewares can be added by wrapping state initiator. [check here](https://zustand.docs.pmnd.rs/middlewares/combine)
+- custom middlewares can be added using `middlewares` option
 
 ## Contributing and project organization
 

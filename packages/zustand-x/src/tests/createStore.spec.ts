@@ -3,18 +3,12 @@ import { createStore } from '../createStore';
 describe('zustandX', () => {
   describe('when get', () => {
     const store = createStore('repo')(
-      () => ({
+      {
         name: 'zustandX',
         stars: 0,
-      }),
+      },
       {
-        devtools: {
-          enabled: true,
-        },
         persist: {
-          enabled: true,
-        },
-        immer: {
           enabled: true,
         },
       }
@@ -26,10 +20,10 @@ describe('zustandX', () => {
   });
 
   describe('when extending actions', () => {
-    const store = createStore('repo')(() => ({
+    const store = createStore('repo')({
       name: 'zustandX',
       stars: 0,
-    }))
+    })
       .extendActions((set, get, api) => ({
         validName: (name: string) => {
           set.name(name.trim());
@@ -53,10 +47,10 @@ describe('zustandX', () => {
   });
 
   describe('when extending selectors', () => {
-    const store = createStore('repo')(() => ({
+    const store = createStore('repo')({
       name: 'zustandX ',
       stars: 0,
-    }))
+    })
       .extendSelectors((set, get, api) => ({
         validName: () => get.name().trim(),
       }))
@@ -73,10 +67,10 @@ describe('zustandX', () => {
   });
 
   describe('when set.state', () => {
-    const store = createStore('repo')(() => ({
+    const store = createStore('repo')({
       name: 'zustandX',
       stars: 0,
-    }));
+    });
 
     it('should be', () => {
       store.set.state((draft) => {
@@ -96,10 +90,10 @@ describe('zustandX', () => {
         const repoStore = createStore('repo')<{
           name?: string;
           stars: number;
-        }>(() => ({
+        }>({
           name: 'zustandX',
           stars: 0,
-        }));
+        });
 
         repoStore.set.state((draft) => {
           delete draft.name;
