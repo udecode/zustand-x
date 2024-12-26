@@ -3,26 +3,27 @@ import { createStore as createStoreZustand } from 'zustand';
 import {
   devtools as devToolsMiddleware,
   DevtoolsOptions,
+} from 'zustand/middleware/devtools';
+import { immer as immerMiddleware } from 'zustand/middleware/immer';
+import {
   persist as persistMiddleware,
   PersistOptions,
-} from 'zustand/middleware';
+} from 'zustand/middleware/persist';
 import { useStoreWithEqualityFn } from 'zustand/traditional';
 
 import {
-  TActionBuilder,
   TEqualityChecker,
-  TSelectorBuilder,
   TStateApi,
-  TStoreMiddlewareStateCreatorType,
-  TStoreSelectorType,
+  TStoreInitiatorType,
+  TUseStoreSelectorType,
 } from './types';
-import { extendActions, extendSelectors } from './utils';
 import { generateStateActions } from './utils/generateStateActions';
 import { generateStateGetSelectors } from './utils/generateStateGetSelectors';
 import { generateStateHookSelectors } from './utils/generateStateHookSelectors';
 import { generateStateTrackedHooksSelectors } from './utils/generateStateTrackedHooksSelectors';
+import { storeFactory } from './utils/storeFactory';
 
-import type { StateCreator, StoreMutatorIdentifier } from 'zustand';
+import type { StoreMutatorIdentifier } from 'zustand';
 
 type TCreateStoreOptions<StateType> = {
   persist?: Partial<PersistOptions<StateType>> & {
@@ -31,34 +32,64 @@ type TCreateStoreOptions<StateType> = {
   devtools?: Partial<DevtoolsOptions> & {
     enabled?: boolean;
   };
+  immer?: {
+    enabled?: boolean;
+  };
 };
-type TStoreMiddlewares<StateType> = [
-  ['zustand/devtools', never],
-  ['zustand/persist', StateType],
+
+type DefaultMutators<
+  StateType,
+  Options extends TCreateStoreOptions<StateType>,
+> = [
+  ...(Options['devtools'] extends { enabled: true }
+    ? [['zustand/devtools', never]]
+    : []),
+  ...(Options['persist'] extends { enabled: true }
+    ? [['zustand/persist', StateType]]
+    : []),
+  ...(Options['immer'] extends { enabled: true }
+    ? [['zustand/immer', never]]
+    : []),
 ];
+
+type ResolveMutators<
+  StateType,
+  Options extends TCreateStoreOptions<StateType>,
+  Mcs extends [StoreMutatorIdentifier, unknown][],
+> = [...DefaultMutators<StateType, Options>, ...Mcs];
+
 export const createStore =
   <TName extends string>(name: TName) =>
   <
     StateType,
     Mps extends [StoreMutatorIdentifier, unknown][] = [],
     Mcs extends [StoreMutatorIdentifier, unknown][] = [],
+    Options extends
+      TCreateStoreOptions<StateType> = TCreateStoreOptions<StateType>,
+    Mutators extends [StoreMutatorIdentifier, unknown][] = ResolveMutators<
+      StateType,
+      Options,
+      Mcs
+    >,
   >(
-    createState: StateCreator<StateType, Mps, Mcs>,
-    options: TCreateStoreOptions<StateType> = {}
+    createState: TStoreInitiatorType<StateType, Mps, Mutators>,
+    options: Options = {} as Options
   ) => {
-    const { devtools, persist } = options;
+    const { devtools, persist, immer } = options;
 
     const middlewares: ((
-      initializer: StateCreator<StateType, any, any>
-    ) => StateCreator<StateType, any, any>)[] = [];
+      initializer: TStoreInitiatorType<StateType, any, any, any>
+    ) => TStoreInitiatorType<StateType, any, any, any>)[] = [];
 
-    if (devtools?.enabled) {
+    //enable devtools
+    if (devtools && devtools.enabled) {
       middlewares.push((config) =>
-        devToolsMiddleware(config, { ...devtools, name })
+        devToolsMiddleware(config, { ...devtools, name: devtools.name ?? name })
       );
     }
 
-    if (persist?.enabled) {
+    //enable persist
+    if (persist && persist.enabled) {
       middlewares.push((config) =>
         persistMiddleware(config, {
           ...persist,
@@ -66,18 +97,23 @@ export const createStore =
         })
       );
     }
-    type Mutators = [...TStoreMiddlewares<StateType>, ...Mcs];
+
+    //enable immer
+    if (immer && immer.enabled) {
+      middlewares.push(immerMiddleware);
+    }
+
     const stateMutators = middlewares.reduce(
       (y: any, fn) => fn(y),
       createState
-    ) as TStoreMiddlewareStateCreatorType<StateType, [], Mutators>;
+    ) as TStoreInitiatorType<StateType, [], Mutators>;
 
     const store = createStoreZustand(stateMutators);
 
     const getterSelectors = generateStateGetSelectors(store);
 
     const useStore = <FilteredStateType>(
-      selector: TStoreSelectorType<StateType, FilteredStateType>,
+      selector: TUseStoreSelectorType<StateType, FilteredStateType>,
       equalityFn?: TEqualityChecker<FilteredStateType>
     ): FilteredStateType => useStoreWithEqualityFn(store, selector, equalityFn);
 
@@ -113,36 +149,6 @@ export const createStore =
 
     return storeFactory(apiInternal) as TStateApi<TName, StateType, Mutators>;
   };
-
-const storeFactory = <
-  TName,
-  StateType,
-  Mutators extends [StoreMutatorIdentifier, unknown][] = [],
->(
-  api: TStateApi<TName, StateType, Mutators>
-) => {
-  return {
-    ...api,
-    extendSelectors: (builder: TSelectorBuilder<TName, StateType>) =>
-      storeFactory(extendSelectors(builder, api)),
-    extendActions: (builder: TActionBuilder<TName, StateType>) =>
-      storeFactory(extendActions(builder, api)),
-  };
-};
-
-// const test = createStore('hello')(() => ({ hey: 'aa' }))
-//   .extendSelectors(() => {
-//     return {
-//       selector: 'asas',
-//     };
-//   })
-//   .extendActions(() => {
-//     return {
-//       action: 'as',
-//     };
-//   });
-
-// test.set.action === ""
 
 // Alias {@link createStore}
 export const createZustandStore = createStore;

@@ -1,7 +1,12 @@
-import { TGetStoreRecord, TReadonlyStoreApi } from '../types';
+import { StoreMutatorIdentifier } from 'zustand';
 
-export const generateStateGetSelectors = <StateType>(
-  store: TReadonlyStoreApi<StateType>
+import { TCreatedStoreType, TGetStoreRecord } from '../types';
+
+export const generateStateGetSelectors = <
+  StateType,
+  Middlewares extends [StoreMutatorIdentifier, unknown][],
+>(
+  store: TCreatedStoreType<StateType, Middlewares>
 ) => {
   const selectors: TGetStoreRecord<StateType> =
     {} as TGetStoreRecord<StateType>;

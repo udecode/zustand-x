@@ -6,13 +6,13 @@ import {
   TGetStoreEqualityRecord,
   TGetStoreRecord,
   TSetStoreRecord,
-  TStoreSelectorType,
+  TUseStoreSelectorType,
 } from './utils';
 
 export type TSelectorBuilder<
   TName,
   StateType,
-  Mutators extends [StoreMutatorIdentifier, unknown][] = [],
+  Mutators extends [StoreMutatorIdentifier, unknown][],
   TActions = {},
   TSelectors = {},
 > = (
@@ -24,7 +24,7 @@ export type TSelectorBuilder<
 export type TActionBuilder<
   TName,
   StateType,
-  Mutators extends [StoreMutatorIdentifier, unknown][] = [],
+  Mutators extends [StoreMutatorIdentifier, unknown][],
   TActions = {},
   TSelectors = {},
 > = (
@@ -35,7 +35,7 @@ export type TActionBuilder<
 
 export type TStoreApiGet<
   StateType,
-  Mutators extends [StoreMutatorIdentifier, unknown][] = [],
+  Mutators extends [StoreMutatorIdentifier, unknown][],
   TSelectors = {},
 > = TGetStoreRecord<StateType> &
   TSelectors & {
@@ -44,7 +44,7 @@ export type TStoreApiGet<
 
 export type TStoreApiSet<
   StateType,
-  Mutators extends [StoreMutatorIdentifier, unknown][] = [],
+  Mutators extends [StoreMutatorIdentifier, unknown][],
   TActions = {},
 > = TSetStoreRecord<StateType> &
   TActions & {
@@ -54,7 +54,7 @@ export type TStoreApiSet<
 export type TStateApi<
   TName,
   StateType,
-  Mutators extends [StoreMutatorIdentifier, unknown][] = [],
+  Mutators extends [StoreMutatorIdentifier, unknown][],
   TActions = {},
   TSelectors = {},
 > = {
@@ -64,7 +64,7 @@ export type TStateApi<
   set: TStoreApiSet<StateType, Mutators, TActions>;
   store: TCreatedStoreType<StateType, Mutators>;
   useStore: <FilteredStateType>(
-    selector: TStoreSelectorType<StateType, FilteredStateType>,
+    selector: TUseStoreSelectorType<StateType, FilteredStateType>,
     equalityFn?: TEqualityChecker<FilteredStateType>
   ) => FilteredStateType;
   use: TGetStoreEqualityRecord<StateType> & TSelectors;

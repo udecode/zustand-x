@@ -1,8 +1,13 @@
-import { TGetStoreRecord, TReadonlyStoreApi } from '../types';
+import { StoreMutatorIdentifier } from 'zustand';
 
-export const generateStateTrackedHooksSelectors = <StateType>(
+import { TCreatedStoreType, TGetStoreRecord } from '../types';
+
+export const generateStateTrackedHooksSelectors = <
+  StateType,
+  Middlewares extends [StoreMutatorIdentifier, unknown][],
+>(
   useTrackedStore: () => StateType,
-  store: TReadonlyStoreApi<StateType>
+  store: TCreatedStoreType<StateType, Middlewares>
 ) => {
   const selectors: TGetStoreRecord<StateType> =
     {} as TGetStoreRecord<StateType>;

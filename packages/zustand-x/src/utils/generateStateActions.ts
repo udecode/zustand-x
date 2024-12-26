@@ -4,7 +4,7 @@ import { TCreatedStoreType, TSetStoreRecord } from '../types';
 
 export const generateStateActions = <
   StateType,
-  Middlewares extends [StoreMutatorIdentifier, unknown][] = [],
+  Middlewares extends [StoreMutatorIdentifier, unknown][],
 >(
   store: TCreatedStoreType<StateType, Middlewares>,
   storeName: string
@@ -12,14 +12,15 @@ export const generateStateActions = <
   const actions: TSetStoreRecord<StateType> = {} as TSetStoreRecord<StateType>;
 
   Object.keys(store.getState() || {}).forEach((key) => {
-    actions[key as keyof StateType] = (value) => {
-      const prevValue = store.getState()[key as keyof StateType];
+    const typedKey = key as keyof StateType;
+    actions[typedKey] = (value) => {
+      const prevValue = store.getState()[typedKey];
       if (prevValue === value) return;
 
       const actionKey = key.replace(/^\S/, (s) => s.toUpperCase());
       store.setState(
         (state) => {
-          state[key as keyof StateType] = value;
+          state[typedKey] = value;
           return state;
         },
         undefined,

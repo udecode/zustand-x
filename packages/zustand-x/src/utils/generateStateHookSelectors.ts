@@ -4,17 +4,17 @@ import {
   TCreatedStoreType,
   TEqualityChecker,
   TGetStoreEqualityRecord,
-  TStoreSelectorType,
+  TUseStoreSelectorType,
 } from '../types';
 
 export const generateStateHookSelectors = <
   StateType,
-  Middlewares extends [StoreMutatorIdentifier, unknown][] = [],
+  Middlewares extends [StoreMutatorIdentifier, unknown][],
 >(
-  useStore: <R>(
-    selector: TStoreSelectorType<StateType, R>,
-    equalityFn?: TEqualityChecker<R>
-  ) => R,
+  useStore: <FilteredStateType>(
+    selector: TUseStoreSelectorType<StateType, FilteredStateType>,
+    equalityFn?: TEqualityChecker<FilteredStateType>
+  ) => FilteredStateType,
   store: TCreatedStoreType<StateType, Middlewares>
 ) => {
   const selectors: TGetStoreEqualityRecord<StateType> =

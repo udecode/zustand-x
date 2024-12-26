@@ -19,22 +19,18 @@ export type TGetStoreEqualityRecord<O> = {
 export type TSetStoreRecord<O> = {
   [K in keyof O]: (value: O[K]) => void;
 };
-export type TStoreSelectorType<StateType, FilteredStateType = unknown> = (
+export type TUseStoreSelectorType<StateType, FilteredStateType = unknown> = (
   state: StateType
 ) => FilteredStateType;
 
-export type TStoreMiddlewareStateCreatorType<
+export type TStoreInitiatorType<
   StateType,
-  Mps extends [StoreMutatorIdentifier, unknown][] = [],
-  Mutators extends [StoreMutatorIdentifier, unknown][] = [],
-> = StateCreator<StateType, Mps, [...Mutators]>;
+  Mps extends [StoreMutatorIdentifier, unknown][],
+  Mutators extends [StoreMutatorIdentifier, unknown][],
+  Modified = StateType,
+> = StateCreator<StateType, Mps, [...Mutators], Modified>;
 
 export type TCreatedStoreType<
   StateType,
-  Mutators extends [StoreMutatorIdentifier, unknown][] = [],
+  Mutators extends [StoreMutatorIdentifier, unknown][],
 > = Mutate<StoreApi<StateType>, [...Mutators]>;
-
-export type TReadonlyStoreApi<StateType> = Pick<
-  StoreApi<StateType>,
-  'getState' | 'getInitialState' | 'subscribe'
->;
