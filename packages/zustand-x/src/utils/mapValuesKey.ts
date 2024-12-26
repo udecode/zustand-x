@@ -1,7 +1,9 @@
 import mapValues from 'lodash.mapvalues';
 
+import { TStateApi } from '../types';
+
 export const mapValuesKey = <
-  VK extends string,
+  VK extends keyof TStateApi<any, any, any, any>,
   T extends Record<VK, any>,
   R extends Record<keyof R, T>,
 >(

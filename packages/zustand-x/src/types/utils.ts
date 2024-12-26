@@ -35,3 +35,7 @@ export type TCreatedStoreType<
   StateType,
   Mutators extends [StoreMutatorIdentifier, unknown][],
 > = UseBoundStoreWithEqualityFn<Mutate<StoreApi<StateType>, Mutators>>;
+
+export type MiddlewareOption<T> = T & {
+  enabled?: boolean;
+};

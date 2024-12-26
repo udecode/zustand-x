@@ -1,13 +1,14 @@
 import { createTrackedSelector } from 'react-tracked';
-import {
-  devtools as devToolsMiddleware,
-  DevtoolsOptions,
-  persist as persistMiddleware,
-  PersistOptions,
-} from 'zustand/middleware';
-import { immer as immerMiddleware } from 'zustand/middleware/immer';
 import { createWithEqualityFn as createStoreZustand } from 'zustand/traditional';
 
+import {
+  devToolsMiddleware,
+  DevtoolsOptions,
+  immerMiddleware,
+  ImmerOptions,
+  persistMiddleware,
+  PersistOptions,
+} from './middlewares';
 import { TStateApi, TStoreInitiatorType } from './types';
 import { generateStateActions } from './utils/generateStateActions';
 import { generateStateGetSelectors } from './utils/generateStateGetSelectors';
@@ -18,29 +19,23 @@ import { storeFactory } from './utils/storeFactory';
 import type { StoreMutatorIdentifier } from 'zustand';
 
 type TCreateStoreOptions<StateType> = {
-  persist?: Partial<PersistOptions<StateType>> & {
-    enabled?: boolean;
-  };
-  devtools?: Partial<DevtoolsOptions> & {
-    enabled?: boolean;
-  };
-  immer?: {
-    enabled?: boolean;
-  };
+  persist?: PersistOptions<StateType>;
+  devtools?: DevtoolsOptions;
+  immer?: ImmerOptions;
 };
 
 type DefaultMutators<
   StateType,
   Options extends TCreateStoreOptions<StateType>,
 > = [
-  ...(Options['devtools'] extends { enabled: true }
-    ? [['zustand/devtools', never]]
+  ...(Options['immer'] extends { enabled: true }
+    ? [['zustand/immer', never]]
     : []),
   ...(Options['persist'] extends { enabled: true }
     ? [['zustand/persist', StateType]]
     : []),
-  ...(Options['immer'] extends { enabled: true }
-    ? [['zustand/immer', never]]
+  ...(Options['devtools'] extends { enabled: true }
+    ? [['zustand/devtools', never]]
     : []),
 ];
 
@@ -73,11 +68,9 @@ export const createStore =
       initializer: TStoreInitiatorType<StateType, any, any, any>
     ) => TStoreInitiatorType<StateType, any, any, any>)[] = [];
 
-    //enable devtools
-    if (devtools && devtools.enabled) {
-      middlewares.push((config) =>
-        devToolsMiddleware(config, { ...devtools, name: devtools.name ?? name })
-      );
+    //enable immer
+    if (immer && immer.enabled) {
+      middlewares.push(immerMiddleware);
     }
 
     //enable persist
@@ -90,9 +83,11 @@ export const createStore =
       );
     }
 
-    //enable immer
-    if (immer && immer.enabled) {
-      middlewares.push(immerMiddleware);
+    //enable devtools
+    if (devtools && devtools.enabled) {
+      middlewares.push((config) =>
+        devToolsMiddleware(config, { ...devtools, name: devtools.name ?? name })
+      );
     }
 
     const stateMutators = middlewares.reduce(
