@@ -44,7 +44,6 @@ describe('createAtomStore', () => {
         <button
           type="button"
           onClick={() => {
-            selectors.age();
             actions.age(selectors.age() + 1);
           }}
         >

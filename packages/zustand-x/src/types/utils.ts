@@ -4,6 +4,7 @@ import {
   StoreApi,
   StoreMutatorIdentifier,
 } from 'zustand';
+import { UseBoundStoreWithEqualityFn } from 'zustand/traditional';
 
 export type TEqualityChecker<StateType> = (
   state: StateType,
@@ -33,4 +34,4 @@ export type TStoreInitiatorType<
 export type TCreatedStoreType<
   StateType,
   Mutators extends [StoreMutatorIdentifier, unknown][],
-> = Mutate<StoreApi<StateType>, Mutators>;
+> = UseBoundStoreWithEqualityFn<Mutate<StoreApi<StateType>, Mutators>>;

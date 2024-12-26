@@ -40,7 +40,8 @@
   "dependencies": {
     "immer": "^10.0.3",
     "lodash.mapvalues": "^4.6.0",
-    "react-tracked": "^1.7.11"
+    "react-tracked": "^1.7.11",
+    "use-sync-external-store": "1.4.0"
   },
   "peerDependencies": {
     "zustand": ">=4.3.9"

@@ -31,31 +31,30 @@ export const extendSelectors = <
     ...api.get,
   };
 
-  Object.entries(builder(api.store.getState(), api.get, api)).forEach(
-    ([key, value]) => {
-      console.log(value, 'value');
-      //@ts-ignore
-      use[key] = (...args: any[]) =>
-        api.useStore((state) => {
-          const selectors = builder(state, api.get, api);
-          const selector = selectors[key];
-          return selector(...args);
-        });
-      //@ts-ignore
-      useTracked[key] = (...args: any[]) => {
-        const trackedState = api.useTrackedStore();
-        const selectors = builder(trackedState, api.get, api);
-        const selector = selectors[key];
-        return selector(...args);
-      };
-      //@ts-ignore
-      get[key] = (...args: any[]) => {
-        const selectors = builder(api.store.getState(), api.get, api);
-        const selector = selectors[key];
-        return selector(...args);
-      };
-    }
-  );
+  Object.entries(builder(api.set, api.get, api)).forEach(([key, selector]) => {
+    //@ts-ignore
+    use[key] =
+      typeof selector === 'function'
+        ? (...args: any[]) =>
+            api.useStore(() => {
+              return selector(...args);
+            })
+        : selector;
+    //@ts-ignore
+    useTracked[key] =
+      typeof selector === 'function'
+        ? (...args: any[]) => {
+            return selector(...args);
+          }
+        : selector;
+    //@ts-ignore
+    get[key] =
+      typeof selector === 'function'
+        ? (...args: any[]) => {
+            return selector(...args);
+          }
+        : selector;
+  });
 
   return {
     ...api,

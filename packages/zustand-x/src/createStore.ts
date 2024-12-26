@@ -1,22 +1,14 @@
 import { createTrackedSelector } from 'react-tracked';
-import { createStore as createStoreZustand } from 'zustand';
 import {
   devtools as devToolsMiddleware,
   DevtoolsOptions,
-} from 'zustand/middleware/devtools';
-import { immer as immerMiddleware } from 'zustand/middleware/immer';
-import {
   persist as persistMiddleware,
   PersistOptions,
-} from 'zustand/middleware/persist';
-import { useStoreWithEqualityFn } from 'zustand/traditional';
+} from 'zustand/middleware';
+import { immer as immerMiddleware } from 'zustand/middleware/immer';
+import { createWithEqualityFn as createStoreZustand } from 'zustand/traditional';
 
-import {
-  TEqualityChecker,
-  TStateApi,
-  TStoreInitiatorType,
-  TUseStoreSelectorType,
-} from './types';
+import { TStateApi, TStoreInitiatorType } from './types';
 import { generateStateActions } from './utils/generateStateActions';
 import { generateStateGetSelectors } from './utils/generateStateGetSelectors';
 import { generateStateHookSelectors } from './utils/generateStateHookSelectors';
@@ -112,16 +104,15 @@ export const createStore =
 
     const getterSelectors = generateStateGetSelectors(store);
 
-    const useStore = <FilteredStateType>(
-      selector: TUseStoreSelectorType<StateType, FilteredStateType>,
-      equalityFn?: TEqualityChecker<FilteredStateType>
-    ): FilteredStateType => useStoreWithEqualityFn(store, selector, equalityFn);
+    const stateActions = generateStateActions(
+      store,
+      name,
+      options.immer?.enabled
+    );
 
-    const stateActions = generateStateActions(store, name);
+    const hookSelectors = generateStateHookSelectors(store);
 
-    const hookSelectors = generateStateHookSelectors(useStore, store);
-
-    const useTrackedStore = createTrackedSelector(useStore);
+    const useTrackedStore = createTrackedSelector(store);
     const trackedHooksSelectors = generateStateTrackedHooksSelectors(
       useTrackedStore,
       store
@@ -139,7 +130,7 @@ export const createStore =
         ...stateActions,
       },
       store,
-      useStore,
+      useStore: store,
       use: hookSelectors,
       useTracked: trackedHooksSelectors,
       useTrackedStore,

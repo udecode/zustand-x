@@ -19,6 +19,7 @@ describe('zustandX', () => {
         },
       }
     );
+
     it('should be', () => {
       expect(store.get.name()).toEqual('zustandX');
     });

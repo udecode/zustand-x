@@ -2,11 +2,9 @@ import { StoreMutatorIdentifier } from 'zustand';
 
 import {
   TCreatedStoreType,
-  TEqualityChecker,
   TGetStoreEqualityRecord,
   TGetStoreRecord,
   TSetStoreRecord,
-  TUseStoreSelectorType,
 } from './utils';
 
 export type TSelectorBuilder<
@@ -16,10 +14,10 @@ export type TSelectorBuilder<
   TActions = {},
   TSelectors = {},
 > = (
-  state: StateType,
+  set: TStoreApiSet<StateType, Mutators, TActions>,
   get: TStoreApiGet<StateType, Mutators, TSelectors>,
   api: TStateApi<TName, StateType, Mutators, TActions, TSelectors>
-) => any;
+) => Record<string, any>;
 
 export type TActionBuilder<
   TName,
@@ -31,7 +29,7 @@ export type TActionBuilder<
   set: TStoreApiSet<StateType, Mutators, TActions>,
   get: TStoreApiGet<StateType, Mutators, TSelectors>,
   api: TStateApi<TName, StateType, Mutators, TActions, TSelectors>
-) => any;
+) => Record<string, any>;
 
 export type TStoreApiGet<
   StateType,
@@ -63,10 +61,7 @@ export type TStateApi<
   get: TStoreApiGet<StateType, Mutators, TSelectors>;
   set: TStoreApiSet<StateType, Mutators, TActions>;
   store: TCreatedStoreType<StateType, Mutators>;
-  useStore: <FilteredStateType>(
-    selector: TUseStoreSelectorType<StateType, FilteredStateType>,
-    equalityFn?: TEqualityChecker<FilteredStateType>
-  ) => FilteredStateType;
+  useStore: TCreatedStoreType<StateType, Mutators>;
   use: TGetStoreEqualityRecord<StateType> & TSelectors;
   useTracked: TGetStoreRecord<StateType> & TSelectors;
   useTrackedStore: () => StateType;
