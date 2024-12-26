@@ -4,35 +4,37 @@ import {
   TCreatedStoreType,
   TGetStoreEqualityRecord,
   TGetStoreRecord,
+  TName,
   TSetStoreRecord,
+  TState,
 } from './utils';
 
 export type TSelectorBuilder<
-  TName,
-  StateType,
+  Name extends TName,
+  StateType extends TState,
   Mutators extends [StoreMutatorIdentifier, unknown][],
   TActions = {},
   TSelectors = {},
 > = (
   set: TStoreApiSet<StateType, Mutators, TActions>,
   get: TStoreApiGet<StateType, Mutators, TSelectors>,
-  api: TStateApi<TName, StateType, Mutators, TActions, TSelectors>
+  api: TStateApi<Name, StateType, Mutators, TActions, TSelectors>
 ) => Record<string, any>;
 
 export type TActionBuilder<
-  TName,
-  StateType,
+  Name extends TName,
+  StateType extends TState,
   Mutators extends [StoreMutatorIdentifier, unknown][],
   TActions = {},
   TSelectors = {},
 > = (
   set: TStoreApiSet<StateType, Mutators, TActions>,
   get: TStoreApiGet<StateType, Mutators, TSelectors>,
-  api: TStateApi<TName, StateType, Mutators, TActions, TSelectors>
+  api: TStateApi<Name, StateType, Mutators, TActions, TSelectors>
 ) => Record<string, any>;
 
 export type TStoreApiGet<
-  StateType,
+  StateType extends TState,
   Mutators extends [StoreMutatorIdentifier, unknown][],
   TSelectors = {},
 > = TGetStoreRecord<StateType> &
@@ -41,7 +43,7 @@ export type TStoreApiGet<
   };
 
 export type TStoreApiSet<
-  StateType,
+  StateType extends TState,
   Mutators extends [StoreMutatorIdentifier, unknown][],
   TActions = {},
 > = TSetStoreRecord<StateType> &
@@ -50,13 +52,13 @@ export type TStoreApiSet<
   };
 
 export type TStateApi<
-  TName,
-  StateType,
+  Name extends TName,
+  StateType extends TState,
   Mutators extends [StoreMutatorIdentifier, unknown][],
   TActions = {},
   TSelectors = {},
 > = {
-  name: TName;
+  name: Name;
   getInitialState: TCreatedStoreType<StateType, Mutators>['getInitialState'];
   get: TStoreApiGet<StateType, Mutators, TSelectors>;
   set: TStoreApiSet<StateType, Mutators, TActions>;
@@ -67,7 +69,7 @@ export type TStateApi<
   useTrackedStore: () => StateType;
   extendSelectors<
     SelectorBuilder extends TSelectorBuilder<
-      TName,
+      Name,
       StateType,
       Mutators,
       TActions,
@@ -76,7 +78,7 @@ export type TStateApi<
   >(
     builder: SelectorBuilder
   ): TStateApi<
-    TName,
+    Name,
     StateType,
     Mutators,
     TStoreApiSet<StateType, Mutators, TActions>,
@@ -84,7 +86,7 @@ export type TStateApi<
   >;
   extendActions<
     ActionBuilder extends TActionBuilder<
-      TName,
+      Name,
       StateType,
       Mutators,
       TActions,
@@ -93,7 +95,7 @@ export type TStateApi<
   >(
     builder: ActionBuilder
   ): TStateApi<
-    TName,
+    Name,
     StateType,
     Mutators,
     TActions & ReturnType<ActionBuilder>,

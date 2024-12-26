@@ -6,6 +6,9 @@ import {
 } from 'zustand';
 import { UseBoundStoreWithEqualityFn } from 'zustand/traditional';
 
+export type TName = string;
+export type TState = object;
+
 export type TEqualityChecker<StateType> = (
   state: StateType,
   newState: StateType
@@ -20,19 +23,20 @@ export type TGetStoreEqualityRecord<O> = {
 export type TSetStoreRecord<O> = {
   [K in keyof O]: (value: O[K]) => void;
 };
-export type TUseStoreSelectorType<StateType, FilteredStateType = unknown> = (
-  state: StateType
-) => FilteredStateType;
+export type TUseStoreSelectorType<
+  StateType extends TState,
+  FilteredStateType = unknown,
+> = (state: StateType) => FilteredStateType;
 
 export type TStoreInitiatorType<
-  StateType,
+  StateType extends TState,
   Mps extends [StoreMutatorIdentifier, unknown][],
   Mutators extends [StoreMutatorIdentifier, unknown][],
   Modified = StateType,
 > = StateCreator<StateType, Mps, Mutators, Modified>;
 
 export type TCreatedStoreType<
-  StateType,
+  StateType extends TState,
   Mutators extends [StoreMutatorIdentifier, unknown][],
 > = UseBoundStoreWithEqualityFn<Mutate<StoreApi<StateType>, Mutators>>;
 

@@ -10,7 +10,7 @@ import {
   persistMiddleware,
   PersistOptions,
 } from './middlewares';
-import { TStateApi, TStoreInitiatorType } from './types';
+import { TName, TState, TStateApi, TStoreInitiatorType } from './types';
 import { generateStateActions } from './utils/generateStateActions';
 import { generateStateGetSelectors } from './utils/generateStateGetSelectors';
 import { generateStateHookSelectors } from './utils/generateStateHookSelectors';
@@ -20,7 +20,7 @@ import { storeFactory } from './utils/storeFactory';
 import type { StoreMutatorIdentifier } from 'zustand';
 
 type DefaultMutators<
-  StateType,
+  StateType extends TState,
   Options extends TBaseStoreOptions<StateType>,
 > = [
   ...(Options['immer'] extends { enabled: true }
@@ -35,7 +35,7 @@ type DefaultMutators<
 ];
 
 type ResolveMutators<
-  StateType,
+  StateType extends TState,
   Mcs extends [StoreMutatorIdentifier, unknown][],
   Options extends TBaseStoreOptions<StateType>,
 > = [...DefaultMutators<StateType, Options>, ...Mcs];
@@ -47,23 +47,23 @@ type TBaseStoreOptions<StateType> = {
 };
 
 type TMiddleware<
-  StateType,
+  StateType extends TState,
   Mutators extends [StoreMutatorIdentifier, unknown][],
 > = (
   config: TStoreInitiatorType<StateType, [], Mutators, StateType>
 ) => TStoreInitiatorType<StateType, [], Mutators, StateType>;
 
 type TCreateStoreOptions<
-  StateType,
+  StateType extends TState,
   Mcs extends [StoreMutatorIdentifier, unknown][],
 > = TBaseStoreOptions<StateType> & {
   middlewares?: TMiddleware<StateType, Mcs>[];
 };
 
 export const createStore =
-  <TName extends string>(name: TName) =>
+  <Name extends TName>(name: Name) =>
   <
-    StateType extends object,
+    StateType extends TState,
     Mps extends [StoreMutatorIdentifier, unknown][] = [],
     Mcs extends [StoreMutatorIdentifier, unknown][] = [],
     Options extends TCreateStoreOptions<StateType, Mcs> = TCreateStoreOptions<
@@ -144,7 +144,7 @@ export const createStore =
       store
     );
 
-    const apiInternal: TStateApi<TName, StateType, Mutators> = {
+    const apiInternal: TStateApi<Name, StateType, Mutators> = {
       getInitialState: store.getInitialState,
       get: {
         state: store.getState,
@@ -164,7 +164,7 @@ export const createStore =
       extendActions: () => apiInternal as any,
     };
 
-    return storeFactory(apiInternal) as TStateApi<TName, StateType, Mutators>;
+    return storeFactory(apiInternal) as TStateApi<Name, StateType, Mutators>;
   };
 
 // Alias {@link createStore}

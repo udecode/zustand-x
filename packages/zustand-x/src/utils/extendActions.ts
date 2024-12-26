@@ -1,15 +1,15 @@
 import { StoreMutatorIdentifier } from 'zustand';
 
-import { TActionBuilder, TStateApi } from '../types';
+import { TActionBuilder, TName, TState, TStateApi } from '../types';
 
 export const extendActions = <
-  TName,
-  StateType,
+  Name extends TName,
+  StateType extends TState,
   Mutators extends [StoreMutatorIdentifier, unknown][],
   TActions,
   TSelectors,
   Builder extends TActionBuilder<
-    TName,
+    Name,
     StateType,
     Mutators,
     TActions,
@@ -17,7 +17,7 @@ export const extendActions = <
   >,
 >(
   builder: Builder,
-  api: TStateApi<TName, StateType, Mutators, TActions, TSelectors>
+  api: TStateApi<Name, StateType, Mutators, TActions, TSelectors>
 ) => {
   const actions = builder(api.set, api.get, api);
 
@@ -28,7 +28,7 @@ export const extendActions = <
       ...actions,
     },
   } as TStateApi<
-    TName,
+    Name,
     StateType,
     Mutators,
     TActions & ReturnType<Builder>,

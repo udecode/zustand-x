@@ -1,15 +1,15 @@
 import { StoreMutatorIdentifier } from 'zustand';
 
-import { TSelectorBuilder, TStateApi } from '../types';
+import { TName, TSelectorBuilder, TState, TStateApi } from '../types';
 
 export const extendSelectors = <
-  TName,
-  StateType,
+  Name extends TName,
+  StateType extends TState,
   Mutators extends [StoreMutatorIdentifier, unknown][],
   TActions,
   TSelectors,
   Builder extends TSelectorBuilder<
-    TName,
+    Name,
     StateType,
     Mutators,
     TActions,
@@ -17,7 +17,7 @@ export const extendSelectors = <
   >,
 >(
   builder: Builder,
-  api: TStateApi<TName, StateType, Mutators, TActions, TSelectors>
+  api: TStateApi<Name, StateType, Mutators, TActions, TSelectors>
 ) => {
   const use = {
     ...api.use,
@@ -62,7 +62,7 @@ export const extendSelectors = <
     use,
     useTracked,
   } as TStateApi<
-    TName,
+    Name,
     StateType,
     Mutators,
     TActions,
