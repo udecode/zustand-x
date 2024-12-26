@@ -4,6 +4,4 @@
 
 export * from './createStore';
 export * from './types';
-export * from './middlewares/index';
-export * from './types/index';
 export * from './utils/index';
