@@ -37,8 +37,9 @@ type DefaultMutators<
 type ResolveMutators<
   StateType extends TState,
   Mcs extends [StoreMutatorIdentifier, unknown][],
+  MiddlewareMutators extends [StoreMutatorIdentifier, unknown][],
   Options extends TBaseStoreOptions<StateType>,
-> = [...DefaultMutators<StateType, Options>, ...Mcs];
+> = [...DefaultMutators<StateType, Options>, ...MiddlewareMutators, ...Mcs];
 
 type TBaseStoreOptions<StateType> = {
   persist?: PersistOptions<StateType>;
@@ -55,9 +56,9 @@ type TMiddleware<
 
 type TCreateStoreOptions<
   StateType extends TState,
-  Mcs extends [StoreMutatorIdentifier, unknown][],
+  MiddlewareMutators extends [StoreMutatorIdentifier, unknown][],
 > = TBaseStoreOptions<StateType> & {
-  middlewares?: TMiddleware<StateType, Mcs>[];
+  middlewares?: TMiddleware<StateType, MiddlewareMutators>[];
 };
 
 export const createStore =
@@ -66,12 +67,14 @@ export const createStore =
     StateType extends TState,
     Mps extends [StoreMutatorIdentifier, unknown][] = [],
     Mcs extends [StoreMutatorIdentifier, unknown][] = [],
-    Options extends TCreateStoreOptions<StateType, Mcs> = TCreateStoreOptions<
+    MiddlewareMutators extends [StoreMutatorIdentifier, unknown][] = [],
+    Options extends TCreateStoreOptions<
       StateType,
-      Mcs
-    >,
+      MiddlewareMutators
+    > = TCreateStoreOptions<StateType, MiddlewareMutators>,
     Mutators extends [StoreMutatorIdentifier, unknown][] = ResolveMutators<
       StateType,
+      MiddlewareMutators,
       Mcs,
       Options
     >,
