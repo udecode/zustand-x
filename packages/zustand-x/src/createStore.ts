@@ -76,7 +76,7 @@ export const createStore =
       Options
     >,
   >(
-    createState: StateType | TStoreInitiatorType<StateType, Mps, Mcs>,
+    initialState: StateType | TStoreInitiatorType<StateType, Mps, Mcs>,
     options: Options = {} as Options
   ) => {
     const {
@@ -123,7 +123,7 @@ export const createStore =
 
     const stateMutators = middlewares.reduce(
       (y: any, fn) => fn(y),
-      typeof createState === 'function' ? createState : () => createState
+      typeof initialState === 'function' ? initialState : () => initialState
     ) as TStoreInitiatorType<StateType, [], Mutators>;
 
     const store = createStoreZustand(stateMutators);
@@ -145,7 +145,6 @@ export const createStore =
     );
 
     const apiInternal: TStateApi<Name, StateType, Mutators> = {
-      getInitialState: store.getInitialState,
       get: {
         state: store.getState,
         ...getterSelectors,

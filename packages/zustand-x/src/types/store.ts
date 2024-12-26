@@ -1,6 +1,7 @@
 import { StoreMutatorIdentifier } from 'zustand';
 
 import {
+  TCreatedStoreMutateType,
   TCreatedStoreType,
   TGetStoreEqualityRecord,
   TGetStoreRecord,
@@ -59,10 +60,9 @@ export type TStateApi<
   TSelectors = {},
 > = {
   name: Name;
-  getInitialState: TCreatedStoreType<StateType, Mutators>['getInitialState'];
   get: TStoreApiGet<StateType, Mutators, TSelectors>;
   set: TStoreApiSet<StateType, Mutators, TActions>;
-  store: TCreatedStoreType<StateType, Mutators>;
+  store: TCreatedStoreMutateType<StateType, Mutators>;
   useStore: TCreatedStoreType<StateType, Mutators>;
   use: TGetStoreEqualityRecord<StateType> & TSelectors;
   useTracked: TGetStoreRecord<StateType> & TSelectors;

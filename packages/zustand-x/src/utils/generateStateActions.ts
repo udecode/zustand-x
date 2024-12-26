@@ -1,9 +1,9 @@
 import { StoreMutatorIdentifier } from 'zustand';
 
-import { TCreatedStoreType, TSetStoreRecord } from '../types';
+import { TCreatedStoreType, TSetStoreRecord, TState } from '../types';
 
 export const generateStateActions = <
-  StateType,
+  StateType extends TState,
   Mutators extends [StoreMutatorIdentifier, unknown][],
 >(
   store: TCreatedStoreType<StateType, Mutators>,

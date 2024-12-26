@@ -4,10 +4,11 @@ import {
   TCreatedStoreType,
   TEqualityChecker,
   TGetStoreEqualityRecord,
+  TState,
 } from '../types';
 
 export const generateStateHookSelectors = <
-  StateType,
+  StateType extends TState,
   Mutators extends [StoreMutatorIdentifier, unknown][],
 >(
   useStore: TCreatedStoreType<StateType, Mutators>

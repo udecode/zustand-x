@@ -1,9 +1,9 @@
 import { StoreMutatorIdentifier } from 'zustand';
 
-import { TCreatedStoreType, TGetStoreRecord } from '../types';
+import { TCreatedStoreType, TGetStoreRecord, TState } from '../types';
 
 export const generateStateTrackedHooksSelectors = <
-  StateType,
+  StateType extends TState,
   Mutators extends [StoreMutatorIdentifier, unknown][],
 >(
   useTrackedStore: () => StateType,

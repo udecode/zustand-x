@@ -3,5 +3,6 @@
  */
 
 export * from './createStore';
-export * from './types/store';
-export * from './utils/index';
+export * from './middlewares';
+export * from './types';
+export * from './utils';

@@ -35,10 +35,15 @@ export type TStoreInitiatorType<
   Modified = StateType,
 > = StateCreator<StateType, Mps, Mutators, Modified>;
 
+export type TCreatedStoreMutateType<
+  StateType extends TState,
+  Mutators extends [StoreMutatorIdentifier, unknown][],
+> = Mutate<StoreApi<StateType>, Mutators>;
+
 export type TCreatedStoreType<
   StateType extends TState,
   Mutators extends [StoreMutatorIdentifier, unknown][],
-> = UseBoundStoreWithEqualityFn<Mutate<StoreApi<StateType>, Mutators>>;
+> = UseBoundStoreWithEqualityFn<TCreatedStoreMutateType<StateType, Mutators>>;
 
 export type MiddlewareOption<T> = T & {
   enabled?: boolean;
