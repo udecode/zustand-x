@@ -9,13 +9,13 @@ import {
 
 export const generateStateHookSelectors = <
   StateType,
-  Middlewares extends [StoreMutatorIdentifier, unknown][],
+  Mutators extends [StoreMutatorIdentifier, unknown][],
 >(
   useStore: <FilteredStateType>(
     selector: TUseStoreSelectorType<StateType, FilteredStateType>,
     equalityFn?: TEqualityChecker<FilteredStateType>
   ) => FilteredStateType,
-  store: TCreatedStoreType<StateType, Middlewares>
+  store: TCreatedStoreType<StateType, Mutators>
 ) => {
   const selectors: TGetStoreEqualityRecord<StateType> =
     {} as TGetStoreEqualityRecord<StateType>;

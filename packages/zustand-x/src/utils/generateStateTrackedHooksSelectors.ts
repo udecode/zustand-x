@@ -4,10 +4,10 @@ import { TCreatedStoreType, TGetStoreRecord } from '../types';
 
 export const generateStateTrackedHooksSelectors = <
   StateType,
-  Middlewares extends [StoreMutatorIdentifier, unknown][],
+  Mutators extends [StoreMutatorIdentifier, unknown][],
 >(
   useTrackedStore: () => StateType,
-  store: TCreatedStoreType<StateType, Middlewares>
+  store: TCreatedStoreType<StateType, Mutators>
 ) => {
   const selectors: TGetStoreRecord<StateType> =
     {} as TGetStoreRecord<StateType>;

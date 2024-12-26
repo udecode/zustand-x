@@ -5,19 +5,19 @@ import { TSelectorBuilder, TStateApi } from '../types';
 export const extendSelectors = <
   TName,
   StateType,
-  Middlewares extends [StoreMutatorIdentifier, unknown][],
+  Mutators extends [StoreMutatorIdentifier, unknown][],
   TActions,
   TSelectors,
   Builder extends TSelectorBuilder<
     TName,
     StateType,
-    Middlewares,
+    Mutators,
     TActions,
     TSelectors
   >,
 >(
   builder: Builder,
-  api: TStateApi<TName, StateType, Middlewares, TActions, TSelectors>
+  api: TStateApi<TName, StateType, Mutators, TActions, TSelectors>
 ) => {
   const use = {
     ...api.use,
@@ -65,7 +65,7 @@ export const extendSelectors = <
   } as TStateApi<
     TName,
     StateType,
-    Middlewares,
+    Mutators,
     TActions,
     TSelectors & ReturnType<Builder>
   >;

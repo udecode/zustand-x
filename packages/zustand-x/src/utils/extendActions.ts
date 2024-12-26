@@ -5,19 +5,19 @@ import { TActionBuilder, TStateApi } from '../types';
 export const extendActions = <
   TName,
   StateType,
-  Middlewares extends [StoreMutatorIdentifier, unknown][],
+  Mutators extends [StoreMutatorIdentifier, unknown][],
   TActions,
   TSelectors,
   Builder extends TActionBuilder<
     TName,
     StateType,
-    Middlewares,
+    Mutators,
     TActions,
     TSelectors
   >,
 >(
   builder: Builder,
-  api: TStateApi<TName, StateType, Middlewares, TActions, TSelectors>
+  api: TStateApi<TName, StateType, Mutators, TActions, TSelectors>
 ) => {
   const actions = builder(api.set, api.get, api);
 
@@ -30,7 +30,7 @@ export const extendActions = <
   } as TStateApi<
     TName,
     StateType,
-    Middlewares,
+    Mutators,
     TActions & ReturnType<Builder>,
     TSelectors
   >;

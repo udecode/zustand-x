@@ -4,9 +4,9 @@ import { TCreatedStoreType, TSetStoreRecord } from '../types';
 
 export const generateStateActions = <
   StateType,
-  Middlewares extends [StoreMutatorIdentifier, unknown][],
+  Mutators extends [StoreMutatorIdentifier, unknown][],
 >(
-  store: TCreatedStoreType<StateType, Middlewares>,
+  store: TCreatedStoreType<StateType, Mutators>,
   storeName: string
 ) => {
   const actions: TSetStoreRecord<StateType> = {} as TSetStoreRecord<StateType>;
@@ -18,8 +18,10 @@ export const generateStateActions = <
       if (prevValue === value) return;
 
       const actionKey = key.replace(/^\S/, (s) => s.toUpperCase());
+
+      //@ts-ignore
       store.setState(
-        (state) => {
+        (state: StateType) => {
           state[typedKey] = value;
           return state;
         },

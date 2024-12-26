@@ -28,9 +28,9 @@ export type TStoreInitiatorType<
   Mps extends [StoreMutatorIdentifier, unknown][],
   Mutators extends [StoreMutatorIdentifier, unknown][],
   Modified = StateType,
-> = StateCreator<StateType, Mps, [...Mutators], Modified>;
+> = StateCreator<StateType, Mps, Mutators, Modified>;
 
 export type TCreatedStoreType<
   StateType,
   Mutators extends [StoreMutatorIdentifier, unknown][],
-> = Mutate<StoreApi<StateType>, [...Mutators]>;
+> = Mutate<StoreApi<StateType>, Mutators>;

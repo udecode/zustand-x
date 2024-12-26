@@ -4,9 +4,9 @@ import { TCreatedStoreType, TGetStoreRecord } from '../types';
 
 export const generateStateGetSelectors = <
   StateType,
-  Middlewares extends [StoreMutatorIdentifier, unknown][],
+  Mutators extends [StoreMutatorIdentifier, unknown][],
 >(
-  store: TCreatedStoreType<StateType, Middlewares>
+  store: TCreatedStoreType<StateType, Mutators>
 ) => {
   const selectors: TGetStoreRecord<StateType> =
     {} as TGetStoreRecord<StateType>;
