@@ -1,22 +1,30 @@
+import { StoreMutatorIdentifier } from 'zustand';
+
 import {
   TCreatedStoreType,
   TEqualityChecker,
-  TGetRecord,
+  TGetStoreEqualityRecord,
   TStoreSelectorType,
 } from '../types';
 
-export const generateStateHookSelectors = <T, U>(
+export const generateStateHookSelectors = <
+  StateType,
+  Middlewares extends [StoreMutatorIdentifier, unknown][] = [],
+>(
   useStore: <R>(
-    selector: TStoreSelectorType<T, R>,
+    selector: TStoreSelectorType<StateType, R>,
     equalityFn?: TEqualityChecker<R>
   ) => R,
-  store: TCreatedStoreType<T, U>
+  store: TCreatedStoreType<StateType, Middlewares>
 ) => {
-  const selectors: TGetRecord<T> = {} as TGetRecord<T>;
+  const selectors: TGetStoreEqualityRecord<StateType> =
+    {} as TGetStoreEqualityRecord<StateType>;
 
   Object.keys(store.getState() || {}).forEach((key) => {
-    selectors[key as keyof T] = (equalityFn?: TEqualityChecker<T[keyof T]>) => {
-      return useStore((state) => state[key as keyof T], equalityFn);
+    selectors[key as keyof StateType] = (
+      equalityFn?: TEqualityChecker<StateType[keyof StateType]>
+    ) => {
+      return useStore((state) => state[key as keyof StateType], equalityFn);
     };
   });
 

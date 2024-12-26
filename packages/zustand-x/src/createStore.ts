@@ -13,7 +13,7 @@ import {
   TEqualityChecker,
   TSelectorBuilder,
   TStateApi,
-  TStoreMiddlewareCreatorType,
+  TStoreMiddlewareStateCreatorType,
   TStoreSelectorType,
 } from './types';
 import { extendActions, extendSelectors } from './utils';
@@ -24,14 +24,18 @@ import { generateStateTrackedHooksSelectors } from './utils/generateStateTracked
 
 import type { StateCreator, StoreMutatorIdentifier } from 'zustand';
 
-type TCreateStoreOptions<T> = {
-  persist?: Partial<PersistOptions<T>> & {
+type TCreateStoreOptions<StateType> = {
+  persist?: Partial<PersistOptions<StateType>> & {
     enabled?: boolean;
   };
   devtools?: Partial<DevtoolsOptions> & {
     enabled?: boolean;
   };
 };
+type TStoreMiddlewares<StateType> = [
+  ['zustand/devtools', never],
+  ['zustand/persist', StateType],
+];
 export const createStore =
   <TName extends string>(name: TName) =>
   <
@@ -62,11 +66,11 @@ export const createStore =
         })
       );
     }
-
+    type Mutators = [...TStoreMiddlewares<StateType>, ...Mcs];
     const stateMutators = middlewares.reduce(
       (y: any, fn) => fn(y),
       createState
-    ) as TStoreMiddlewareCreatorType<StateType>;
+    ) as TStoreMiddlewareStateCreatorType<StateType, [], Mutators>;
 
     const store = createStoreZustand(stateMutators);
 
@@ -87,7 +91,7 @@ export const createStore =
       store
     );
 
-    const apiInternal: TStateApi<TName, StateType> = {
+    const apiInternal: TStateApi<TName, StateType, Mutators> = {
       getInitialState: store.getInitialState,
       get: {
         state: store.getState,
@@ -107,10 +111,16 @@ export const createStore =
       extendActions: () => apiInternal as any,
     };
 
-    return storeFactory(apiInternal) as TStateApi<TName, StateType>;
+    return storeFactory(apiInternal) as TStateApi<TName, StateType, Mutators>;
   };
 
-const storeFactory = <TName, StateType>(api: TStateApi<TName, StateType>) => {
+const storeFactory = <
+  TName,
+  StateType,
+  Mutators extends [StoreMutatorIdentifier, unknown][] = [],
+>(
+  api: TStateApi<TName, StateType, Mutators>
+) => {
   return {
     ...api,
     extendSelectors: (builder: TSelectorBuilder<TName, StateType>) =>
@@ -131,6 +141,8 @@ const storeFactory = <TName, StateType>(api: TStateApi<TName, StateType>) => {
 //       action: 'as',
 //     };
 //   });
+
+// test.set.action === ""
 
 // Alias {@link createStore}
 export const createZustandStore = createStore;
