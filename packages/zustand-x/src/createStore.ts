@@ -1,3 +1,4 @@
+import { enableMapSet, setAutoFreeze } from 'immer';
 import { createTrackedSelector } from 'react-tracked';
 import { createWithEqualityFn as createStoreZustand } from 'zustand/traditional';
 
@@ -71,6 +72,10 @@ export const createStore =
     //enable immer
     if (immer && immer.enabled) {
       middlewares.push(immerMiddleware);
+      setAutoFreeze(immer.enabledAutoFreeze ?? false);
+      if (immer.enableMapSet) {
+        enableMapSet();
+      }
     }
 
     //enable persist
