@@ -24,7 +24,7 @@ import { generateStateHookSelectors } from './utils/generateStateHookSelectors';
 import { generateStateTrackedHooksSelectors } from './utils/generateStateTrackedHooksSelectors';
 import { storeFactory } from './utils/storeFactory';
 
-import type { StateCreator, StoreMutatorIdentifier } from 'zustand';
+import type { StoreMutatorIdentifier } from 'zustand';
 
 export const createStore =
   <Name extends TName>(name: Name) =>
@@ -34,7 +34,7 @@ export const createStore =
     Mcs extends [StoreMutatorIdentifier, unknown][] = [],
     Options extends TBaseStoreOptions<StateType> = TBaseStoreOptions<StateType>,
   >(
-    initialState: StateType | StateCreator<StateType, Mps, Mcs>,
+    initialState: StateType | TStoreInitiatorType<StateType, Mps, Mcs>,
     options: Options = {} as Options
   ) => {
     type Mutators = ResolveMutators<DefaultMutators<StateType, Options>, Mcs>;

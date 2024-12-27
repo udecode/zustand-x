@@ -9,6 +9,5 @@ declare module 'zustand/middleware' {
     initializer: StateCreator<T, [...Mps, ['zustand/devtools', never]], Mcs>,
     devtoolsOptions?: DevtoolsOptions
   ) => StateCreator<T, Mps, [['zustand/devtools', never], ...Mcs]>;
-  //@ts-ignore
   declare const devtools: Devtools;
 }
