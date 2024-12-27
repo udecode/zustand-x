@@ -28,14 +28,10 @@ export type DefaultMutators<
 
 export type ResolveMutators<
   OptionMutators extends [StoreMutatorIdentifier, unknown][] = [],
-  MiddlewareMutators extends [StoreMutatorIdentifier, unknown][] = [],
   Mcs extends [StoreMutatorIdentifier, unknown][] = [],
 > = [
   ...(OptionMutators extends [StoreMutatorIdentifier, unknown][]
     ? OptionMutators
-    : []),
-  ...(MiddlewareMutators extends [StoreMutatorIdentifier, unknown][]
-    ? MiddlewareMutators
     : []),
   ...(Mcs extends [StoreMutatorIdentifier, unknown][] ? Mcs : []),
 ];

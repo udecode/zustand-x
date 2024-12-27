@@ -22,9 +22,6 @@ export type TFlattenMiddlewaresRecursive<Middlewares extends readonly any[]> = {
 export type TFlattenMiddlewares<Middlewares extends readonly any[]> =
   ArrayFilterNonNullable<TFlattenMiddlewaresRecursive<Middlewares>>;
 
-export type TMiddleware<
-  StateType extends TState,
-  Mutators extends [StoreMutatorIdentifier, unknown][],
-> = (
-  initializer: StateCreator<StateType, any, Mutators>
+export type TMiddleware<StateType extends TState> = (
+  initializer: StateCreator<StateType, any, any>
 ) => StateCreator<any, any, any>;

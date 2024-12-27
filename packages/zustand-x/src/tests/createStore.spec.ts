@@ -1,14 +1,16 @@
+import { devtools } from 'zustand/middleware';
+
 import { createStore } from '../createStore';
 
 describe('zustandX', () => {
   describe('when get', () => {
     const store = createStore('repo')(
-      {
+      devtools(() => ({
         name: 'zustandX',
         stars: 0,
-      },
+      })),
       {
-        immer: {
+        persist: {
           enabled: true,
         },
       }
