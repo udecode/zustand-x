@@ -8,7 +8,7 @@ describe('zustandX', () => {
         stars: 0,
       },
       {
-        persist: {
+        immer: {
           enabled: true,
         },
       }

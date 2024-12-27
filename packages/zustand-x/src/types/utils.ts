@@ -48,3 +48,9 @@ export type TCreatedStoreType<
 export type MiddlewareOption<T> = T & {
   enabled?: boolean;
 };
+
+export type ArrayElement<T> = T extends (infer E)[] ? E : never;
+
+export type ArrayFilterNonNullable<T> = T extends [null | undefined | never]
+  ? []
+  : T;
