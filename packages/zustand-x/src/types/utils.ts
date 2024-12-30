@@ -33,9 +33,11 @@ export type TCreatedStoreType<
   Mutators extends [StoreMutatorIdentifier, unknown][],
 > = UseBoundStoreWithEqualityFn<TCreatedStoreMutateType<StateType, Mutators>>;
 
-export type MiddlewareOption<T> = T & {
-  enabled?: boolean;
-};
+export type MiddlewareOption<T> =
+  | boolean
+  | (T & {
+      enabled?: boolean;
+    });
 
 export type ArrayElement<T> = T extends (infer E)[] ? E : never;
 

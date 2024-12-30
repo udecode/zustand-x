@@ -20,20 +20,15 @@ export const generateStateActions = <
       const actionKey = key.replace(/^\S/, (s) => s.toUpperCase());
       const debugLog = storeName ? `@@${storeName}/set${actionKey}` : undefined;
 
-      const extraParams: unknown[] = [debugLog];
-      if (isImmerEnabled) {
-        extraParams.unshift(true);
-      }
-
       //@ts-ignore
-      store.setState(
-        (state: StateType) => {
-          state[typedKey] = value;
-          if (!isImmerEnabled) {
-            return { ...state };
-          }
-        },
-        ...extraParams
+      store.setState?.(
+        isImmerEnabled
+          ? (draft: StateType) => {
+              draft[typedKey] = value;
+            }
+          : { [typedKey]: value },
+        undefined,
+        debugLog
       );
     };
   });

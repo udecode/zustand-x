@@ -20,51 +20,69 @@ import { generateStateActions } from './utils/generateStateActions';
 import { generateStateGetSelectors } from './utils/generateStateGetSelectors';
 import { generateStateHookSelectors } from './utils/generateStateHookSelectors';
 import { generateStateTrackedHooksSelectors } from './utils/generateStateTrackedHooksSelectors';
+import { getOptions } from './utils/helpers';
 import { storeFactory } from './utils/storeFactory';
 
 import type { StateCreator, StoreMutatorIdentifier } from 'zustand';
 
 export const createStore = <
   StateType extends TState,
-  Options extends TBaseStoreOptions<StateType> = TBaseStoreOptions<StateType>,
-  Mcs extends [StoreMutatorIdentifier, unknown][] = [],
-  Mutators extends [StoreMutatorIdentifier, unknown][] = ResolveMutators<
-    DefaultMutators<StateType, Options>,
-    Mcs
-  >,
   Name extends TName = TName,
+  CreateStoreOptions extends TBaseStoreOptions<
+    StateType,
+    Name
+  > = TBaseStoreOptions<StateType, Name>,
+  Mps extends [StoreMutatorIdentifier, unknown][] = [],
+  Mcs extends [StoreMutatorIdentifier, unknown][] = [],
 >(
-  initialState: StateType | StateCreator<StateType, Mutators, Mcs>,
-  options: Options & { name: Name }
+  initialState: StateType | StateCreator<StateType, Mps, Mcs>,
+  options: CreateStoreOptions & { name: Name }
 ) => {
-  const { devtools, persist, immer, name } = options;
+  type Mutators = ResolveMutators<
+    DefaultMutators<Name, StateType, CreateStoreOptions>,
+    Mcs
+  >;
+  const {
+    devtools: devtoolsOptions,
+    persist: persistOptions,
+    immer: immerOptions,
+    name,
+  } = options;
 
+  //current middlewares order devTools(persist(immer(initiator)))
   const middlewares: TMiddleware[] = [];
 
-  //enable immer
-  if (immer && immer.enabled) {
-    middlewares.push(immerMiddleware);
-    setAutoFreeze(immer.enabledAutoFreeze ?? false);
-    if (immer.enableMapSet) {
-      enableMapSet();
-    }
-  }
-
-  //enable persist
-  if (persist && persist.enabled) {
+  //enable devtools
+  const _devtoolsOptionsInternal = getOptions(devtoolsOptions);
+  if (_devtoolsOptionsInternal.enabled) {
     middlewares.push((config) =>
-      persistMiddleware(config, {
-        ...persist,
-        name: persist.name ?? name,
+      devToolsMiddleware(config, {
+        ..._devtoolsOptionsInternal,
+        name: _devtoolsOptionsInternal?.name ?? name,
       })
     );
   }
 
-  //enable devtools
-  if (devtools && devtools.enabled) {
+  //enable persist
+  const _persistOptionsInternal = getOptions(persistOptions);
+  if (_persistOptionsInternal.enabled) {
     middlewares.push((config) =>
-      devToolsMiddleware(config, { ...devtools, name: devtools.name ?? name })
+      persistMiddleware(config, {
+        ..._persistOptionsInternal,
+        name: _persistOptionsInternal.name ?? name,
+      })
     );
+  }
+
+  //enable immer
+  //by default immer is enabled
+  const _immerOptionsInternal = getOptions(immerOptions, true);
+  if (_immerOptionsInternal.enabled) {
+    setAutoFreeze(_immerOptionsInternal.enabledAutoFreeze ?? false);
+    if (_immerOptionsInternal.enableMapSet) {
+      enableMapSet();
+    }
+    middlewares.push(immerMiddleware);
   }
 
   const stateMutators = middlewares
@@ -74,16 +92,16 @@ export const createStore = <
       (typeof initialState === 'function'
         ? initialState
         : () => initialState) as StateCreator<StateType>
-    );
+    ) as StateCreator<StateType, [], Mutators>;
 
-  const store = createStoreZustand<StateType, Mutators>(stateMutators);
+  const store = createStoreZustand(stateMutators);
 
   const getterSelectors = generateStateGetSelectors(store);
 
   const stateActions = generateStateActions(
     store,
     name,
-    options.immer?.enabled
+    _immerOptionsInternal.enabled
   );
 
   const hookSelectors = generateStateHookSelectors(store);

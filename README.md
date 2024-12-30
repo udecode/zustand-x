@@ -41,14 +41,19 @@ API.
 ```ts
 import { createStore } from 'zustand-x';
 
-const repoStore = createStore('repo')({
-  name: 'zustandX',
-  stars: 0,
-  owner: {
-    name: 'someone',
-    email: 'someone@xxx.com',
+const repoStore = createStore(
+  {
+    name: 'zustandX',
+    stars: 0,
+    owner: {
+      name: 'someone',
+      email: 'someone@xxx.com',
+    },
   },
-});
+  {
+    name: 'repo',
+  }
+);
 ```
 
 - the parameter of the first function is the name of the store, this is
@@ -117,11 +122,16 @@ selectors) for reusability. ZustandX supports extending selectors with
 full typescript support:
 
 ```ts
-const repoStore = createStore('repo')({
-  name: 'zustandX',
-  stars: 0,
-  middlewares: ['immer', 'devtools', 'persist'],
-})
+const repoStore = createStore(
+  {
+    name: 'zustandX',
+    stars: 0,
+    middlewares: ['immer', 'devtools', 'persist'],
+  },
+  {
+    name: 'repo',
+  }
+)
   .extendSelectors((state, get, api) => ({
     validName: () => get.name().trim(),
     // other selectors
@@ -158,10 +168,15 @@ However, you generally want to create derived actions for reusability.
 ZustandX supports extending actions with full typescript support:
 
 ```ts
-const repoStore = createStore('repo')({
-  name: 'zustandX',
-  stars: 0,
-})
+const repoStore = createStore('repo')(
+  {
+    name: 'zustandX',
+    stars: 0,
+  },
+  {
+    name: 'repo',
+  }
+)
   .extendActions((set, get, api) => ({
     validName: (name: string) => {
       set.name(name.trim());
@@ -268,10 +283,11 @@ These can be used anywhere.
 The second parameter of `createStore` is for options:
 
 ```ts
-export interface CreateStoreOptions<T extends State> {
+export interface CreateStoreOptions {
   devtools?: DevtoolsOptions;
   immer?: ImmerOptions;
   persist?: PersistOptions;
+  name: string;
 }
 ```
 
@@ -284,7 +300,28 @@ ZustandX is using these middlewares:
 - `persist`: enabled if `persist.enabled` option is `true`. `persist`
   implements `PersistOptions` interface from
   [zustand](https://github.com/pmndrs/zustand#persist-middleware)
-- custom middlewares can be added using `middlewares` option
+- custom middlewares can be added by wrapping `state initiator`.
+
+```ts
+import { createStore } from 'zustand-x';
+import { combine } from 'zustand/middleware';
+
+const store = createStore<{ name: string; stars?: number }>(
+  combine(
+    () => ({
+      name: 'zustandX',
+    }),
+    () => ({ stars: 0 })
+  ),
+  {
+    name: 'repo',
+    //enables persist middleware
+    persist: {
+      enabled: true,
+    },
+  }
+);
+```
 
 ## Contributing and project organization
 

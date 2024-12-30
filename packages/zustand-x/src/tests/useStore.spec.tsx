@@ -22,6 +22,7 @@ describe('createAtomStore', () => {
 
     const store = createZustandStore(() => initialTestStoreValue, {
       name: 'myTestStore',
+      immer: true,
     });
     const useSelectors = () => store.use;
     const actions = store.set;
@@ -98,6 +99,9 @@ describe('createAtomStore', () => {
       () => initialFirstTestStoreValue,
       {
         name: 'myFirstTestStore',
+        persist: {
+          enabled: true,
+        },
       }
     );
     const mySecondTestStoreStore = createZustandStore(
