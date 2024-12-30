@@ -1,9 +1,4 @@
-import {
-  Mutate,
-  StateCreator,
-  StoreApi,
-  StoreMutatorIdentifier,
-} from 'zustand';
+import { Mutate, StoreApi, StoreMutatorIdentifier } from 'zustand';
 import { UseBoundStoreWithEqualityFn } from 'zustand/traditional';
 
 export type TName = string;
@@ -27,13 +22,6 @@ export type TUseStoreSelectorType<
   StateType extends TState,
   FilteredStateType = unknown,
 > = (state: StateType) => FilteredStateType;
-
-export type TStoreInitiatorType<
-  StateType extends TState,
-  Mps extends [StoreMutatorIdentifier, unknown][],
-  Mutators extends [StoreMutatorIdentifier, unknown][],
-  Modified = StateType,
-> = StateCreator<StateType, Mps, Mutators, Modified>;
 
 export type TCreatedStoreMutateType<
   StateType extends TState,

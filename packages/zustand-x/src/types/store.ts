@@ -19,7 +19,7 @@ export type TSelectorBuilder<
 > = (
   set: TStoreApiSet<StateType, Mutators, TActions>,
   get: TStoreApiGet<StateType, Mutators, TSelectors>,
-  api: TStateApi<Name, StateType, Mutators, TActions, TSelectors>
+  api: TStateApiForBuilder<Name, StateType, Mutators, TActions, TSelectors>
 ) => Record<string, any>;
 
 export type TActionBuilder<
@@ -31,7 +31,7 @@ export type TActionBuilder<
 > = (
   set: TStoreApiSet<StateType, Mutators, TActions>,
   get: TStoreApiGet<StateType, Mutators, TSelectors>,
-  api: TStateApi<Name, StateType, Mutators, TActions, TSelectors>
+  api: TStateApiForBuilder<Name, StateType, Mutators, TActions, TSelectors>
 ) => Record<string, any>;
 
 export type TStoreApiGet<
@@ -102,3 +102,14 @@ export type TStateApi<
     TStoreApiGet<StateType, Mutators, TSelectors>
   >;
 };
+
+export type TStateApiForBuilder<
+  Name extends TName,
+  StateType extends TState,
+  Mutators extends [StoreMutatorIdentifier, unknown][],
+  TActions = {},
+  TSelectors = {},
+> = Omit<
+  TStateApi<Name, StateType, Mutators, TActions, TSelectors>,
+  'extendActions' | 'extendSelectors'
+>;

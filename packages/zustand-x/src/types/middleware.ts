@@ -1,6 +1,6 @@
 import { StateCreator, StoreMutatorIdentifier } from 'zustand';
 
-import { ArrayFilterNonNullable, TState } from './utils';
+import { ArrayFilterNonNullable } from './utils';
 
 // Helper type to extract mutator type from a middleware
 export type TExtractMutatorFromMiddleware<M> = M extends (
@@ -22,6 +22,6 @@ export type TFlattenMiddlewaresRecursive<Middlewares extends readonly any[]> = {
 export type TFlattenMiddlewares<Middlewares extends readonly any[]> =
   ArrayFilterNonNullable<TFlattenMiddlewaresRecursive<Middlewares>>;
 
-export type TMiddleware<StateType extends TState> = (
-  initializer: StateCreator<StateType, any, any>
+export type TMiddleware = (
+  initializer: StateCreator<any, any, any>
 ) => StateCreator<any, any, any>;

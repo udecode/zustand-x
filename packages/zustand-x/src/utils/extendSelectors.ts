@@ -1,6 +1,6 @@
 import { StoreMutatorIdentifier } from 'zustand';
 
-import { TName, TSelectorBuilder, TState, TStateApi } from '../types';
+import { TName, TSelectorBuilder, TState, TStateApiForBuilder } from '../types';
 
 export const extendSelectors = <
   Name extends TName,
@@ -17,7 +17,7 @@ export const extendSelectors = <
   >,
 >(
   builder: Builder,
-  api: TStateApi<Name, StateType, Mutators, TActions, TSelectors>
+  api: TStateApiForBuilder<Name, StateType, Mutators, TActions, TSelectors>
 ) => {
   const use = {
     ...api.use,
@@ -35,7 +35,7 @@ export const extendSelectors = <
     //@ts-ignore
     use[key] =
       typeof selector === 'function'
-        ? (...args: any[]) =>
+        ? (...args: unknown[]) =>
             api.useStore(() => {
               return selector(...args);
             })
@@ -43,14 +43,14 @@ export const extendSelectors = <
     //@ts-ignore
     useTracked[key] =
       typeof selector === 'function'
-        ? (...args: any[]) => {
+        ? (...args: unknown[]) => {
             return selector(...args);
           }
         : selector;
     //@ts-ignore
     get[key] =
       typeof selector === 'function'
-        ? (...args: any[]) => {
+        ? (...args: unknown[]) => {
             return selector(...args);
           }
         : selector;
@@ -61,11 +61,5 @@ export const extendSelectors = <
     get,
     use,
     useTracked,
-  } as TStateApi<
-    Name,
-    StateType,
-    Mutators,
-    TActions,
-    TSelectors & ReturnType<Builder>
-  >;
+  };
 };

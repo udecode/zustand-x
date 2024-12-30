@@ -6,6 +6,7 @@ import {
   TSelectorBuilder,
   TState,
   TStateApi,
+  TStateApiForBuilder,
 } from '../types';
 import { extendActions } from './extendActions';
 import { extendSelectors } from './extendSelectors';
@@ -15,7 +16,7 @@ export const storeFactory = <
   StateType extends TState,
   Mutators extends [StoreMutatorIdentifier, unknown][] = [],
 >(
-  api: TStateApi<Name, StateType, Mutators>
+  api: TStateApiForBuilder<Name, StateType, Mutators>
 ) => {
   return {
     ...api,
@@ -23,5 +24,5 @@ export const storeFactory = <
       storeFactory(extendSelectors(builder, api)),
     extendActions: (builder: TActionBuilder<Name, StateType, Mutators>) =>
       storeFactory(extendActions(builder, api)),
-  };
+  } as TStateApi<Name, StateType, Mutators>;
 };

@@ -4,7 +4,7 @@ import { createStore } from '../createStore';
 
 describe('zustandX', () => {
   describe('when get', () => {
-    const store = createStore('repo')(
+    const store = createStore(
       devtools(() => ({
         name: 'zustandX',
         stars: 0,
@@ -13,6 +13,7 @@ describe('zustandX', () => {
         persist: {
           enabled: true,
         },
+        name: 'repo',
       }
     );
 
@@ -22,10 +23,15 @@ describe('zustandX', () => {
   });
 
   describe('when extending actions', () => {
-    const store = createStore('repo')({
-      name: 'zustandX',
-      stars: 0,
-    })
+    const store = createStore(
+      {
+        name: 'zustandX',
+        stars: 0,
+      },
+      {
+        name: 'repo',
+      }
+    )
       .extendActions((set, get, api) => ({
         validName: (name: string) => {
           set.name(name.trim());
@@ -49,10 +55,15 @@ describe('zustandX', () => {
   });
 
   describe('when extending selectors', () => {
-    const store = createStore('repo')({
-      name: 'zustandX ',
-      stars: 0,
-    })
+    const store = createStore(
+      {
+        name: 'zustandX ',
+        stars: 0,
+      },
+      {
+        name: 'repo',
+      }
+    )
       .extendSelectors((set, get, api) => ({
         validName: () => get.name().trim(),
       }))
@@ -69,10 +80,15 @@ describe('zustandX', () => {
   });
 
   describe('when set.state', () => {
-    const store = createStore('repo')({
-      name: 'zustandX',
-      stars: 0,
-    });
+    const store = createStore(
+      {
+        name: 'zustandX',
+        stars: 0,
+      },
+      {
+        name: 'repo',
+      }
+    );
 
     it('should be', () => {
       store.set.state((draft) => {
@@ -89,13 +105,18 @@ describe('zustandX', () => {
 
     describe('deletes a property', () => {
       it('should delete that property', () => {
-        const repoStore = createStore('repo')<{
+        const repoStore = createStore<{
           name?: string;
           stars: number;
-        }>({
-          name: 'zustandX',
-          stars: 0,
-        });
+        }>(
+          {
+            name: 'zustandX',
+            stars: 0,
+          },
+          {
+            name: 'repo',
+          }
+        );
 
         repoStore.set.state((draft) => {
           delete draft.name;

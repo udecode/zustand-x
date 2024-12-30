@@ -20,9 +20,9 @@ describe('createAtomStore', () => {
       age: INITIAL_AGE,
     };
 
-    const store = createZustandStore('myTestStore')(
-      () => initialTestStoreValue
-    );
+    const store = createZustandStore(() => initialTestStoreValue, {
+      name: 'myTestStore',
+    });
     const useSelectors = () => store.use;
     const actions = store.set;
     const selectors = store.get;
@@ -94,11 +94,17 @@ describe('createAtomStore', () => {
       age: 72,
     };
 
-    const myFirstTestStoreStore = createZustandStore('myFirstTestStore')(
-      () => initialFirstTestStoreValue
+    const myFirstTestStoreStore = createZustandStore(
+      () => initialFirstTestStoreValue,
+      {
+        name: 'myFirstTestStore',
+      }
     );
-    const mySecondTestStoreStore = createZustandStore('mySecondTestStore')(
-      () => initialSecondTestStoreValue
+    const mySecondTestStoreStore = createZustandStore(
+      () => initialSecondTestStoreValue,
+      {
+        name: 'mySecondTestStore',
+      }
     );
 
     const FirstReadOnlyConsumer = () => {

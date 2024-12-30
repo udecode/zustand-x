@@ -7,7 +7,7 @@ export const generateStateActions = <
   Mutators extends [StoreMutatorIdentifier, unknown][],
 >(
   store: TCreatedStoreType<StateType, Mutators>,
-  storeName: string,
+  storeName?: string,
   isImmerEnabled?: boolean
 ) => {
   const actions: TSetStoreRecord<StateType> = {} as TSetStoreRecord<StateType>;
@@ -18,6 +18,12 @@ export const generateStateActions = <
       const prevValue = store.getState()[typedKey];
       if (prevValue === value) return;
       const actionKey = key.replace(/^\S/, (s) => s.toUpperCase());
+      const debugLog = storeName ? `@@${storeName}/set${actionKey}` : undefined;
+
+      const extraParams: unknown[] = [debugLog];
+      if (isImmerEnabled) {
+        extraParams.unshift(true);
+      }
 
       //@ts-ignore
       store.setState(
@@ -27,8 +33,7 @@ export const generateStateActions = <
             return { ...state };
           }
         },
-        undefined,
-        `@@${storeName}/set${actionKey}`
+        ...extraParams
       );
     };
   });
