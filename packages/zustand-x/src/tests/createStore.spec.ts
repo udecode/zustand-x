@@ -27,7 +27,6 @@ describe('zustandX', () => {
       },
       {
         name: 'repo',
-        immer: true,
       }
     )
       .extendActions((set, get, api) => ({
@@ -85,7 +84,6 @@ describe('zustandX', () => {
       },
       {
         name: 'repo',
-        immer: true,
       }
     );
 
@@ -93,6 +91,7 @@ describe('zustandX', () => {
       store.set.state((draft) => {
         draft.name = 'test';
         draft.stars = 1;
+        return draft;
       });
 
       expect(store.get.state()).toEqual({
@@ -103,19 +102,22 @@ describe('zustandX', () => {
 
     describe('deletes a property', () => {
       it('should delete that property', () => {
-        const repoStore = createStore(
+        const repoStore = createStore<{
+          name?: string;
+          stars: number;
+        }>(
           {
             name: 'zustandX',
             stars: 0,
           },
           {
             name: 'repo',
-            immer: true,
           }
         );
 
         repoStore.set.state((draft) => {
           delete draft.name;
+          return draft;
         });
 
         expect(repoStore.get.state()).toEqual({

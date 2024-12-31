@@ -1,15 +1,18 @@
-import { produce } from 'immer';
+import { create, PatchesOptions } from 'mutative';
 
 import type { MiddlewareOption } from '../types';
-import type { Draft } from 'immer';
+import type { Options as _MutativeOptions, Draft } from 'mutative';
 import type { StateCreator, StoreMutatorIdentifier } from 'zustand';
 
-declare module 'zustand' {
+declare module 'zustand/vanilla' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface StoreMutators<S, A> {
-    ['zustand/immer-x']: WithImmer<S>;
+    ['zustand/mutative-x']: WithMutative<S>;
   }
 }
+
+type SetStateType<T extends unknown[]> = Exclude<T[0], (...args: any[]) => any>;
+type WithMutative<S> = Write<S, StoreMutative<S>>;
 
 type Write<T, U> = Omit<T, keyof U> & U;
 type SkipTwo<T> = T extends { length: 0 }
@@ -25,12 +28,7 @@ type SkipTwo<T> = T extends { length: 0 }
           : T extends [unknown?, unknown?, ...infer A]
             ? A
             : never;
-
-type SetStateType<T extends unknown[]> = Exclude<T[0], (...args: any[]) => any>;
-
-type WithImmer<S> = Write<S, StoreImmer<S>>;
-
-type StoreImmer<S> = S extends {
+type StoreMutative<S> = S extends {
   setState: infer SetState;
 }
   ? SetState extends {
@@ -60,37 +58,46 @@ type StoreImmer<S> = S extends {
     : never
   : never;
 
-type Options = {
-  enableMapSet?: boolean;
-  enabledAutoFreeze?: boolean;
-};
-type ImmerImpl = <T>(
+type Options<O extends PatchesOptions, F extends boolean> = Omit<
+  _MutativeOptions<O, F>,
+  'enablePatches'
+>;
+type MutativeImpl = <T, F extends boolean = false>(
   storeInitializer: StateCreator<T, [], []>,
-  options?: Options
+  options?: Options<false, F>
 ) => StateCreator<T, [], []>;
 
-const immerImpl: ImmerImpl = (initializer) => (set, get, store) => {
-  type T = ReturnType<typeof initializer>;
+const mutativeImpl: MutativeImpl =
+  (initializer, options) => (set, get, store) => {
+    type T = ReturnType<typeof initializer>;
 
-  store.setState = (updater, replace, ...a) => {
-    const nextState = (
-      typeof updater === 'function' ? produce(updater as any) : updater
-    ) as ((s: T) => T) | T | Partial<T>;
+    store.setState = (updater, replace, ...a) => {
+      const nextState = (
+        typeof updater === 'function'
+          ? create(
+              updater as any,
+              options ? { ...options, enablePatches: false } : options
+            )
+          : updater
+      ) as ((s: T) => T) | T | Partial<T>;
 
-    return set(nextState, replace as any, ...a);
+      return set(nextState as any, replace as any, ...a);
+    };
+
+    return initializer(store.setState, get, store);
   };
 
-  return initializer(store.setState, get, store);
-};
-
-type Immer = <
+type Mutative = <
   T,
   Mps extends [StoreMutatorIdentifier, unknown][] = [],
   Mcs extends [StoreMutatorIdentifier, unknown][] = [],
+  F extends boolean = false,
 >(
-  initializer: StateCreator<T, [...Mps, ['zustand/immer-x', never]], Mcs>,
-  options?: Options
-) => StateCreator<T, Mps, [['zustand/immer-x', never], ...Mcs]>;
-export const immerMiddleware = immerImpl as unknown as Immer;
+  initializer: StateCreator<T, [...Mps, ['zustand/mutative-x', never]], Mcs>,
+  options?: Options<false, F>
+) => StateCreator<T, Mps, [['zustand/mutative-x', never], ...Mcs]>;
 
-export type ImmerOptions = MiddlewareOption<Options>;
+export const mutativeMiddleware = mutativeImpl as unknown as Mutative;
+export type MutativeOptions<F extends boolean = false> = MiddlewareOption<
+  Options<false, F>
+>;

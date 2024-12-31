@@ -8,4 +8,6 @@ export * from './generateStateActions';
 export * from './generateStateGetSelectors';
 export * from './generateStateHookSelectors';
 export * from './generateStateTrackedHooksSelectors';
+export * from './helpers';
 export * from './mapValuesKey';
+export * from './storeFactory';

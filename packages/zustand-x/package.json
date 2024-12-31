@@ -40,6 +40,7 @@
   "dependencies": {
     "immer": "^10.0.3",
     "lodash.mapvalues": "^4.6.0",
+    "mutative": "1.1.0",
     "react-tracked": "^1.7.11",
     "use-sync-external-store": "1.4.0"
   },

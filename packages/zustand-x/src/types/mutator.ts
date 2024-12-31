@@ -5,6 +5,7 @@ import {
   immerMiddleware,
   persistMiddleware,
 } from '../middlewares';
+import { mutativeMiddleware } from '../middlewares/mutative';
 import { TFlattenMiddlewares, TMiddleware } from './middleware';
 import { TBaseStoreOptions } from './options';
 import { TName, TState } from './utils';
@@ -45,8 +46,11 @@ export type DefaultMutators<
     >,
     ...ConditionalMiddleware<
       CreateStoreOptions['immer'],
-      typeof immerMiddleware,
-      true
+      typeof immerMiddleware
+    >,
+    ...ConditionalMiddleware<
+      CreateStoreOptions['mutative'],
+      typeof mutativeMiddleware
     >,
   ]
 >;

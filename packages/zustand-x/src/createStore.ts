@@ -3,11 +3,10 @@ import { createWithEqualityFn as createStoreZustand } from 'zustand/traditional'
 
 import {
   devToolsMiddleware,
-  enableMapSet,
   immerMiddleware,
   persistMiddleware,
-  setAutoFreeze,
 } from './middlewares';
+import { mutativeMiddleware } from './middlewares/mutative';
 import {
   DefaultMutators,
   ResolveMutators,
@@ -36,16 +35,18 @@ export const createStore = <
   Mcs extends [StoreMutatorIdentifier, unknown][] = [],
 >(
   initialState: StateType | StateCreator<StateType, Mps, Mcs>,
-  options: CreateStoreOptions & { name: Name }
+  options: CreateStoreOptions
 ) => {
   type Mutators = ResolveMutators<
     DefaultMutators<Name, StateType, CreateStoreOptions>,
     Mcs
   >;
+
   const {
     devtools: devtoolsOptions,
     persist: persistOptions,
     immer: immerOptions,
+    mutative: mutativeOptions,
     name,
   } = options;
 
@@ -75,14 +76,19 @@ export const createStore = <
   }
 
   //enable immer
-  //by default immer is enabled
-  const _immerOptionsInternal = getOptions(immerOptions, true);
+  const _immerOptionsInternal = getOptions(immerOptions);
   if (_immerOptionsInternal.enabled) {
-    setAutoFreeze(_immerOptionsInternal.enabledAutoFreeze ?? false);
-    if (_immerOptionsInternal.enableMapSet) {
-      enableMapSet();
-    }
-    middlewares.push(immerMiddleware);
+    middlewares.push((config) =>
+      immerMiddleware(config, _immerOptionsInternal)
+    );
+  }
+
+  //enable mutative
+  const _mutativeOptionsInternal = getOptions(mutativeOptions);
+  if (_mutativeOptionsInternal.enabled) {
+    middlewares.push((config) =>
+      mutativeMiddleware(config, _mutativeOptionsInternal)
+    );
   }
 
   const stateMutators = middlewares
