@@ -7,13 +7,7 @@ import {
   persistMiddleware,
 } from './middlewares';
 import { mutativeMiddleware } from './middlewares/mutative';
-import {
-  DefaultMutators,
-  ResolveMutators,
-  TBaseStoreOptions,
-  TName,
-  TState,
-} from './types';
+import { DefaultMutators, TBaseStoreOptions, TState } from './types';
 import { TMiddleware } from './types/middleware';
 import { generateStateActions } from './utils/generateStateActions';
 import { generateStateGetSelectors } from './utils/generateStateGetSelectors';
@@ -26,22 +20,15 @@ import type { StateCreator, StoreMutatorIdentifier } from 'zustand';
 
 export const createStore = <
   StateType extends TState,
-  Name extends TName = TName,
-  CreateStoreOptions extends TBaseStoreOptions<
-    StateType,
-    Name
-  > = TBaseStoreOptions<StateType, Name>,
+  CreateStoreOptions extends
+    TBaseStoreOptions<StateType> = TBaseStoreOptions<StateType>,
   Mps extends [StoreMutatorIdentifier, unknown][] = [],
   Mcs extends [StoreMutatorIdentifier, unknown][] = [],
 >(
   initialState: StateType | StateCreator<StateType, Mps, Mcs>,
   options: CreateStoreOptions
 ) => {
-  type Mutators = ResolveMutators<
-    DefaultMutators<Name, StateType, CreateStoreOptions>,
-    Mcs
-  >;
-
+  type Mutators = [...DefaultMutators<StateType, CreateStoreOptions>, ...Mcs];
   const {
     devtools: devtoolsOptions,
     persist: persistOptions,
@@ -74,7 +61,6 @@ export const createStore = <
       })
     );
   }
-
   //enable immer
   const _immerOptionsInternal = getOptions(immerOptions);
   if (_immerOptionsInternal.enabled) {
@@ -82,7 +68,6 @@ export const createStore = <
       immerMiddleware(config, _immerOptionsInternal)
     );
   }
-
   //enable mutative
   const _mutativeOptionsInternal = getOptions(mutativeOptions);
   if (_mutativeOptionsInternal.enabled) {

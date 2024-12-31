@@ -112,6 +112,9 @@ describe('zustandX', () => {
           },
           {
             name: 'repo',
+            immer: {
+              enabled: true,
+            },
           }
         );
 

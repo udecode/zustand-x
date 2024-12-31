@@ -1,7 +1,6 @@
 import { Mutate, StoreApi, StoreMutatorIdentifier } from 'zustand';
 import { UseBoundStoreWithEqualityFn } from 'zustand/traditional';
 
-export type TName = string;
 export type TState = object;
 
 export type TEqualityChecker<StateType> = (
@@ -41,6 +40,8 @@ export type MiddlewareOption<T> =
 
 export type ArrayElement<T> = T extends (infer E)[] ? E : never;
 
-export type ArrayFilterNonNullable<T> = T extends [null | undefined | never]
-  ? []
-  : T;
+export type RemoveNever<T> = T extends [infer First, ...infer Rest]
+  ? [First] extends [never]
+    ? RemoveNever<Rest>
+    : [First, ...RemoveNever<Rest>]
+  : [];

@@ -1,11 +1,11 @@
 import { DevtoolsOptions, ImmerOptions, PersistOptions } from '../middlewares';
 import { MutativeOptions } from './../middlewares/mutative';
-import { TName, TState } from './utils';
+import { TState } from './utils';
 
-export type TBaseStoreOptions<StateType extends TState, Name extends TName> = {
+export type TBaseStoreOptions<StateType extends TState> = {
   persist?: PersistOptions<StateType>;
   devtools?: DevtoolsOptions;
   immer?: ImmerOptions;
   mutative?: MutativeOptions;
-  name: Name;
+  name: string;
 };

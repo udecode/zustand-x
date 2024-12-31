@@ -1,5 +1,3 @@
-import { StoreMutatorIdentifier } from 'zustand';
-
 import {
   devToolsMiddleware,
   immerMiddleware,
@@ -8,7 +6,7 @@ import {
 import { mutativeMiddleware } from '../middlewares/mutative';
 import { TFlattenMiddlewares, TMiddleware } from './middleware';
 import { TBaseStoreOptions } from './options';
-import { TName, TState } from './utils';
+import { RemoveNever, TState } from './utils';
 
 type ConditionalMiddleware<
   T,
@@ -19,50 +17,39 @@ type ConditionalMiddleware<
       enabled: true;
     }
   | true
-  ? [Middleware]
+  ? Middleware
   : IsDefault extends true
     ? T extends
         | {
             enabled: false;
           }
         | false
-      ? []
-      : [Middleware]
-    : [];
+      ? never
+      : Middleware
+    : never;
 
 export type DefaultMutators<
-  Name extends TName,
   StateType extends TState,
-  CreateStoreOptions extends TBaseStoreOptions<StateType, Name>,
-> = TFlattenMiddlewares<
-  [
-    ...ConditionalMiddleware<
-      CreateStoreOptions['devtools'],
-      typeof devToolsMiddleware
-    >,
-    ...ConditionalMiddleware<
-      CreateStoreOptions['persist'],
-      typeof persistMiddleware<StateType>
-    >,
-    ...ConditionalMiddleware<
-      CreateStoreOptions['immer'],
-      typeof immerMiddleware
-    >,
-    ...ConditionalMiddleware<
-      CreateStoreOptions['mutative'],
-      typeof mutativeMiddleware
-    >,
-  ]
+  CreateStoreOptions extends TBaseStoreOptions<StateType>,
+> = RemoveNever<
+  TFlattenMiddlewares<
+    [
+      ConditionalMiddleware<
+        CreateStoreOptions['devtools'],
+        typeof devToolsMiddleware
+      >,
+      ConditionalMiddleware<
+        CreateStoreOptions['persist'],
+        typeof persistMiddleware<StateType>
+      >,
+      ConditionalMiddleware<
+        CreateStoreOptions['immer'],
+        typeof immerMiddleware
+      >,
+      ConditionalMiddleware<
+        CreateStoreOptions['mutative'],
+        typeof mutativeMiddleware
+      >,
+    ]
+  >
 >;
-
-export type ResolveMutators<
-  OptionMutators extends [StoreMutatorIdentifier, unknown][] = [],
-  Mcs extends [StoreMutatorIdentifier, unknown][] = [],
-  Mps extends [StoreMutatorIdentifier, unknown][] = [],
-> = [
-  ...(OptionMutators extends [StoreMutatorIdentifier, unknown][]
-    ? OptionMutators
-    : []),
-  ...(Mcs extends [StoreMutatorIdentifier, unknown][] ? Mcs : []),
-  ...(Mps extends [StoreMutatorIdentifier, unknown][] ? Mps : []),
-];

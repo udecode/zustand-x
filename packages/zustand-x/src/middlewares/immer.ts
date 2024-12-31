@@ -43,16 +43,16 @@ type StoreImmer<S> = S extends {
         // a partial type.
         setState(
           nextStateOrUpdater:
-            | SetStateType<A2>
-            | Partial<SetStateType<A2>>
-            | ((state: Draft<SetStateType<A2>>) => void),
+            | SetStateType<A1>
+            | Partial<SetStateType<A1>>
+            | ((state: Draft<Partial<SetStateType<A1>>>) => void),
           shouldReplace?: false,
           ...a: SkipTwo<A1>
         ): Sr1;
         setState(
           nextStateOrUpdater:
             | SetStateType<A2>
-            | ((state: Draft<SetStateType<A2>>) => void),
+            | ((state: Draft<Partial<SetStateType<A2>>>) => void),
           shouldReplace: true,
           ...a: SkipTwo<A2>
         ): Sr2;
