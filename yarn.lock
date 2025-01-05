@@ -11701,18 +11701,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zustand-mutative@npm:1.2.0":
-  version: 1.2.0
-  resolution: "zustand-mutative@npm:1.2.0"
-  peerDependencies:
-    "@types/react": ^18.0 || ^17.0 || ^19.0
-    mutative: ^1.0
-    react: ^18.0 || ^17.0 || ^19.0
-    zustand: ^4.0 || ^5.0
-  checksum: f06bda18889208ab2bf76279e8a0adc26868fc2950c351a16575cdf6a3f5994194c21abfa30548aa6eb514d210669b7c0ce03182be455ba4a3fdf4fd98681bfa
-  languageName: node
-  linkType: hard
-
 "zustand-x@workspace:packages/zustand-x":
   version: 0.0.0-use.local
   resolution: "zustand-x@workspace:packages/zustand-x"
@@ -11722,7 +11710,6 @@ __metadata:
     mutative: "npm:1.1.0"
     react-tracked: "npm:^1.7.11"
     use-sync-external-store: "npm:1.4.0"
-    zustand-mutative: "npm:1.2.0"
   peerDependencies:
     zustand: ">=5.0.2"
   languageName: unknown

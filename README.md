@@ -161,6 +161,7 @@ You can update the whole state from your app:
 store.set.state((draft) => {
   draft.name = 'test';
   draft.stars = 1;
+  return draft;
 });
 ```
 
@@ -168,7 +169,7 @@ However, you generally want to create derived actions for reusability.
 ZustandX supports extending actions with full typescript support:
 
 ```ts
-const repoStore = createStore('repo')(
+const repoStore = createStore(
   {
     name: 'zustandX',
     stars: 0,

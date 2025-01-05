@@ -7,8 +7,7 @@ export const generateStateActions = <
   Mutators extends [StoreMutatorIdentifier, unknown][],
 >(
   store: TCreatedStoreType<StateType, Mutators>,
-  storeName?: string,
-  isImmerEnabled?: boolean
+  storeName?: string
 ) => {
   const actions: TSetStoreRecord<StateType> = {} as TSetStoreRecord<StateType>;
 
@@ -22,11 +21,10 @@ export const generateStateActions = <
 
       //@ts-ignore
       store.setState?.(
-        isImmerEnabled
-          ? (draft: StateType) => {
-              draft[typedKey] = value;
-            }
-          : { [typedKey]: value },
+        (draft: StateType) => {
+          draft[typedKey] = value;
+          return draft;
+        },
         undefined,
         debugLog
       );

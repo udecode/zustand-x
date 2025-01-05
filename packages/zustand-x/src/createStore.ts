@@ -30,11 +30,11 @@ export const createStore = <
 ) => {
   type Mutators = [...DefaultMutators<StateType, CreateStoreOptions>, ...Mcs];
   const {
+    name,
     devtools: devtoolsOptions,
-    persist: persistOptions,
     immer: immerOptions,
     mutative: mutativeOptions,
-    name,
+    persist: persistOptions,
   } = options;
 
   //current middlewares order devTools(persist(immer(initiator)))
@@ -61,6 +61,7 @@ export const createStore = <
       })
     );
   }
+
   //enable immer
   const _immerOptionsInternal = getOptions(immerOptions);
   if (_immerOptionsInternal.enabled) {
@@ -68,6 +69,7 @@ export const createStore = <
       immerMiddleware(config, _immerOptionsInternal)
     );
   }
+
   //enable mutative
   const _mutativeOptionsInternal = getOptions(mutativeOptions);
   if (_mutativeOptionsInternal.enabled) {
@@ -89,11 +91,7 @@ export const createStore = <
 
   const getterSelectors = generateStateGetSelectors(store);
 
-  const stateActions = generateStateActions(
-    store,
-    name,
-    _immerOptionsInternal.enabled
-  );
+  const stateActions = generateStateActions(store, name);
 
   const hookSelectors = generateStateHookSelectors(store);
 

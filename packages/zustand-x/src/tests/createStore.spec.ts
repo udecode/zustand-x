@@ -117,7 +117,6 @@ describe('zustandX', () => {
 
         repoStore.set.state((draft) => {
           delete draft.name;
-          return draft;
         });
 
         expect(repoStore.get.state()).toEqual({
