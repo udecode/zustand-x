@@ -1,5 +1,5 @@
-> [!NOTE]
-> `@udecode/zustood` has been renamed to `zustand-x`.
+> [!NOTE] > `@udecode/zustood` has been renamed to `zustand-x`.
+> Using Jotai? See [JotaiX](https://github.com/udecode/jotai-x).
 
 # ZustandX
 
@@ -12,38 +12,48 @@ and [context loss](https://github.com/facebook/react/issues/13332)
 between mixed renderers. It may be the one state-manager in the React
 space that gets all of these right.
 
-As zustand is un-opinionated by design, it's challenging to find out the
+As `zustand` is un-opinionated by design, it's challenging to find out the
 best patterns to use when creating stores, often leading to boilerplate
 code.
 
-ZustandX, built on top of zustand, is providing a powerful store factory
+`zustand-x`, built on top of `zustand`, is providing a powerful store factory
 which solves these challenges, so you can focus on your app.
 
 ```bash
-yarn add zustand zustand-x
+yarn add zustand@latest zustand-x
 ```
 
 Visit [zustand-x.udecode.dev](https://zustand-x.udecode.dev) for the
 API.
 
-### Why zustand-x over zustand?
+### Why `zustand-x` in addition to `zustand`?
 
 - Much less boilerplate
 - Modular state management:
   - Derived selectors
   - Derived actions
-- `immer`, `devtools` and `persist` middlewares
+- `immer`, `devtools` , `mutative` and `persist` middlewares
 - Full typescript support
+- `react-tracked` support
 
 ## Create a store
 
 ```ts
-import { createStore } from 'zustand-x'
+import { createStore } from 'zustand-x';
 
-const repoStore = createStore('repo')({
-  name: 'zustandX',
-  stars: 0,
-})
+const repoStore = createStore(
+  {
+    name: 'zustandX',
+    stars: 0,
+    owner: {
+      name: 'someone',
+      email: 'someone@xxx.com',
+    },
+  },
+  {
+    name: 'repo',
+  }
+);
 ```
 
 - the parameter of the first function is the name of the store, this is
@@ -57,10 +67,10 @@ Note that the zustand store is accessible through:
 
 ```ts
 // hook store
-repoStore.useStore
+repoStore.useStore;
 
 // vanilla store
-repoStore.store
+repoStore.store;
 ```
 
 ## Selectors
@@ -71,12 +81,23 @@ Use the hooks in React components, no providers needed. Select your
 state and the component will re-render on changes. Use the `use` method:
 
 ```ts
-repoStore.use.name()
-repoStore.use.stars()
+repoStore.use.name();
+repoStore.use.stars();
 ```
 
 We recommend using the global hooks (see below) to support ESLint hook
 linting.
+
+### Tracked Hooks
+
+> Big thanks for [react-tracked](https://github.com/dai-shi/react-tracked)
+
+Use the tracked hooks in React components, no providers needed. Select your
+state and the component will trigger re-renders only if the **accessed property** is changed. Use the `useTracked` method:
+
+```ts
+repoStore.useTracked.owner();
+```
 
 ### Getters
 
@@ -84,14 +105,14 @@ Don't overuse hooks. If you don't need to subscribe to the state, use
 instead the `get` method:
 
 ```ts
-repoStore.get.name()
-repoStore.get.stars()
+repoStore.get.name();
+repoStore.get.stars();
 ```
 
 You can also get the whole state:
 
 ```ts
-repoStore.get.state()
+repoStore.get.state();
 ```
 
 ### Extend selectors
@@ -101,20 +122,26 @@ selectors) for reusability. ZustandX supports extending selectors with
 full typescript support:
 
 ```ts
-const repoStore = createStore('repo')({
-  name: 'zustandX',
-  stars: 0,
-})
-  .extendSelectors((set, get, api) => ({
+const repoStore = createStore(
+  {
+    name: 'zustandX',
+    stars: 0,
+    middlewares: ['immer', 'devtools', 'persist'],
+  },
+  {
+    name: 'repo',
+  }
+)
+  .extendSelectors((state, get, api) => ({
     validName: () => get.name().trim(),
     // other selectors
   }))
-  .extendSelectors((set, get, api) => ({
+  .extendSelectors((state, get, api) => ({
     // get.validName is accessible
     title: (prefix: string) =>
       `${prefix + get.validName()} with ${get.stars()} stars`,
-  }))
-  // extend again...
+  }));
+// extend again...
 ```
 
 ## Actions
@@ -122,8 +149,8 @@ const repoStore = createStore('repo')({
 Update your store from anywhere by using the `set` method:
 
 ```ts
-repoStore.set.name('new name')
-repoStore.set.stars(repoStore.get.stars + 1)
+repoStore.set.name('new name');
+repoStore.set.stars(repoStore.get.stars + 1);
 ```
 
 ### Extend actions
@@ -134,6 +161,7 @@ You can update the whole state from your app:
 store.set.state((draft) => {
   draft.name = 'test';
   draft.stars = 1;
+  return draft;
 });
 ```
 
@@ -141,10 +169,15 @@ However, you generally want to create derived actions for reusability.
 ZustandX supports extending actions with full typescript support:
 
 ```ts
-const repoStore = createStore('repo')({
-  name: 'zustandX',
-  stars: 0,
-})
+const repoStore = createStore(
+  {
+    name: 'zustandX',
+    stars: 0,
+  },
+  {
+    name: 'repo',
+  }
+)
   .extendActions((set, get, api) => ({
     validName: (name: string) => {
       set.name(name.trim());
@@ -157,8 +190,8 @@ const repoStore = createStore('repo')({
       set.validName(name);
       set.stars(0);
     },
-  }))
-  // extend again...
+  }));
+// extend again...
 ```
 
 ## Global store
@@ -184,6 +217,9 @@ export const rootStore = {
 // Global hook selectors
 export const useStore = () => mapValuesKey('use', rootStore);
 
+// Global tracked hook selectors
+export const useTrackedStore = () => mapValuesKey('useTracked', rootStore);
+
 // Global getter selectors
 export const store = mapValuesKey('get', rootStore);
 
@@ -194,17 +230,42 @@ export const actions = mapValuesKey('set', rootStore);
 ### Global hook selectors
 
 ```ts
-useStore().repo.name()
-useStore().modal.isOpen()
+useStore().repo.name();
+useStore().modal.isOpen();
 ```
 
-By using `useStore()`, ESLint will correctly lint hook errors.
+### Global tracked hook selectors
+
+```tsx
+// with useTrackStore UserEmail Component will only re-render when accessed property owner.email changed
+const UserEmail = () => {
+  const owner = useTrackedStore().repo.owner()
+  return (
+    <div>
+      <span>User Email: {owner.email}</span>
+    </div>
+  );
+};
+
+// with useStore UserEmail Component re-render when owner changed, but you can pass equalityFn to avoid it.
+const UserEmail = () => {
+  const owner = useStore().repo.owner()
+  // const owner = useStore().repo.owner((prev, next) => prev.email === next.email)
+  return (
+    <div>
+      <span>User Email: {owner.email}</span>
+    </div>
+  );
+};
+```
+
+By using `useStore() or useTrackStore()`, ESLint will correctly lint hook errors.
 
 ### Global getter selectors
 
 ```ts
-store.repo.name()
-store.modal.isOpen()
+store.repo.name();
+store.modal.isOpen();
 ```
 
 These can be used anywhere.
@@ -212,8 +273,8 @@ These can be used anywhere.
 ### Global actions
 
 ```ts
-actions.repo.stars(store.repo.stars + 1)
-actions.modal.open()
+actions.repo.stars(store.repo.stars + 1);
+actions.modal.open();
 ```
 
 These can be used anywhere.
@@ -223,10 +284,11 @@ These can be used anywhere.
 The second parameter of `createStore` is for options:
 
 ```ts
-export interface CreateStoreOptions<T extends State> {
-  middlewares?: any[];
+export interface CreateStoreOptions {
+  name: string;
   devtools?: DevtoolsOptions;
   immer?: ImmerOptions;
+  mutative?: MutativeOptions;
   persist?: PersistOptions;
 }
 ```
@@ -234,13 +296,35 @@ export interface CreateStoreOptions<T extends State> {
 ### Middlewares
 
 ZustandX is using these middlewares:
-- `immer`: required. Autofreeze can be enabled using
-  `immer.enabledAutoFreeze` option.
-- `devtools`: enabled if `devtools.enabled` option is `true`.
+
+- `immer`: enabled if `immer.enabled` option is `true`. `immer` implements from [zustand](https://github.com/pmndrs/zustand?tab=readme-ov-file#immer-middleware).
+- `devtools`: enabled if `devtools.enabled` option is `true`. `devtools` implements `DevtoolsOptions` interface from [zustand](https://github.com/pmndrs/zustand?tab=readme-ov-file#redux-devtools).
+- `mutative`: enabled if `mutative.enabled` option is `true`.
 - `persist`: enabled if `persist.enabled` option is `true`. `persist`
   implements `PersistOptions` interface from
   [zustand](https://github.com/pmndrs/zustand#persist-middleware)
-- custom middlewares can be added using `middlewares` option
+- custom middlewares can be added by wrapping `state initiator`.
+
+```ts
+import { createStore } from 'zustand-x';
+import { combine } from 'zustand/middleware';
+
+const store = createStore<{ name: string; stars?: number }>(
+  combine(
+    () => ({
+      name: 'zustandX',
+    }),
+    () => ({ stars: 0 })
+  ),
+  {
+    name: 'repo',
+    //enables persist middleware
+    persist: {
+      enabled: true,
+    },
+  }
+);
+```
 
 ## Contributing and project organization
 
@@ -259,6 +343,12 @@ appreciated!
 your feedback** here. Read our
 [contributing guide](https://github.com/udecode/zustand-x/blob/main/CONTRIBUTING.md)
 to get started.
+
+<p>
+<a href="https://www.netlify.com">
+  <img src="https://www.netlify.com/img/global/badges/netlify-color-accent.svg" alt="Deploys by Netlify" />
+</a>
+</p>
 
 ## License
 

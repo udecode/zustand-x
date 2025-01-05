@@ -94,7 +94,6 @@
     "prettier": "^3.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-is": "18.2.0",
     "react-test-renderer": "18.2.0",
     "rimraf": "^5.0.5",
     "ts-jest": "^29.1.1",
@@ -102,13 +101,15 @@
     "turbo": "^1.11.0",
     "turbowatch": "2.29.4",
     "typedoc": "^0.25.4",
-    "typescript": "5.3.3",
-    "zustand": "^4.4.7"
+    "typescript": "5.3.3"
   },
   "packageManager": "yarn@4.0.2",
   "engines": {
     "node": ">=18.12.0",
     "yarn": ">=1.22.0",
     "npm": "please-use-yarn"
+  },
+  "dependencies": {
+    "zustand": "5.0.2"
   }
 }

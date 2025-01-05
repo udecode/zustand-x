@@ -1,14 +1,20 @@
-import { GetRecord, ImmerStoreApi, State } from '../types';
+import { StoreMutatorIdentifier } from 'zustand';
 
-export const generateStateTrackedHooksSelectors = <T extends State>(
-  useTrackedStore: () => T,
-  store: ImmerStoreApi<T>
+import { TCreatedStoreType, TGetStoreRecord, TState } from '../types';
+
+export const generateStateTrackedHooksSelectors = <
+  StateType extends TState,
+  Mutators extends [StoreMutatorIdentifier, unknown][],
+>(
+  useTrackedStore: () => StateType,
+  store: TCreatedStoreType<StateType, Mutators>
 ) => {
-  const selectors: GetRecord<T> = {} as any;
+  const selectors: TGetStoreRecord<StateType> =
+    {} as TGetStoreRecord<StateType>;
 
-  Object.keys((store as any).getState()).forEach((key) => {
-    selectors[key as keyof T] = () => {
-      return useTrackedStore()[key as keyof T];
+  Object.keys(store.getState() || {}).forEach((key) => {
+    selectors[key as keyof StateType] = () => {
+      return useTrackedStore()[key as keyof StateType];
     };
   });
 

@@ -3,7 +3,7 @@ import '@testing-library/jest-dom';
 import React from 'react';
 import { act, render, renderHook } from '@testing-library/react';
 
-import { createZustandStore } from './createStore';
+import { createZustandStore } from '../createStore';
 
 describe('createAtomStore', () => {
   describe('single provider', () => {
@@ -20,7 +20,10 @@ describe('createAtomStore', () => {
       age: INITIAL_AGE,
     };
 
-    const store = createZustandStore('myTestStore')(initialTestStoreValue);
+    const store = createZustandStore(() => initialTestStoreValue, {
+      name: 'myTestStore',
+      immer: true,
+    });
     const useSelectors = () => store.use;
     const actions = store.set;
     const selectors = store.get;
@@ -42,7 +45,6 @@ describe('createAtomStore', () => {
         <button
           type="button"
           onClick={() => {
-            selectors.age();
             actions.age(selectors.age() + 1);
           }}
         >
@@ -93,11 +95,20 @@ describe('createAtomStore', () => {
       age: 72,
     };
 
-    const myFirstTestStoreStore = createZustandStore('myFirstTestStore')(
-      initialFirstTestStoreValue
+    const myFirstTestStoreStore = createZustandStore(
+      () => initialFirstTestStoreValue,
+      {
+        name: 'myFirstTestStore',
+        persist: {
+          enabled: true,
+        },
+      }
     );
-    const mySecondTestStoreStore = createZustandStore('mySecondTestStore')(
-      initialSecondTestStoreValue
+    const mySecondTestStoreStore = createZustandStore(
+      () => initialSecondTestStoreValue,
+      {
+        name: 'mySecondTestStore',
+      }
     );
 
     const FirstReadOnlyConsumer = () => {

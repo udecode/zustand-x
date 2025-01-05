@@ -1,11 +1,18 @@
-import { createStore } from './createStore';
+import { devtools } from 'zustand/middleware';
+
+import { createStore } from '../createStore';
 
 describe('zustandX', () => {
   describe('when get', () => {
-    const store = createStore('repo')({
-      name: 'zustandX',
-      stars: 0,
-    });
+    const store = createStore(
+      devtools(() => ({
+        name: 'zustandX',
+        stars: 0,
+      })),
+      {
+        name: 'repo',
+      }
+    );
 
     it('should be', () => {
       expect(store.get.name()).toEqual('zustandX');
@@ -13,10 +20,15 @@ describe('zustandX', () => {
   });
 
   describe('when extending actions', () => {
-    const store = createStore('repo')({
-      name: 'zustandX',
-      stars: 0,
-    })
+    const store = createStore(
+      {
+        name: 'zustandX',
+        stars: 0,
+      },
+      {
+        name: 'repo',
+      }
+    )
       .extendActions((set, get, api) => ({
         validName: (name: string) => {
           set.name(name.trim());
@@ -40,10 +52,15 @@ describe('zustandX', () => {
   });
 
   describe('when extending selectors', () => {
-    const store = createStore('repo')({
-      name: 'zustandX ',
-      stars: 0,
-    })
+    const store = createStore(
+      {
+        name: 'zustandX ',
+        stars: 0,
+      },
+      {
+        name: 'repo',
+      }
+    )
       .extendSelectors((set, get, api) => ({
         validName: () => get.name().trim(),
       }))
@@ -60,15 +77,21 @@ describe('zustandX', () => {
   });
 
   describe('when set.state', () => {
-    const store = createStore('repo')({
-      name: 'zustandX',
-      stars: 0,
-    });
+    const store = createStore(
+      {
+        name: 'zustandX',
+        stars: 0,
+      },
+      {
+        name: 'repo',
+      }
+    );
 
     it('should be', () => {
       store.set.state((draft) => {
         draft.name = 'test';
         draft.stars = 1;
+        return draft;
       });
 
       expect(store.get.state()).toEqual({
@@ -79,13 +102,18 @@ describe('zustandX', () => {
 
     describe('deletes a property', () => {
       it('should delete that property', () => {
-        const repoStore = createStore('repo')<{
-          name?: string;
-          stars: number;
-        }>({
-          name: 'zustandX',
-          stars: 0,
-        });
+        const repoStore = createStore(
+          {
+            name: 'zustandX',
+            stars: 0,
+          },
+          {
+            name: 'repo',
+            immer: {
+              enabled: true,
+            },
+          }
+        );
 
         repoStore.set.state((draft) => {
           delete draft.name;

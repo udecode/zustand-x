@@ -1,21 +1,35 @@
-import { ImmerStoreApi, SetRecord, State } from '../types';
+import { StoreMutatorIdentifier } from 'zustand';
 
-export const generateStateActions = <T extends State>(
-  store: ImmerStoreApi<T>,
-  storeName: string
+import { TCreatedStoreType, TSetStoreRecord, TState } from '../types';
+
+export const generateStateActions = <
+  StateType extends TState,
+  Mutators extends [StoreMutatorIdentifier, unknown][],
+>(
+  store: TCreatedStoreType<StateType, Mutators>,
+  storeName?: string,
+  isMutative?: boolean
 ) => {
-  const actions: SetRecord<T> = {} as any;
+  const actions: TSetStoreRecord<StateType> = {} as TSetStoreRecord<StateType>;
 
-  Object.keys((store as any).getState()).forEach((key) => {
-    actions[key as keyof T] = (value) => {
-      const prevValue = store.getState()[key as keyof T];
+  Object.keys(store.getState() || {}).forEach((key) => {
+    const typedKey = key as keyof StateType;
+    actions[typedKey] = (value) => {
+      const prevValue = store.getState()[typedKey];
       if (prevValue === value) return;
-
       const actionKey = key.replace(/^\S/, (s) => s.toUpperCase());
-      store.setState((draft) => {
-        // @ts-ignore
-        draft[key] = value;
-      }, `@@${storeName}/set${actionKey}`);
+      const debugLog = storeName ? `@@${storeName}/set${actionKey}` : undefined;
+
+      //@ts-ignore
+      store.setState?.(
+        isMutative
+          ? (draft: StateType) => {
+              draft[typedKey] = value;
+            }
+          : { [typedKey]: value },
+        undefined,
+        debugLog
+      );
     };
   });
 

@@ -1,13 +1,19 @@
-import { GetRecord, ImmerStoreApi, State } from '../types';
+import { StoreMutatorIdentifier } from 'zustand';
 
-export const generateStateGetSelectors = <T extends State>(
-  store: ImmerStoreApi<T>
+import { TCreatedStoreType, TGetStoreRecord, TState } from '../types';
+
+export const generateStateGetSelectors = <
+  StateType extends TState,
+  Mutators extends [StoreMutatorIdentifier, unknown][],
+>(
+  store: TCreatedStoreType<StateType, Mutators>
 ) => {
-  const selectors: GetRecord<T> = {} as any;
+  const selectors: TGetStoreRecord<StateType> =
+    {} as TGetStoreRecord<StateType>;
 
-  Object.keys((store as any).getState()).forEach((key) => {
-    // selectors[`get${capitalize(key)}`] = () => store.getState()[key as keyof T];
-    selectors[key as keyof T] = () => store.getState()[key as keyof T];
+  Object.keys(store.getState() || {}).forEach((key) => {
+    selectors[key as keyof StateType] = () =>
+      store.getState()[key as keyof StateType];
   });
 
   return selectors;

@@ -1,6 +1,6 @@
 {
   "name": "zustand-x",
-  "version": "3.0.4",
+  "version": "4.0.0",
   "description": "Zustand store factory for a best-in-class developer experience.",
   "license": "MIT",
   "homepage": "https://zustand-x.udecode.dev",
@@ -40,10 +40,12 @@
   "dependencies": {
     "immer": "^10.0.3",
     "lodash.mapvalues": "^4.6.0",
-    "react-tracked": "^1.7.11"
+    "mutative": "1.1.0",
+    "react-tracked": "^1.7.11",
+    "use-sync-external-store": "1.4.0"
   },
   "peerDependencies": {
-    "zustand": ">=4.3.9"
+    "zustand": ">=5.0.2"
   },
   "keywords": [
     "zustand"

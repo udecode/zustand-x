@@ -1,32 +1,21 @@
-import { ActionBuilder, State, StateActions, StoreApi } from '../types';
+import { StoreMutatorIdentifier } from 'zustand';
+
+import { TActionBuilder, TState, TStateApiForBuilder } from '../types';
 
 export const extendActions = <
-  AB extends ActionBuilder<TName, T, StateActions<T> & TActions, TSelectors>,
-  TName extends string,
-  T extends State = {},
-  TActions = {},
-  TSelectors = {},
+  StateType extends TState,
+  Mutators extends [StoreMutatorIdentifier, unknown][],
+  TActions,
+  TSelectors,
+  Builder extends TActionBuilder<StateType, Mutators, TActions, TSelectors>,
 >(
-  builder: AB,
-  api: StoreApi<TName, T, StateActions<T> & TActions, TSelectors>
-): StoreApi<
-  TName,
-  T,
-  StateActions<T> & TActions & ReturnType<AB>,
-  TSelectors
-> => {
+  builder: Builder,
+  api: TStateApiForBuilder<StateType, Mutators, TActions, TSelectors>
+) => {
   const actions = builder(api.set, api.get, api);
-  // Object.keys(actions).forEach((key) => {
-  //   actions[key] = (...args: any[]) => {
-  //     // React batch
-  //     batch(() => {
-  //       actions[key](...args);
-  //     });
-  //   };
-  // });
 
   return {
-    ...(api as any),
+    ...api,
     set: {
       ...api.set,
       ...actions,

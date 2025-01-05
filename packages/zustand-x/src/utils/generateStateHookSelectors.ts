@@ -1,21 +1,26 @@
+import { StoreMutatorIdentifier } from 'zustand';
+
 import {
-  EqualityChecker,
-  GetRecord,
-  ImmerStoreApi,
-  State,
-  UseImmerStore,
+  TCreatedStoreType,
+  TEqualityChecker,
+  TGetStoreEqualityRecord,
+  TState,
 } from '../types';
 
-export const generateStateHookSelectors = <T extends State>(
-  useStore: UseImmerStore<T>,
-  store: ImmerStoreApi<T>
+export const generateStateHookSelectors = <
+  StateType extends TState,
+  Mutators extends [StoreMutatorIdentifier, unknown][],
+>(
+  useStore: TCreatedStoreType<StateType, Mutators>
 ) => {
-  const selectors: GetRecord<T> = {} as any;
+  const selectors: TGetStoreEqualityRecord<StateType> =
+    {} as TGetStoreEqualityRecord<StateType>;
 
-  Object.keys((store as any).getState()).forEach((key) => {
-    // selectors[`use${capitalize(key)}`] = () =>
-    selectors[key as keyof T] = (equalityFn?: EqualityChecker<T[keyof T]>) => {
-      return useStore((state: T) => state[key as keyof T], equalityFn);
+  Object.keys(useStore.getState() || {}).forEach((key) => {
+    selectors[key as keyof StateType] = (
+      equalityFn?: TEqualityChecker<StateType[keyof StateType]>
+    ) => {
+      return useStore((state) => state[key as keyof StateType], equalityFn);
     };
   });
 

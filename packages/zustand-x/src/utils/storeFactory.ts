@@ -1,28 +1,18 @@
-import {
-  ActionBuilder,
-  SelectorBuilder,
-  State,
-  StateActions,
-  StoreApi,
-} from '../types';
+import { StoreMutatorIdentifier } from 'zustand';
+
+import { TState, TStateApi, TStateApiForBuilder } from '../types';
 import { extendActions } from './extendActions';
 import { extendSelectors } from './extendSelectors';
 
 export const storeFactory = <
-  TName extends string,
-  T extends State,
-  TActions = {},
-  TSelectors = {},
+  StateType extends TState,
+  Mutators extends [StoreMutatorIdentifier, unknown][] = [],
 >(
-  api: StoreApi<TName, T, StateActions<T> & TActions, TSelectors>
-) => {
+  api: TStateApiForBuilder<StateType, Mutators>
+): TStateApi<StateType, Mutators> => {
   return {
     ...api,
-    extendSelectors: (
-      builder: SelectorBuilder<TName, T, TActions, TSelectors>
-    ) => storeFactory(extendSelectors(builder, api)),
-    extendActions: (
-      builder: ActionBuilder<TName, T, StateActions<T> & TActions, TSelectors>
-    ) => storeFactory(extendActions(builder, api)),
-  };
+    extendSelectors: (builder) => storeFactory(extendSelectors(builder, api)),
+    extendActions: (builder) => storeFactory(extendActions(builder, api)),
+  } as TStateApi<StateType, Mutators>;
 };
