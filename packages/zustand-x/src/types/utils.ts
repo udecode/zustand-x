@@ -15,7 +15,7 @@ export type TGetStoreEqualityRecord<O> = {
   [K in keyof O]: (equalityFn?: TEqualityChecker<O[K]>) => O[K];
 };
 export type TSetStoreRecord<O> = {
-  [K in keyof O]: (value: O[K], mutative?: boolean) => void;
+  [K in keyof O]: (value: O[K]) => void;
 };
 export type TUseStoreSelectorType<
   StateType extends TState,

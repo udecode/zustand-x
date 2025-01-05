@@ -14,15 +14,15 @@ export const generateStateActions = <
 
   Object.keys(store.getState() || {}).forEach((key) => {
     const typedKey = key as keyof StateType;
-    actions[typedKey] = (value, mutative) => {
+    actions[typedKey] = (value) => {
       const prevValue = store.getState()[typedKey];
       if (prevValue === value) return;
       const actionKey = key.replace(/^\S/, (s) => s.toUpperCase());
       const debugLog = storeName ? `@@${storeName}/set${actionKey}` : undefined;
-      const _isMutative = mutative || isMutative;
+
       //@ts-ignore
       store.setState?.(
-        _isMutative
+        isMutative
           ? (draft: StateType) => {
               draft[typedKey] = value;
             }

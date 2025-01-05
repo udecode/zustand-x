@@ -18,6 +18,13 @@ import { storeFactory } from './utils/storeFactory';
 
 import type { StateCreator, StoreMutatorIdentifier } from 'zustand';
 
+/**
+ * Creates zustand store with additional selectors and actions.
+ *
+ * @param {StateType | StateCreator<StateType, Mps, Mcs>} initializer - A function or object that initializes the state.
+ * @param {TBaseStoreOptions<StateType>} options - store create options.
+ */
+
 export const createStore = <
   StateType extends TState,
   Mps extends [StoreMutatorIdentifier, unknown][] = [],
@@ -25,7 +32,7 @@ export const createStore = <
   CreateStoreOptions extends
     TBaseStoreOptions<StateType> = TBaseStoreOptions<StateType>,
 >(
-  initialState: StateType | StateCreator<StateType, Mps, Mcs>,
+  initializer: StateType | StateCreator<StateType, Mps, Mcs>,
   options: CreateStoreOptions
 ) => {
   type Mutators = [...DefaultMutators<StateType, CreateStoreOptions>, ...Mcs];
@@ -35,6 +42,7 @@ export const createStore = <
     immer: immerOptions,
     mutative: mutativeOptions,
     persist: persistOptions,
+    isMutativeState,
   } = options;
 
   //current middlewares order devTools(persist(immer(initiator)))
@@ -82,9 +90,9 @@ export const createStore = <
     .reverse()
     .reduce(
       (y, fn) => fn(y),
-      (typeof initialState === 'function'
-        ? initialState
-        : () => initialState) as StateCreator<StateType>
+      (typeof initializer === 'function'
+        ? initializer
+        : () => initializer) as StateCreator<StateType>
     ) as StateCreator<StateType, [], Mutators>;
 
   const store = createStoreZustand(stateMutators);
@@ -94,7 +102,9 @@ export const createStore = <
   const stateActions = generateStateActions(
     store,
     name,
-    _immerOptionsInternal.enabled || _mutativeOptionsInternal.enabled
+    isMutativeState ||
+      _immerOptionsInternal.enabled ||
+      _mutativeOptionsInternal.enabled
   );
 
   const hookSelectors = generateStateHookSelectors(store);
