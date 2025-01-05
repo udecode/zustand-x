@@ -118,6 +118,7 @@ export const createStore = <
   const apiInternal = {
     get: {
       state: store.getState,
+      initialState: store.getInitialState,
       ...getterSelectors,
     },
     name,
