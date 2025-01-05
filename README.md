@@ -32,7 +32,7 @@ API.
 - Modular state management:
   - Derived selectors
   - Derived actions
-- `immer`, `devtools` and `persist` middlewares
+- `immer`, `devtools` , `mutative` and `persist` middlewares
 - Full typescript support
 - `react-tracked` support
 
@@ -284,10 +284,11 @@ The second parameter of `createStore` is for options:
 
 ```ts
 export interface CreateStoreOptions {
+  name: string;
   devtools?: DevtoolsOptions;
   immer?: ImmerOptions;
+  mutative?: MutativeOptions;
   persist?: PersistOptions;
-  name: string;
 }
 ```
 
@@ -297,6 +298,7 @@ ZustandX is using these middlewares:
 
 - `immer`: enabled if `immer.enabled` option is `true`. `immer` implements from [zustand](https://github.com/pmndrs/zustand?tab=readme-ov-file#immer-middleware).
 - `devtools`: enabled if `devtools.enabled` option is `true`. `devtools` implements `DevtoolsOptions` interface from [zustand](https://github.com/pmndrs/zustand?tab=readme-ov-file#redux-devtools).
+- `mutative`: enabled if `mutative.enabled` option is `true`.
 - `persist`: enabled if `persist.enabled` option is `true`. `persist`
   implements `PersistOptions` interface from
   [zustand](https://github.com/pmndrs/zustand#persist-middleware)
