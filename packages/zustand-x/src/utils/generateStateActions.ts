@@ -7,24 +7,26 @@ export const generateStateActions = <
   Mutators extends [StoreMutatorIdentifier, unknown][],
 >(
   store: TCreatedStoreType<StateType, Mutators>,
-  storeName?: string
+  storeName?: string,
+  isMutative?: boolean
 ) => {
   const actions: TSetStoreRecord<StateType> = {} as TSetStoreRecord<StateType>;
 
   Object.keys(store.getState() || {}).forEach((key) => {
     const typedKey = key as keyof StateType;
-    actions[typedKey] = (value) => {
+    actions[typedKey] = (value, mutative) => {
       const prevValue = store.getState()[typedKey];
       if (prevValue === value) return;
       const actionKey = key.replace(/^\S/, (s) => s.toUpperCase());
       const debugLog = storeName ? `@@${storeName}/set${actionKey}` : undefined;
-
+      const _isMutative = mutative || isMutative;
       //@ts-ignore
       store.setState?.(
-        (draft: StateType) => {
-          draft[typedKey] = value;
-          return draft;
-        },
+        _isMutative
+          ? (draft: StateType) => {
+              draft[typedKey] = value;
+            }
+          : { [typedKey]: value },
         undefined,
         debugLog
       );

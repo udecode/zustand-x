@@ -91,7 +91,11 @@ export const createStore = <
 
   const getterSelectors = generateStateGetSelectors(store);
 
-  const stateActions = generateStateActions(store, name);
+  const stateActions = generateStateActions(
+    store,
+    name,
+    _immerOptionsInternal.enabled || _mutativeOptionsInternal.enabled
+  );
 
   const hookSelectors = generateStateHookSelectors(store);
 

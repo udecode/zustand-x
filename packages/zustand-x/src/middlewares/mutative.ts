@@ -44,14 +44,14 @@ type StoreMutative<S> = S extends {
             | SetStateType<A1>
             | Partial<SetStateType<A1>>
             | ((state: Draft<Partial<SetStateType<A1>>>) => void),
-          shouldReplace?: false,
+          shouldReplace?: true,
           ...a: SkipTwo<A1>
         ): Sr1;
         setState(
           nextStateOrUpdater:
             | SetStateType<A2>
             | ((state: Draft<Partial<SetStateType<A2>>>) => void),
-          shouldReplace: true,
+          shouldReplace: false,
           ...a: SkipTwo<A2>
         ): Sr2;
       }
@@ -81,7 +81,11 @@ const mutativeImpl: MutativeImpl =
           : updater
       ) as ((s: T) => T) | T | Partial<T>;
 
-      return set(nextState as any, replace as any, ...a);
+      return set(
+        nextState as any,
+        typeof replace === 'boolean' ? (replace as any) : true,
+        ...a
+      );
     };
 
     return initializer(store.setState, get, store);
