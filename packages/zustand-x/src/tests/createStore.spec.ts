@@ -102,10 +102,7 @@ describe('zustandX', () => {
 
     describe('deletes a property', () => {
       it('should delete that property', () => {
-        const repoStore = createStore<{
-          name?: string;
-          stars: number;
-        }>(
+        const repoStore = createStore(
           {
             name: 'zustandX',
             stars: 0,

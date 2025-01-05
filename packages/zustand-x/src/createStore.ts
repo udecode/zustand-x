@@ -20,10 +20,10 @@ import type { StateCreator, StoreMutatorIdentifier } from 'zustand';
 
 export const createStore = <
   StateType extends TState,
-  CreateStoreOptions extends
-    TBaseStoreOptions<StateType> = TBaseStoreOptions<StateType>,
   Mps extends [StoreMutatorIdentifier, unknown][] = [],
   Mcs extends [StoreMutatorIdentifier, unknown][] = [],
+  CreateStoreOptions extends
+    TBaseStoreOptions<StateType> = TBaseStoreOptions<StateType>,
 >(
   initialState: StateType | StateCreator<StateType, Mps, Mcs>,
   options: CreateStoreOptions
