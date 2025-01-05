@@ -9,7 +9,7 @@ export const storeFactory = <
   Mutators extends [StoreMutatorIdentifier, unknown][] = [],
 >(
   api: TStateApiForBuilder<StateType, Mutators>
-) => {
+): TStateApi<StateType, Mutators> => {
   return {
     ...api,
     extendSelectors: (builder) => storeFactory(extendSelectors(builder, api)),
