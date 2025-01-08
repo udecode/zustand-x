@@ -38,7 +38,6 @@ export type TStoreApiGet<
 > = TGetStoreRecord<StateType> &
   TSelectors & {
     state: TCreatedStoreType<StateType, Mutators>['getState'];
-    initialState: TCreatedStoreType<StateType, Mutators>['getInitialState'];
   };
 
 export type TStoreApiSet<
