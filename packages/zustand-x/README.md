@@ -1,4 +1,5 @@
-> [!NOTE] > `@udecode/zustood` has been renamed to `zustand-x`.
+> [!NOTE] 
+> `@udecode/zustood` has been renamed to `zustand-x`.
 > Using Jotai? See [JotaiX](https://github.com/udecode/jotai-x).
 
 # ZustandX
