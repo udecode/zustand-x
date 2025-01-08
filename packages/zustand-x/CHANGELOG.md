@@ -1,5 +1,12 @@
 # @udecode/zustood
 
+## 5.0.1
+
+### Patch Changes
+
+- [#95](https://github.com/udecode/zustand-x/pull/95) by [@imarabinda](https://github.com/imarabinda) –
+  - fix: missing export `mapValuesKey`
+
 ## 5.0.0
 
 ### Major Changes
