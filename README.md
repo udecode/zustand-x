@@ -24,9 +24,6 @@ which solves these challenges, so you can focus on your app.
 yarn add zustand@latest zustand-x
 ```
 
-Visit [zustand-x.udecode.dev](https://zustand-x.udecode.dev) for the
-API.
-
 ### Why `zustand-x` in addition to `zustand`?
 
 - Much less boilerplate
