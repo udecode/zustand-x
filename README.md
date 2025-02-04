@@ -12,7 +12,7 @@ An extension for [Zustand](https://github.com/pmndrs/zustand) that auto-generate
 
 ## Why
 
-Building on top of the unopinionated Zustand, Zustand X offers a better developer experience with less boilerplate. Create and interact with stores faster using a more intuitive API.
+Built on top of Zustand foundation, Zustand X offers a better developer experience with less boilerplate. Create and interact with stores faster using a more intuitive API.
 
 > Looking for React Context-based state management instead of global state? Check out [Jotai X](https://github.com/udecode/jotai-x) - same API, different state model.
 
