@@ -24,7 +24,7 @@
     "typecheck": {},
     "test": {
       "dependsOn": [],
-      "outputs": ["jest.config.cjs"]
+      "outputs": ["vitest.config.ts"]
     },
     "test:watch": {
       "dependsOn": [],

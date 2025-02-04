@@ -52,5 +52,10 @@
   ],
   "publishConfig": {
     "access": "public"
+  },
+  "devDependencies": {
+    "@vitest/eslint-plugin": "1.1.25",
+    "jsdom": "26.0.0",
+    "vitest": "3.0.5"
   }
 }

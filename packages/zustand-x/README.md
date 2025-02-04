@@ -12,16 +12,14 @@ An extension for [Zustand](https://github.com/pmndrs/zustand) that auto-generate
 
 ## Why
 
-Built on top of Zustand foundation, Zustand X offers a better developer experience with less boilerplate. Create and interact with stores faster using a more intuitive API.
+Built on top of `zustand`, `zustand-x` offers a better developer experience with less boilerplate. Create and interact with stores faster using a more intuitive API.
 
 > Looking for React Context-based state management instead of global state? Check out [Jotai X](https://github.com/udecode/jotai-x) - same API, different state model.
 
 ## Installation
 
 ```bash
-npm install zustand-x
-# or
-yarn add zustand-x
+pnpm add zustand-x
 ```
 
 You'll also need `react` and [`zustand`](https://github.com/pmndrs/zustand) installed.
@@ -298,35 +296,10 @@ const unsubscribe = vanillaStore.subscribe((state) =>
 );
 ```
 
-## Migration to v6
-
-```ts
-// Before
-store.use.name();
-store.get.name();
-store.set.name('Bob');
-
-// Now
-useStoreValue(store, 'name');
-store.get('name');
-store.set('name', 'Bob');
-
-// With selectors and actions
-// Before
-store.use.someSelector(42);
-store.set.someAction(10);
-
-// Now
-useStoreValue(store, 'someSelector', 42);
-store.set('someAction', 10);
-```
-
 ## Comparison with Zustand
 
-Zustand X builds on top of Zustand's foundation while providing a more streamlined developer experience:
-
 ```ts
-// Zustand
+// zustand
 import create from 'zustand'
 
 const useStore = create((set, get) => ({
@@ -342,7 +315,7 @@ const count = useStore((state) => state.count)
 const increment = useStore((state) => state.increment)
 const double = useStore((state) => state.double)
 
-// Zustand X
+// zustand-x
 import { createStore, useStoreValue, useStoreState } from 'zustand-x'
 
 const store = createStore({ count: 0 })
@@ -368,6 +341,29 @@ Key differences:
 - Type-safe by default without extra type annotations
 - Computed values are easier to define and auto-memoized with `extendSelectors`
 
+## Migration to v6
+
+```ts
+// Before
+store.use.name();
+store.get.name();
+store.set.name('Bob');
+
+// Now
+useStoreValue(store, 'name');
+store.get('name');
+store.set('name', 'Bob');
+
+// With selectors and actions
+// Before
+store.use.someSelector(42);
+store.set.someAction(10);
+
+// Now
+useStoreValue(store, 'someSelector', 42);
+store.set('someAction', 10);
+```
+
 ## License
 
-MIT © [Zustand X](./LICENSE)
+[MIT](./LICENSE)
