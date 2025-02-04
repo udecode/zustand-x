@@ -55,6 +55,7 @@
   },
   "devDependencies": {
     "@vitest/eslint-plugin": "1.1.25",
+    "eslint-plugin-vitest": "0.5.4",
     "jsdom": "26.0.0",
     "vitest": "3.0.5"
   }
