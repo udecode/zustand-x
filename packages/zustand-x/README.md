@@ -129,8 +129,6 @@ store.set('state', (draft) => {
 
 ### React Hooks
 
-We've built a set of hooks that work seamlessly with the React compiler.
-
 #### `useStoreValue(store, key, ...args)`
 
 Subscribe to a single value or selector. Optionally pass an equality function for custom comparison:
@@ -187,7 +185,7 @@ function UserAvatar() {
 
 #### `useTrackedStore(store)`
 
-Get the entire store with tracking. Great for complex components that need many fields:
+Get the entire store with tracking.
 
 ```ts
 function UserProfile() {
@@ -286,9 +284,8 @@ const store = createStore(
 Access the underlying Zustand store when needed:
 
 ```ts
-// Get the Zustand hook
-const useZustandStore = store.useStore;
-const state = useZustandStore();
+// Use the original Zustand hook
+const name = useZustandStore(store, (state) => state.name);
 
 // Get the vanilla store
 const vanillaStore = store.store;

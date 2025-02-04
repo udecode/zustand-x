@@ -2,7 +2,12 @@ import { act, renderHook } from '@testing-library/react';
 import { devtools } from 'zustand/middleware';
 
 import { createStore } from '../createStore';
-import { useStoreState, useStoreValue, useTrackedStore } from '../useStore';
+import {
+  useStoreState,
+  useStoreValue,
+  useTrackedStore,
+  useZustandStore,
+} from '../useStore';
 
 describe('zustandX', () => {
   describe('when get and set', () => {
@@ -422,5 +427,19 @@ describe('zustandX', () => {
       store.set('prefixName', 'prefix_');
       expect(store.get('name')).toBe('prefix_zustandX_test');
     });
+  });
+});
+
+describe('useZustandStore', () => {
+  it('should return the underlying Zustand store hook', () => {
+    const store = createStore({ name: 'test' }, { name: 'test-store' });
+    const useStore = useZustandStore(store);
+
+    // The hook should be the same as store.useStore
+    expect(useStore).toBe(store.useStore);
+
+    // Test in a component
+    const { result } = renderHook(() => useStore((state) => state.name));
+    expect(result.current).toBe('test');
   });
 });

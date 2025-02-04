@@ -107,3 +107,19 @@ export function useTracked<
 ): StateType[K] {
   return store.useTracked(key);
 }
+
+/**
+ * Get the underlying Zustand store hook.
+ * @example
+ * const name = useZustandStore(store, (state) => state.name)
+ */
+export const useZustandStore = <
+  StateType extends TState,
+  Mutators extends [StoreMutatorIdentifier, unknown][],
+  TActions extends Record<string, AnyFunction> = {},
+  TSelectors extends Record<string, AnyFunction> = {},
+>(
+  store: TStateApi<StateType, Mutators, TActions, TSelectors>
+) => {
+  return store.useStore;
+};
