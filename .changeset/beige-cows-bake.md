@@ -30,6 +30,12 @@ store.get('state');
 store.set('name', 'value');
 store.set('extendedAction', 1, 2);
 store.set('state', (draft) => {});
+
+// Before: store.extendSelectors((set, get, api) => ({ ... })). Now only api argument that you can destructure.
+store.extendSelectors(({ get }) => ({ ... }));
+
+// Before: store.extendActions((set, get, api) => ({ ... })). Now only api argument that you can destructure.
+store.extendActions(({ set }) => ({ ... }));
 ```
 
 - Remove `mapValuesKey`. This would be the equivalent:
