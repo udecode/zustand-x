@@ -1,11 +1,11 @@
 import { produce } from 'immer';
 
-import type { MiddlewareOption } from '../types';
+import type { AnyFunction, MiddlewareOption } from '../types';
 import type { Draft } from 'immer';
 import type { StateCreator, StoreMutatorIdentifier } from 'zustand';
 
 declare module 'zustand' {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, unused-imports/no-unused-vars
   interface StoreMutators<S, A> {
     ['zustand/immer-x']: WithImmer<S>;
   }
@@ -26,7 +26,7 @@ type SkipTwo<T> = T extends { length: 0 }
             ? A
             : never;
 
-type SetStateType<T extends unknown[]> = Exclude<T[0], (...args: any[]) => any>;
+type SetStateType<T extends unknown[]> = Exclude<T[0], AnyFunction>;
 
 type WithImmer<S> = Write<S, StoreImmer<S>>;
 

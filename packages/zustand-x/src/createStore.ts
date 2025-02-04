@@ -9,13 +9,10 @@ import {
 import { mutativeMiddleware } from './middlewares/mutative';
 import { DefaultMutators, TBaseStoreOptions, TState } from './types';
 import { TMiddleware } from './types/middleware';
-import { generateStateActions } from './utils/generateStateActions';
-import { generateStateGetSelectors } from './utils/generateStateGetSelectors';
-import { generateStateHookSelectors } from './utils/generateStateHookSelectors';
-import { generateStateTrackedHooksSelectors } from './utils/generateStateTrackedHooksSelectors';
 import { getOptions } from './utils/helpers';
 import { storeFactory } from './utils/storeFactory';
 
+import type { TStateApiForBuilder } from './types';
 import type { StateCreator, StoreMutatorIdentifier } from 'zustand';
 
 /**
@@ -97,40 +94,78 @@ export const createStore = <
 
   const store = createStoreZustand(stateMutators);
 
-  const getterSelectors = generateStateGetSelectors(store);
-
-  const stateActions = generateStateActions(
-    store,
-    name,
-    isMutativeState ||
-      _immerOptionsInternal.enabled ||
-      _mutativeOptionsInternal.enabled
-  );
-
-  const hookSelectors = generateStateHookSelectors(store);
-
   const useTrackedStore = createTrackedSelector(store);
-  const trackedHooksSelectors = generateStateTrackedHooksSelectors(
-    useTrackedStore,
-    store
-  );
+
+  const useTracked = (key: string) => {
+    return useTrackedStore()[key as keyof StateType];
+  };
+
+  const getFn = (key: string) => {
+    if (key === 'state') {
+      return store.getState();
+    }
+
+    return store.getState()[key as keyof StateType];
+  };
+
+  const isMutative =
+    isMutativeState ||
+    _immerOptionsInternal.enabled ||
+    _mutativeOptionsInternal.enabled;
+
+  const setFn = (key: string, value: any) => {
+    if (key === 'state') {
+      return (store.setState as any)(value);
+    }
+
+    const typedKey = key as keyof StateType;
+    const prevValue = store.getState()[typedKey];
+
+    if (prevValue === value) return;
+
+    const actionKey = key.replace(/^\S/, (s) => s.toUpperCase());
+    const debugLog = name ? `@@${name}/set${actionKey}` : undefined;
+
+    (store.setState as any)?.(
+      isMutative
+        ? (draft: StateType) => {
+            draft[typedKey] = value;
+          }
+        : { [typedKey]: value },
+      undefined,
+      debugLog
+    );
+  };
+
+  const useValue = (
+    key: string,
+    equalityFn?: (oldValue: any, newValue: any) => boolean
+  ) => {
+    return store((state) => state[key as keyof StateType], equalityFn);
+  };
+
+  const useState = (
+    key: string,
+    equalityFn?: (oldValue: any, newValue: any) => boolean
+  ) => {
+    const value = useValue(key, equalityFn);
+
+    return [value, (val: any) => setFn(key, val)];
+  };
 
   const apiInternal = {
-    get: {
-      state: store.getState,
-      ...getterSelectors,
-    },
+    get: getFn,
     name,
-    set: {
-      state: store.setState,
-      ...stateActions,
-    },
+    set: setFn,
     store,
     useStore: store,
-    use: hookSelectors,
-    useTracked: trackedHooksSelectors,
+    useValue,
+    useState,
+    useTracked,
     useTrackedStore,
-  };
+    actions: {},
+    selectors: {},
+  } as any as TStateApiForBuilder<StateType, Mutators>;
 
   return storeFactory(apiInternal);
 };

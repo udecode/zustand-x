@@ -3,6 +3,6 @@
  */
 
 export * from './createStore';
-export * from './middlewares';
-export * from './types';
-export * from './utils/mapValuesKey';
+export * from './middlewares/index';
+export * from './types/index';
+export * from './utils/index';

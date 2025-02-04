@@ -8,20 +8,6 @@ export type TEqualityChecker<StateType> = (
   newState: StateType
 ) => boolean;
 
-export type TGetStoreRecord<O> = {
-  [K in keyof O]: () => O[K];
-};
-export type TGetStoreEqualityRecord<O> = {
-  [K in keyof O]: (equalityFn?: TEqualityChecker<O[K]>) => O[K];
-};
-export type TSetStoreRecord<O> = {
-  [K in keyof O]: (value: O[K]) => void;
-};
-export type TUseStoreSelectorType<
-  StateType extends TState,
-  FilteredStateType = unknown,
-> = (state: StateType) => FilteredStateType;
-
 export type TCreatedStoreMutateType<
   StateType extends TState,
   Mutators extends [StoreMutatorIdentifier, unknown][],

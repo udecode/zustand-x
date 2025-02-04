@@ -1,11 +1,11 @@
 import '@testing-library/jest-dom';
 
 import React from 'react';
-import { act, render, renderHook } from '@testing-library/react';
+import { act, render } from '@testing-library/react';
 
 import { createZustandStore } from '../createStore';
 
-describe('createAtomStore', () => {
+describe('useStore', () => {
   describe('single provider', () => {
     type MyTestStoreValue = {
       name: string;
@@ -22,15 +22,14 @@ describe('createAtomStore', () => {
 
     const store = createZustandStore(() => initialTestStoreValue, {
       name: 'myTestStore',
-      immer: true,
+      immer: {
+        enabled: true,
+      },
     });
-    const useSelectors = () => store.use;
-    const actions = store.set;
-    const selectors = store.get;
 
     const ReadOnlyConsumer = () => {
-      const name = useSelectors().name();
-      const age = useSelectors().age();
+      const name = store.useValue('name');
+      const age = store.useValue('age');
 
       return (
         <div>
@@ -45,7 +44,7 @@ describe('createAtomStore', () => {
         <button
           type="button"
           onClick={() => {
-            actions.age(selectors.age() + 1);
+            store.set('age', store.get('age') + 1);
           }}
         >
           consumerSetAge
@@ -54,8 +53,8 @@ describe('createAtomStore', () => {
     };
 
     beforeEach(() => {
-      renderHook(() => actions.name(INITIAL_NAME));
-      renderHook(() => actions.age(INITIAL_AGE));
+      store.set('name', INITIAL_NAME);
+      store.set('age', INITIAL_AGE);
     });
 
     it('read only', () => {
@@ -79,7 +78,7 @@ describe('createAtomStore', () => {
 
       expect(getByText(INITIAL_NAME)).toBeInTheDocument();
       expect(getByText(INITIAL_AGE + 1)).toBeInTheDocument();
-      expect(store.store.getState().age).toBe(INITIAL_AGE + 1);
+      expect(store.get('age')).toBe(INITIAL_AGE + 1);
     });
   });
 
@@ -112,7 +111,7 @@ describe('createAtomStore', () => {
     );
 
     const FirstReadOnlyConsumer = () => {
-      const name = myFirstTestStoreStore.use.name();
+      const name = myFirstTestStoreStore.useValue('name');
 
       return (
         <div>
@@ -122,7 +121,7 @@ describe('createAtomStore', () => {
     };
 
     const SecondReadOnlyConsumer = () => {
-      const age = mySecondTestStoreStore.use.age();
+      const age = mySecondTestStoreStore.useValue('age');
 
       return (
         <div>
