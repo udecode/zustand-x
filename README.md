@@ -1,5 +1,4 @@
-> [!NOTE]
-> `@udecode/zustood` has been renamed to `zustand-x`.
+> [!NOTE] > `@udecode/zustood` has been renamed to `zustand-x`.
 > Using Jotai? See [JotaiX](https://github.com/udecode/jotai-x).
 
 # ZustandX
@@ -199,10 +198,9 @@ one to import. By combining all the stores, selectors and actions, just
 pick what you need using TS autocomplete.
 
 ```ts
-import { mapValuesKey } from 'zustand-x';
+import { combineStores } from 'zustand-x';
 
-// Global store
-export const rootStore = {
+export const stores = combineStores({
   auth: authStore,
   combobox: comboboxStore,
   contextMenu: contextMenuStore,
@@ -210,10 +208,10 @@ export const rootStore = {
   modal: modalStore,
   repo: repoStore,
   toolbar: toolbarStore,
-};
+});
 
 // Global hook selectors
-export const useStore = () => mapValuesKey('use', rootStore);
+export const useStores = combineStores(rootStore);
 
 // Global tracked hook selectors
 export const useTrackedStore = () => mapValuesKey('useTracked', rootStore);

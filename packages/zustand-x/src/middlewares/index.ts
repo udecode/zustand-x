@@ -4,4 +4,5 @@
 
 export * from './devtools';
 export * from './immer';
+export * from './mutative';
 export * from './persist';

@@ -1,17 +1,17 @@
 import { create, PatchesOptions } from 'mutative';
 
-import type { MiddlewareOption } from '../types';
+import type { AnyFunction, MiddlewareOption } from '../types';
 import type { Options as _MutativeOptions, Draft } from 'mutative';
 import type { StateCreator, StoreMutatorIdentifier } from 'zustand';
 
 declare module 'zustand/vanilla' {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, unused-imports/no-unused-vars
   interface StoreMutators<S, A> {
     ['zustand/mutative-x']: WithMutative<S>;
   }
 }
 
-type SetStateType<T extends unknown[]> = Exclude<T[0], (...args: any[]) => any>;
+type SetStateType<T extends unknown[]> = Exclude<T[0], AnyFunction>;
 type WithMutative<S> = Write<S, StoreMutative<S>>;
 
 type Write<T, U> = Omit<T, keyof U> & U;
