@@ -248,6 +248,24 @@ describe('zustandX', () => {
       extendedStore.set('validName', 'foo ');
       expect(extendedStore.get('name')).toBe('foo foo');
     });
+
+    it('should pass all parameters to actions', () => {
+      const another = createStore(
+        {
+          value: '',
+        },
+        {
+          name: 'test-params',
+        }
+      ).extendActions(({ set }) => ({
+        setValue: (a: string, b: string, c: string) => {
+          set('value', `${a}-${b}-${c}`);
+        },
+      }));
+
+      another.set('setValue', 'a', 'b', 'c');
+      expect(another.get('value')).toBe('a-b-c');
+    });
   });
 
   describe('when extending selectors', () => {

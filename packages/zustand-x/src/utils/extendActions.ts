@@ -25,17 +25,17 @@ export const extendActions = <
     actions,
     set: <K extends keyof (StateType | TActions)>(
       key: K,
-      value: K extends keyof TActions
-        ? Parameters<TActions[K]>[0]
+      ...args: K extends keyof TActions
+        ? Parameters<TActions[K]>
         : K extends keyof StateType
-          ? StateType[K]
+          ? [StateType[K]]
           : never
     ) => {
       if (key in actions) {
         const action = actions[key as keyof typeof actions];
-        return action(value);
+        return action(...args);
       }
-      return api.set(key as any, value);
+      return api.set(key as any, args[0]);
     },
   };
 };
