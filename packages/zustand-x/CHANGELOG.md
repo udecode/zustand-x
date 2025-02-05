@@ -1,5 +1,11 @@
 # @udecode/zustood
 
+## 6.0.1
+
+### Patch Changes
+
+- [`f5801e9`](https://github.com/udecode/zustand-x/commit/f5801e9bdbbe7e062e778b8a28543f8866fede94) by [@zbeyens](https://github.com/zbeyens) – Fix exports
+
 ## 6.0.0
 
 ### Major Changes
