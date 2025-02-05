@@ -1,5 +1,11 @@
 # @udecode/zustood
 
+## 6.0.3
+
+### Patch Changes
+
+- [`86582be`](https://github.com/udecode/zustand-x/commit/86582be18d07304032ece09b9a1efae594cc3b3b) by [@zbeyens](https://github.com/zbeyens) – Add `useStoreSelect`
+
 ## 6.0.2
 
 ### Patch Changes
