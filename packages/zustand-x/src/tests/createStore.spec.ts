@@ -3,10 +3,10 @@ import { devtools } from 'zustand/middleware';
 
 import { createStore } from '../createStore';
 import {
+  useStoreSelect,
   useStoreState,
   useStoreValue,
   useTrackedStore,
-  useZustandStore,
 } from '../useStore';
 
 describe('zustandX', () => {
@@ -448,16 +448,18 @@ describe('zustandX', () => {
   });
 });
 
-describe('useZustandStore', () => {
-  it('should return the underlying Zustand store hook', () => {
+describe('useStoreSelect', () => {
+  it('should use the underlying Zustand store hook', () => {
     const store = createStore({ name: 'test' }, { name: 'test-store' });
-    const useStore = useZustandStore(store);
-
-    // The hook should be the same as store.useStore
-    expect(useStore).toBe(store.useStore);
 
     // Test in a component
-    const { result } = renderHook(() => useStore((state) => state.name));
+    const { result } = renderHook(() =>
+      useStoreSelect(
+        store,
+        (state) => state.name,
+        (a, b) => a === b
+      )
+    );
     expect(result.current).toBe('test');
   });
 });

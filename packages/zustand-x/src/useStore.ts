@@ -109,17 +109,20 @@ export function useTracked<
 }
 
 /**
- * Get the underlying Zustand store hook.
+ * Use zustand store selector with optional equality function.
  * @example
- * const name = useZustandStore(store, (state) => state.name)
+ * const name = useStoreSelect(store, (state) => state.name, equalityFn)
  */
-export const useZustandStore = <
+export const useStoreSelect = <
   StateType extends TState,
   Mutators extends [StoreMutatorIdentifier, unknown][],
   TActions extends Record<string, AnyFunction> = {},
   TSelectors extends Record<string, AnyFunction> = {},
+  U = StateType,
 >(
-  store: TStateApi<StateType, Mutators, TActions, TSelectors>
-) => {
-  return store.useStore;
+  store: TStateApi<StateType, Mutators, TActions, TSelectors>,
+  selector: (state: StateType) => U,
+  equalityFn?: (a: U, b: U) => boolean
+): U => {
+  return store.useStore(selector, equalityFn);
 };

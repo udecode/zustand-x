@@ -283,7 +283,7 @@ Access the underlying Zustand store when needed:
 
 ```ts
 // Use the original Zustand hook
-const name = useZustandStore(store, (state) => state.name);
+const name = useStoreSelect(store, (state) => state.name);
 
 // Get the vanilla store
 const vanillaStore = store.store;
