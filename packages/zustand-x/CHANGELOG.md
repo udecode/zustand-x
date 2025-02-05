@@ -1,5 +1,11 @@
 # @udecode/zustood
 
+## 6.0.2
+
+### Patch Changes
+
+- [`d8f922a`](https://github.com/udecode/zustand-x/commit/d8f922a49095982669318fbfdf6e0ed2aa61fee9) by [@zbeyens](https://github.com/zbeyens) – Fixes #102
+
 ## 6.0.1
 
 ### Patch Changes
