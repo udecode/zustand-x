@@ -125,6 +125,32 @@ store.set('state', (draft) => {
 });
 ```
 
+### Subscribing State
+```ts
+// Subscribe to changes
+const unsubscribe = store.subscribe('name', (name, previousName) => {
+  console.log('Name changed from', previousName, 'to', name);
+});
+
+// Subscribe to the entire state
+const unsubscribe = store.subscribe('state', (state) => {
+  console.log('State changed:', state);
+});
+
+// Subscribe to a selector with arguments
+const unsubscribe = store.subscribe('someSelector', 1, 2 (result) => {
+  console.log('Selector result changed:', result);
+});
+
+// Subscribe with an additional selector and options
+const unsubscribe = store.subscribe(
+  'name',
+  name => name.length,
+  length => console.log('Name length changed:', length),
+  { fireImmediately: true } // Fire the callback immediately when subscribing
+);
+```
+
 ### React Hooks
 
 #### `useStoreValue(store, key, ...args)`
