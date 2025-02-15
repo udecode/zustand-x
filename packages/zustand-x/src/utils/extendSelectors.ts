@@ -10,40 +10,6 @@ import {
 
 const identity = <T>(arg: T) => arg;
 
-export interface ExtendedSelectorSubscribe<
-  StateType extends TState,
-  Mutators extends [StoreMutatorIdentifier, unknown][],
-  TActions extends Record<string, AnyFunction>,
-  TSelectors extends Record<string, AnyFunction>,
-  _Builder extends TSelectorBuilder<StateType, Mutators, TActions, TSelectors>,
-> {
-  <K extends keyof (StateType & TSelectors & { state: true }), S>(
-    key: K,
-    ...args: [
-      ...(K extends keyof TSelectors ? Parameters<TSelectors[K]> : []),
-      listener: (state: S, previousState: S) => void,
-    ]
-  ): () => void;
-  <K extends keyof (StateType & TSelectors & { state: true }), S>(
-    key: K,
-    ...args: [
-      ...(K extends keyof TSelectors ? Parameters<TSelectors[K]> : []),
-      selector: (
-        state: K extends keyof TSelectors
-          ? TSelectors[K]
-          : K extends keyof StateType
-            ? StateType[K]
-            : StateType
-      ) => S,
-      listener: (state: S, previousState: S) => void,
-      options?: {
-        equalityFn?: TEqualityChecker<S>;
-        fireImmediately?: boolean;
-      },
-    ]
-  ): () => void;
-}
-
 export const extendSelectors = <
   StateType extends TState,
   Mutators extends [StoreMutatorIdentifier, unknown][],
