@@ -1,4 +1,5 @@
 import { createTrackedSelector } from 'react-tracked';
+import { subscribeWithSelector } from 'zustand/middleware';
 import { createWithEqualityFn as createStoreZustand } from 'zustand/traditional';
 
 import {
@@ -92,7 +93,7 @@ export const createStore = <
         : () => initializer) as StateCreator<StateType>
     ) as StateCreator<StateType, [], Mutators>;
 
-  const store = createStoreZustand(stateMutators);
+  const store = createStoreZustand(subscribeWithSelector(stateMutators));
 
   const useTrackedStore = createTrackedSelector(store);
 
@@ -106,6 +107,33 @@ export const createStore = <
     }
 
     return store.getState()[key as keyof StateType];
+  };
+
+  const subscribeFn = (
+    key: string,
+    selector: any,
+    listener: any,
+    subscribeOptions: any
+  ) => {
+    if (key === 'state') {
+      // @ts-expect-error -- typescript is unable to infer the 3 args version
+      return store.subscribe(selector, listener, subscribeOptions);
+    }
+
+    let wrappedSelector: any;
+
+    if (listener) {
+      // subscribe(selector, listener, subscribeOptions) variant
+      wrappedSelector = (state: StateType) =>
+        selector(state[key as keyof StateType]);
+    } else {
+      // subscribe(listener) variant
+      listener = selector;
+      wrappedSelector = (state: StateType) => state[key as keyof StateType];
+    }
+
+    // @ts-expect-error -- typescript is unable to infer the 3 args version
+    return store.subscribe(wrappedSelector, listener, subscribeOptions);
   };
 
   const isMutative =
@@ -157,6 +185,7 @@ export const createStore = <
     get: getFn,
     name,
     set: setFn,
+    subscribe: subscribeFn,
     store,
     useStore: store,
     useValue,
