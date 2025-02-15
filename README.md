@@ -138,7 +138,7 @@ const unsubscribe = store.subscribe('state', (state) => {
 });
 
 // Subscribe to a selector with arguments
-const unsubscribe = store.subscribe('someSelector', 1, 2 (result) => {
+const unsubscribe = store.subscribe('someSelector', 1, 2, (result) => {
   console.log('Selector result changed:', result);
 });
 
