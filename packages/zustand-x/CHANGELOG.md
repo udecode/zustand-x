@@ -1,5 +1,11 @@
 # @udecode/zustood
 
+## 6.1.0
+
+### Minor Changes
+
+- [#107](https://github.com/udecode/zustand-x/pull/107) by [@yf-yang](https://github.com/yf-yang) – feat: `store.subscribe` support
+
 ## 6.0.3
 
 ### Patch Changes
