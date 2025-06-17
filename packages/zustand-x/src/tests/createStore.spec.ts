@@ -150,7 +150,8 @@ describe('zustandX', () => {
       }))
       .extendSelectors(({ get }) => ({
         complexTitle: (options: { prefix: string; suffix: number }) =>
-          `${options.prefix}${get('validName')} with ${get('stars')} stars. ${options.suffix
+          `${options.prefix}${get('validName')} with ${get('stars')} stars. ${
+            options.suffix
           }`,
       }));
 
