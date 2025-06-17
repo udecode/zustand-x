@@ -150,8 +150,7 @@ describe('zustandX', () => {
       }))
       .extendSelectors(({ get }) => ({
         complexTitle: (options: { prefix: string; suffix: number }) =>
-          `${options.prefix}${get('validName')} with ${get('stars')} stars. ${
-            options.suffix
+          `${options.prefix}${get('validName')} with ${get('stars')} stars. ${options.suffix
           }`,
       }));
 
@@ -266,19 +265,30 @@ describe('zustandX', () => {
   });
 
   describe('when extending actions', () => {
+    const initialTags: string[] = ['tag1', 'tag2'];
     const store = createStore(
       {
         name: 'zustandX',
         stars: 0,
         description: '',
+        tags: initialTags,
       },
       {
         name: 'repo',
+        immer: {
+          enabled: true,
+        },
       }
     )
       .extendActions(({ set }) => ({
         validName: (name: string) => {
           set('name', name.trim());
+        },
+        replace2ndTag: (tag: string) => {
+          set('state', (draft) => {
+            draft.tags?.splice(1, 1, tag);
+            return draft;
+          });
         },
       }))
       .extendActions(({ set }) => ({
@@ -300,12 +310,19 @@ describe('zustandX', () => {
       expect(store.get('name')).toBe('test');
     });
 
+    it('should execute action with immer', () => {
+      store.actions.replace2ndTag('tag3');
+      expect(store.get('tags')).toEqual(['tag1', 'tag3']);
+      expect(store.get('tags')).not.toBe(initialTags);
+    });
+
     it('should execute chained actions', () => {
       store.actions.reset('test ');
       expect(store.get('state')).toEqual({
         name: 'test',
         stars: 0,
         description: '',
+        tags: ['tag1', 'tag3'],
       });
     });
 
@@ -315,6 +332,7 @@ describe('zustandX', () => {
         name: 'test-repo',
         stars: 42,
         description: 'A test repository',
+        tags: ['tag1', 'tag3'],
       });
     });
 
@@ -616,13 +634,18 @@ describe('zustandX', () => {
   });
 
   describe('when set.state', () => {
+    const initialTags: string[] = ['tag1', 'tag2'];
     const store = createStore(
       {
         name: 'zustandX',
         stars: 0,
+        tags: initialTags,
       },
       {
         name: 'repo',
+        immer: {
+          enabled: true,
+        },
       }
     );
 
@@ -636,7 +659,15 @@ describe('zustandX', () => {
       expect(store.get('state')).toEqual({
         name: 'test',
         stars: 1,
+        tags: ['tag1', 'tag2'],
       });
+
+      store.set('state', (draft) => {
+        draft.tags?.splice(1, 1, 'tag3', 'tag4');
+        return draft;
+      });
+
+      expect(store.get('tags')).not.toBe(initialTags);
     });
 
     describe('when using immer', () => {
