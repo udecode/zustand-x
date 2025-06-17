@@ -1,5 +1,11 @@
 # @udecode/zustood
 
+## 6.1.1
+
+### Patch Changes
+
+- [#113](https://github.com/udecode/zustand-x/pull/113) by [@yf-yang](https://github.com/yf-yang) – Update readme and improve test cases related to immer style set
+
 ## 6.1.0
 
 ### Minor Changes
