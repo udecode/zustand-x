@@ -122,6 +122,8 @@ store.set('someAction', 10);
 store.set('state', (draft) => {
   draft.name = 'Bob';
   draft.loggedIn = true;
+  // With immer, draft still need to be returned to be compatible with general state update type signatures 
+  return draft;
 });
 ```
 
@@ -272,6 +274,9 @@ const storeWithActions = store.extendActions(
       set('state', (draft) => {
         draft.firstName = 'Jane';
         draft.lastName = 'Doe';
+
+        // With immer, draft still need to be returned to be compatible with general state update type signatures 
+        return draft;
       });
     },
     someActionToOverride: () => {
