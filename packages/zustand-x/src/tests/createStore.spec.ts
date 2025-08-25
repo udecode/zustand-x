@@ -285,6 +285,9 @@ describe('zustandX', () => {
         validName: (name: string) => {
           set('name', name.trim());
         },
+        validNameWithCallback: (lastName: string) => {
+          set('name', (firstName) => firstName + ' ' + lastName);
+        },
         replace2ndTag: (tag: string) => {
           set('state', (draft) => {
             draft.tags?.splice(1, 1, tag);
@@ -309,6 +312,11 @@ describe('zustandX', () => {
     it('should execute single action', () => {
       store.actions.validName('test ');
       expect(store.get('name')).toBe('test');
+    });
+
+    it('should execute action with callback', () => {
+      store.actions.validNameWithCallback('test');
+      expect(store.get('name')).toBe('test test');
     });
 
     it('should execute action with immer', () => {

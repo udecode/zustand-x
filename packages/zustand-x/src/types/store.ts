@@ -49,6 +49,10 @@ export type TStoreApiSet<
     key: K,
     ...args: Parameters<TActions[K]>
   ): ReturnType<TActions[K]>;
+  <K extends keyof StateType>(
+    key: K,
+    callback: (prevVal: StateType[K]) => StateType[K]
+  ): void;
   (
     key: 'state',
     value: Parameters<TCreatedStoreType<StateType, Mutators>['setState']>[0]
