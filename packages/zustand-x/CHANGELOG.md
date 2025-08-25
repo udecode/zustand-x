@@ -1,5 +1,11 @@
 # @udecode/zustood
 
+## 6.1.2
+
+### Patch Changes
+
+- [#115](https://github.com/udecode/zustand-x/pull/115) by [@RavenColEvol](https://github.com/RavenColEvol) – fix support for set callback value
+
 ## 6.1.1
 
 ### Patch Changes
