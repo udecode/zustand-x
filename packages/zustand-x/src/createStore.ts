@@ -149,6 +149,9 @@ export const createStore = <
     const typedKey = key as keyof StateType;
     const prevValue = store.getState()[typedKey];
 
+    if (typeof value === 'function') {
+      value = value(prevValue);
+    }
     if (prevValue === value) return;
 
     const actionKey = key.replace(/^\S/, (s) => s.toUpperCase());
