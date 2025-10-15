@@ -11,10 +11,18 @@ const INPUT_FILE = fs.existsSync(INPUT_FILE_PATH)
   ? INPUT_FILE_PATH
   : path.join(PACKAGE_ROOT_PATH, 'src/index.tsx');
 
+const VANILLA_ENTRY_PATH = path.join(PACKAGE_ROOT_PATH, 'src/lib/index.ts');
+
 export default defineConfig((opts) => {
+  const entryPoints = [INPUT_FILE];
+
+  if (fs.existsSync(VANILLA_ENTRY_PATH)) {
+    entryPoints.push(VANILLA_ENTRY_PATH);
+  }
+
   return {
     ...opts,
-    entry: [INPUT_FILE],
+    entry: entryPoints,
     format: ['cjs', 'esm'],
     dts: true,
     sourcemap: true,

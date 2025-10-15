@@ -5,5 +5,6 @@
 export * from './middleware';
 export * from './mutator';
 export * from './options';
+export * from './baseStore';
 export * from './store';
 export * from './utils';

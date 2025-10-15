@@ -56,6 +56,35 @@ function AddStarButton() {
 }
 ```
 
+## Vanilla Usage (No React)
+
+Need the same ergonomics without bundling React? Import from the `zustand-x/vanilla` entry to get a plain Zustand store augmented with actions and selectors.
+
+```ts
+import { createVanillaStore } from 'zustand-x/vanilla';
+
+const counterStore = createVanillaStore(
+  {
+    count: 0,
+  },
+  {
+    name: 'vanilla-counter',
+    persist: true,
+  }
+)
+  .extendSelectors(({ get }) => ({
+    doubled: () => get('count') * 2,
+  }))
+  .extendActions(({ set }) => ({
+    increment: () => set('count', (value) => value + 1),
+  }));
+
+counterStore.actions.increment();
+console.log(counterStore.get('doubled')); // 2
+```
+
+This API exposes `get`, `set`, `subscribe`, `extendSelectors`, and `extendActions` without attaching any React hooks, so it can run in Node.js, workers, or any non-React environment.
+
 ## Core Concepts
 
 ### Store Configuration
