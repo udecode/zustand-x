@@ -28,7 +28,7 @@ export const extendActions = <
     set: ((key: string, ...args: unknown[]) => {
       if (key in actions) {
         const action = actions[key];
-        return action(...args);
+        return action?.(...args);
       }
 
       return api.set(key as any, args[0]);

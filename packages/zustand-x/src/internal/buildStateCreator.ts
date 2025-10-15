@@ -80,7 +80,7 @@ export const buildStateCreator = <
       (typeof initializer === 'function'
         ? initializer
         : () => initializer) as StateCreator<StateType>
-    ) as StateCreator<StateType, [], Mutators>;
+    ) as unknown as StateCreator<StateType, [], Mutators>;
 
   const isMutative =
     isMutativeState || immerConfig.enabled || mutativeConfig.enabled;
@@ -89,5 +89,5 @@ export const buildStateCreator = <
     stateCreator: subscribeWithSelector(stateCreator),
     isMutative,
     name,
-  } as BuildStateCreatorResult<StateType, Mutators>;
+  } as unknown as BuildStateCreatorResult<StateType, Mutators>;
 };
