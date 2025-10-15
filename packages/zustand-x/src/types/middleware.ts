@@ -6,7 +6,7 @@ export type TExtractMutatorFromMiddleware<M> = M extends (
   ...rest: any[]
 ) => StateCreator<any, any, infer Mutators, any>
   ? // eslint-disable-next-line unused-imports/no-unused-vars
-    Mutators extends [infer Mutator, ...infer Rest]
+    Mutators extends [infer Mutator, ...unknown[]]
     ? Mutator extends [StoreMutatorIdentifier, unknown]
       ? Mutator
       : never

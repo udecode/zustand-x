@@ -1,16 +1,13 @@
 import { StoreMutatorIdentifier } from 'zustand';
 
-import {
+import { TCreatedStoreType, TState } from './utils';
+
+import type {
   AnyFunction,
   TActionBuilder,
   TBaseStateApi,
   TSelectorBuilder,
-  TStoreApiGet,
-  TStoreApiSet,
-  TStoreApiSubscribe,
 } from './baseStore';
-import { TCreatedStoreType, TState } from './utils';
-
 import type { TEqualityChecker } from './utils';
 
 export type TStateApi<

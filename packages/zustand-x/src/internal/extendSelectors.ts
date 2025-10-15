@@ -3,8 +3,8 @@ import type {
   TBaseStateApiForBuilder,
   TSelectorBuilder,
 } from '../types/baseStore';
-import type { StoreMutatorIdentifier } from 'zustand';
 import type { TState } from '../types/utils';
+import type { StoreMutatorIdentifier } from 'zustand';
 
 const identity = <T>(arg: T) => arg;
 
@@ -41,7 +41,7 @@ export const extendSelectors = <
     get: ((key: string, ...args: unknown[]) => {
       if (key in selectors) {
         const selector = selectors[key];
-        return selector(...args);
+        return selector?.(...args);
       }
 
       return baseGet(key as keyof StateType);
@@ -70,9 +70,7 @@ export const extendSelectors = <
           'state',
           () =>
             selectorArg(
-              selectors[key as keyof typeof selectors](
-                ...selectorArgs
-              )
+              selectors[key as keyof typeof selectors](...selectorArgs)
             ),
           listener,
           optionsArg
@@ -91,10 +89,7 @@ export const extendSelectors = <
 
   if (options?.selectWithStore) {
     const selectWithStore = options.selectWithStore;
-    (extendedApi as any).useValue = (
-      key: string,
-      ...args: unknown[]
-    ) => {
+    (extendedApi as any).useValue = (key: string, ...args: unknown[]) => {
       if (key in selectors) {
         const selector = selectors[key];
         const maybeEqualityFn = args.at(-1);
@@ -103,7 +98,7 @@ export const extendSelectors = <
         const selectorArgs = equalityFn ? args.slice(0, -1) : args;
 
         return selectWithStore(
-          () => selector(...selectorArgs),
+          () => selector?.(...selectorArgs),
           equalityFn as AnyFunction
         );
       }
