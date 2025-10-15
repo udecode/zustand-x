@@ -24,6 +24,12 @@
       "import": "./dist/index.mjs",
       "module": "./dist/index.mjs",
       "require": "./dist/index.js"
+    },
+    "./vanilla": {
+      "types": "./dist/lib/index.d.ts",
+      "import": "./dist/lib/index.mjs",
+      "module": "./dist/lib/index.mjs",
+      "require": "./dist/lib/index.js"
     }
   },
   "scripts": {
