@@ -1,5 +1,20 @@
 # @udecode/zustood
 
+## 6.2.0
+
+### Minor Changes
+
+- [#117](https://github.com/udecode/zustand-x/pull/117) by [@felixfeng33](https://github.com/felixfeng33) – Added `createVanillaStore`: create a vanilla Zustand store in Node.js, workers, or any non-React environment. Example:
+
+  ```ts
+  import { createVanillaStore } from 'zustand-x/vanilla';
+
+  const store = createVanillaStore({ count: 0 }, { name: 'counter' });
+
+  store.get('count');
+  store.set('count', 1);
+  ```
+
 ## 6.1.2
 
 ### Patch Changes
