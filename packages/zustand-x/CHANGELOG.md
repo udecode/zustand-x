@@ -1,5 +1,11 @@
 # @udecode/zustood
 
+## 6.2.1
+
+### Patch Changes
+
+- [#120](https://github.com/udecode/zustand-x/pull/120) by [@zbeyens](https://github.com/zbeyens) – Fix assigning function-valued options so callbacks still work.
+
 ## 6.2.0
 
 ### Minor Changes
