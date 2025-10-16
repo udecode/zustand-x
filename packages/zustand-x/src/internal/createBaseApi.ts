@@ -1,8 +1,7 @@
 import { StoreMutatorIdentifier } from 'zustand';
 
 import { TBaseStateApiForBuilder, TStoreApiGet } from '../types/baseStore';
-import { TState } from '../types/utils';
-import { TCreatedStoreMutateType } from '../types/utils';
+import { TCreatedStoreMutateType, TState } from '../types/utils';
 
 import type {
   AnyFunction,
@@ -44,7 +43,13 @@ export const createBaseApi = <
     const typedKey = key as keyof StateType;
     const prevValue = store.getState()[typedKey];
 
-    if (typeof value === 'function') {
+    const shouldInvokeUpdater =
+      typeof value === 'function' &&
+      prevValue !== undefined &&
+      prevValue !== null &&
+      typeof prevValue !== 'function';
+
+    if (shouldInvokeUpdater) {
       value = value(prevValue);
     }
     if (prevValue === value) return;
