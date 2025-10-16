@@ -126,6 +126,43 @@ describe('zustandX', () => {
       expect(starsListener).toHaveBeenCalledTimes(2);
       expect(starsListener).toHaveBeenLastCalledWith(3, 0);
     });
+
+    it('should support callback updates for primitive values', () => {
+      expect(store.get('stars')).toBe(0);
+      store.set('stars', (currentStars) => currentStars + 5);
+      expect(store.get('stars')).toBe(5);
+      store.set('state', {
+        name: 'zustandX',
+        stars: 0,
+      });
+    });
+
+    it('should store function values without invoking them', () => {
+      type FunctionStoreState = {
+        handler: () => string;
+        optionalHandler: ((value: number) => number) | null;
+      };
+
+      const functionStore = createStore<FunctionStoreState>(
+        {
+          handler: () => 'initial',
+          optionalHandler: null,
+        },
+        {
+          name: 'function-store',
+        }
+      );
+
+      const newHandler = vi.fn(() => 'updated');
+      expect(() => functionStore.set('handler', newHandler)).not.toThrow();
+      expect(functionStore.get('handler')).toBe(newHandler);
+      expect(newHandler).not.toHaveBeenCalled();
+
+      const nextOptional = vi.fn((value: number) => value * 2);
+      functionStore.set('optionalHandler', nextOptional);
+      expect(functionStore.get('optionalHandler')).toBe(nextOptional);
+      expect(nextOptional).not.toHaveBeenCalled();
+    });
   });
 
   describe('when using hooks', () => {
